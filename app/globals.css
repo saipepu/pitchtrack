@@ -16,6 +16,14 @@
   }
 }
 
+*::-webkit-scrollbar {
+  /* scrollbar-width: 0; */
+  /* scrollbar-color: #00000010 white; */
+  /* width: 10px; */
+  /* background-color: #cbcbcb; */
+  display: none
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

@@ -6,8 +6,7 @@ const layout = ({
     children: ReactNode
 }) => {
   return (
-    <div>
-        Monitor Layout
+    <div className='w-full h-full overflow-hidden'>
         {children}
     </div>
   )
