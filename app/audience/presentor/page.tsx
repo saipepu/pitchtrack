@@ -10,7 +10,7 @@ const Presentor = () => {
 
   return (
     <div
-      className='w-full h-full flex flex-col justify-start items-start'
+      className='w-full h-full flex flex-col justify-start items-start overflow-hidden'
     >
       <div className='w-full h-full flex flex-col justify-start items-center'>
         {/* Header */}

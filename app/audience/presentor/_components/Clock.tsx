@@ -55,7 +55,7 @@ const Clock = ({ isFlashing }: ClockProps ) => {
   return (
     <>
       {/* Body */}
-      <div id="box" className='relative w-full h-full flex flex-col justify-between items-center'
+      <div id="box" className='relative w-full flex-1 flex flex-col justify-between items-center'
         style={{
           backgroundColor: countDown > convertHHMMSStoTotalSec(Timer.warning) - 1 ? 'white' : countDown > convertHHMMSStoTotalSec(Timer.danger) - 1 ? 'yellow' : 'red',
           animation: isFlashing && countDown < convertHHMMSStoTotalSec(Timer.danger) ? 'flash 0.5s infinite' : 'none'
@@ -65,7 +65,7 @@ const Clock = ({ isFlashing }: ClockProps ) => {
         <p className='text-2xl md:text-4xl font-bold pt-8 text-center'>
           {Timer.generalMessage}
         </p>
-        <p className="text-[120px] md:text-[240px] lg:text-[500px] font-bold text-center">
+        <p className="text-[120px] md:text-[240px] lg:text-[500px] font-bold text-center leading-[0px]">
           {convertTotalSectoHHMMSS(countDown)}
         </p>
         <p className='text-3xl font-bold py-4 text-center'>
