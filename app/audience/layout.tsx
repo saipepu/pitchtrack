@@ -6,9 +6,8 @@ const layout = ({
     children: ReactNode
 }) => {
   return (
-    <div>
-        Audience Layout
-        {children}
+    <div className='w-full min-h-full flex flex-col'>
+      {children}
     </div>
   )
 }

@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <>
       <h1>Hello</h1>
-      <h1>Connected - {connected.toString()}</h1>
+      <h1 className="two-xl text-blue-200 bg-blue">Connected - {connected.toString()}</h1>
     </>
   );
 }

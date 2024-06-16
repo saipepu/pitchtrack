@@ -26,8 +26,69 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.flash-animation {
+  animation: flash 0.5s infinite;
+}
+
+@keyframes flash {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: #ff000050;
+  }
+  100% {
+    background-color: red;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@layer components {
+  .xs {
+    @apply text-[8px];
+  }
+  .sm {
+    @apply text-[12px];
+  }
+  .md {
+    @apply text-[16px];
+  }
+  .lg {
+    @apply text-[20px];
+  }
+  .xl {
+    @apply text-[24px];
+  }
+  .two-xl {
+    @apply text-[32px];
+  }
+  .three-xl {
+    @apply text-[56px];
+  }
+  .four-xl {
+    @apply text-[96px];
+  }
+  .five-xl {
+    @apply text-[120px];
+  }
+  .bg-green {
+    @apply bg-[#00ff00];
+  }
+  .bg-red {
+    @apply bg-[#F1343E];
+  }
+  .bg-yellow {
+    @apply bg-[#F89314];
+  }
+  .bg-blue {
+    @apply bg-[#14B4F7];
+  }
+  .bg-deep-blue {
+    @apply bg-[#003DD2];
   }
 }
