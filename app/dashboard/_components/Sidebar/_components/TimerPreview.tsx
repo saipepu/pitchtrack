@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -15,11 +17,11 @@ const TimerPreview = () => {
         <div className='w-full h-full flex justify-center items-center'>
           <p className='text-md font-medium text-center'>Dashboard</p>
         </div>
-        <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300'>
+        <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'>
           <Palette size={16} />
           <p className='text-sm font-medium text-center'>Customize</p>
         </div>
-        <div className='cursor-pointer bg-slate-100 w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300'>
+        <div className='cursor-pointer bg-slate-100 w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'>
           <Link size={16} strokeWidth={2.5}/>
           <p className='text-sm font-medium text-center'>Share</p>
         </div>
@@ -52,13 +54,13 @@ const TimerPreview = () => {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md w-full flex justify-center items-center'>
+        <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center'>
           <SkipBack size={16} />
         </div>
-        <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md w-full flex justify-center items-center'>
+        <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center'>
           <Play size={16} />
         </div>
-        <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md w-full flex justify-center items-center'>
+        <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center'>
           <SkipForward size={16} />
         </div>
         <Select defaultValue='+1m'>
