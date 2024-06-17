@@ -93,7 +93,7 @@ const page = () => {
         </div>
 
         {/* Message List */}
-        <div className='flex-2 max-w-[25vw] w-full h-full overflow-x-hidden overflow-y-scroll'>
+        <div className='hidden lg:flex flex-2 max-w-[25vw] w-full h-full overflow-x-hidden overflow-y-scroll'>
           <MessageList />
         </div>
 
