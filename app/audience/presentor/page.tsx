@@ -22,7 +22,7 @@ const Presentor = () => {
             <p className="text-2xl md:text-4xl font-bold">{Timer.team}</p>
           </div>
           <div
-            className="hidden md:flex w-full flex justify-end items-center"
+            className="hidden md:flex w-full justify-end items-center"
             >
             <p className={`text-right ${isFlashing ? 'bg-red' : 'bg-white'} text-black px-4 py-2 rounded-lg cursor-pointer`}
               onClick={() => setIsFlashing(!isFlashing)}
