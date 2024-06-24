@@ -2,7 +2,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { ALargeSmall, ArrowBigUp, Dot, Equal, Plus, Trash } from 'lucide-react'
 import React from 'react'
 import { FiPlus } from 'react-icons/fi'
-import MessageEditor from './_components/MessageEditor'
 import MessageSortableList from './_components/MessageSortableList'
 
 const page = () => {
@@ -80,11 +79,6 @@ const page = () => {
 
       {/* Message List */}
       <div className='w-full flex flex-col justify-start items-start gap-2 pb-[100px]'>
-        {/* {message?.map((message, i) => {
-          return (
-            <MessageEditor key={i} message={message} setMessage={setMessage} i={i}/>
-          )
-        })} */}
         <MessageSortableList />
         <div className='w-full flex justify-center items-center'>
           <div
