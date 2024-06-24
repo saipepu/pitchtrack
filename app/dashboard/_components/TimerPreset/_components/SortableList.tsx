@@ -3,6 +3,7 @@ import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
 import TimeBlock from "./TimeBlock";
+import { useToast } from "@/components/ui/use-toast";
 
 let timers = [
     { name: 'Timer 1', duration: 60, start: false },
@@ -34,17 +35,23 @@ const Board = () => {
 };
 
 const Column = ({ title, headingColor, cards, column, setCards }: any) => {
+  
   const [active, setActive] = useState(false);
+  const { toast } = useToast();
 
   const handleDragStart = (e: any, card: any) => {
     e.dataTransfer.setData("cardId", card.id);
+    e.dataTransfer.setData("type", "timer");
   };
 
   const handleDragEnd = (e: any) => {
-    const cardId = e.dataTransfer.getData("cardId");
 
     setActive(false);
     clearHighlights();
+    if(e.dataTransfer.getData("type") !== "timer") return;
+    console.log('timer sorted')
+
+    const cardId = e.dataTransfer.getData("cardId");
 
     const indicators = getIndicators();
     const { element } = getNearestIndicator(e, indicators);
@@ -71,6 +78,9 @@ const Column = ({ title, headingColor, cards, column, setCards }: any) => {
         copy.splice(insertAtIndex, 0, cardToTransfer);
       }
 
+      toast({
+        title: "Timer Sorted",
+      })
       setCards(copy);
     }
   };
