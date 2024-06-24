@@ -1,31 +1,82 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import SockJS from "sockjs-client";
-import { over } from "stompjs";
+import { useEffect, useRef, useState } from "react";
+import { io } from 'socket.io-client'
 
-var stompClient: any = null;
-var socket = new SockJS('https://spring-boot-898-websocket.azurewebsites.net/ws');
-stompClient = over(socket);
+enum ACTION {
+  PAUSE = "PAUSE",
+  RESUME = "RESUME"
+}
+
+interface Timer {
+  stoppedTime: number;
+  action: ACTION
+}
+const socket = io('http://localhost:8080');
+socket.on('connect', () => {
+})
 
 export default function Home() {
 
-  const [connected, setConnected] = useState<Boolean>(true)
+  const [message, setMessage] = useState<string>('')
+  const [time, setTime] = useState<number>(0)
+  const [startTime, setStartTime] = useState<number>(0)
+  const [currentTime, setCurrentTime] = useState<number>(0)
+  const [paused, setPaused] = useState<boolean>(false)
+  const [resumed, setResumed] = useState<boolean>(true)
+  const intervalRef = useRef<number | null>(null);
 
-  // Socket JS Connecting
-  stompClient.connect({}, () => {
-    stompClient?.subscribe(`/specific/scoreBoard/teamScores/1`, function(result: any) {
-      console.log("Connected")
-    });
-  }, (error: any) => {
-    console.log(error, "Error")
-  });
+  socket.on("message", (message) => {
+    setMessage(message)
+  })
+
+  socket.on("resume", (message) => {
+    setStartTime(currentTime);
+    setResumed(true)
+  })
+
+  socket.on("pause", (message) => {
+    console.log('PAUSED')
+    setResumed(false)
+  })
+
+  const EmitSocket = (path: string, payload: Timer) => {
+    console.log('Emitting', path, payload)
+    socket.emit(path, payload);
+  }
+
+  useEffect(() => {
+    if (!resumed) {
+      console.log('paused', !resumed)
+        clearInterval(intervalRef.current as number);
+    } else {
+        startTimerInterval();
+    }
+}, [resumed]);
+
+const startTimerInterval = () => {
+    const sT = startTime || 0;
+    clearInterval(intervalRef.current as number);
+    intervalRef.current = window.setInterval(() => {
+        // let c = Math.floor((Date.now() - sT) / 1000);
+        setCurrentTime((prev) => prev + 1);
+    }, 1000);
+};
 
   return (
     <>
       <h1>Hello</h1>
-      <h1 className="two-xl text-blue-200 bg-blue">Connected - {connected.toString()}</h1>
+      <h1 className="two-xl text-blue-200 bg-blue">Timer - {currentTime}</h1>
+      <input type="number" onChange={(e) => setTime(parseInt(e.target.value))} />
+      <button onClick={() => EmitSocket('resume', {
+        stoppedTime: currentTime,
+        action: ACTION.RESUME
+      })}>RESUME</button>
+      <button onClick={() => EmitSocket('pause', {
+        stoppedTime: currentTime,
+        action: ACTION.PAUSE
+      })}>PAUSE</button>
     </>
   );
 }
