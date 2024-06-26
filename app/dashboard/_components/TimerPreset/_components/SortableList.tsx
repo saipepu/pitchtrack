@@ -3,7 +3,7 @@ import { FiPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
 import TimeBlock from "./TimeBlock";
 import { useToast } from "@/components/ui/use-toast";
-import { SlotContext } from "@/app/dashboard/page";
+import { SlotContext } from "@/app/dashboard/hook";
 
 const SortablePreset = () => {
 

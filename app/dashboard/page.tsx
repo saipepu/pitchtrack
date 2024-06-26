@@ -8,8 +8,7 @@ import { PencilLine } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import slotList from '@/utils/dummy-data/slots'
-
-export const SlotContext = createContext<any>(null)
+import { SlotContext } from './hook'
 
 const page = () => {
 
