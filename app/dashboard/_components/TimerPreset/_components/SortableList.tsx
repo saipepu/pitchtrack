@@ -1,34 +1,30 @@
-import React, { useState } from "react";
-import { FiPlus, FiTrash } from "react-icons/fi";
+import React, { useContext, useState } from "react";
+import { FiPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { FaFire } from "react-icons/fa";
 import TimeBlock from "./TimeBlock";
 import { useToast } from "@/components/ui/use-toast";
-
-let timers = [
-    { name: 'Timer 1', duration: 60, start: false },
-    { name: 'Timer 2', duration: 120, start: false },
-    { name: 'Timer 3', duration: 180, start: false },
-  ]
+import { SlotContext } from "@/app/dashboard/layout";
 
 const SortablePreset = () => {
+
+  const { slots, setSlots } = useContext(SlotContext);
+  
   return (
     <div className='w-full flex justify-start items-start'>
-      <Board />
+      <Board slots={slots} setSlots={setSlots} />
     </div>
   );
 };
 
-const Board = () => {
-  const [cards, setCards] = useState(DEFAULT_CARDS);
+const Board = ({ slots, setSlots } : any ) => {
 
   return (
     <div className="flex w-full gap-3 ">
       <Column
         column="backlog"
         headingColor="text-neutral-500"
-        cards={cards}
-        setCards={setCards}
+        cards={slots}
+        setCards={setSlots}
       />
     </div>
   );
@@ -49,7 +45,6 @@ const Column = ({ title, headingColor, cards, column, setCards }: any) => {
     setActive(false);
     clearHighlights();
     if(e.dataTransfer.getData("type") !== "timer") return;
-    console.log('timer sorted')
 
     const cardId = e.dataTransfer.getData("cardId");
 
@@ -160,7 +155,7 @@ const Column = ({ title, headingColor, cards, column, setCards }: any) => {
         className={`h-full w-full transition-colors`}
       >
         {filteredCards.map((c: any, i: any) => {
-          return <Card key={c.id} timer={c.timer} {...c} handleDragStart={handleDragStart} i={i} />;
+          return <Card key={i} timer={c} {...c} handleDragStart={handleDragStart} setCards={setCards} i={i} />;
         })}
         <DropIndicator beforeId={null} column={column} />
         <AddCard column={column} setCards={setCards} cards={cards} />
@@ -169,7 +164,7 @@ const Column = ({ title, headingColor, cards, column, setCards }: any) => {
   );
 };
 
-const Card = ({ title, id, timer, column, handleDragStart, i}: any) => {
+const Card = ({ title, id, timer, column, handleDragStart, setCards, i}: any) => {
   return (
     <>
       <DropIndicator beforeId={id} column={column} />
@@ -180,7 +175,7 @@ const Card = ({ title, id, timer, column, handleDragStart, i}: any) => {
         onDragStart={(e) => handleDragStart(e, { title, id, column })}
         className="cursor-grab active:cursor-grabbing"
       >
-        <TimeBlock timer={timer} i={i} />
+        <TimeBlock timer={timer} setCards={setCards} i={i} />
       </motion.div>
     </>
   );
@@ -203,14 +198,9 @@ const AddCard = ({ column, setCards, cards }: any) => {
       <motion.button
           layout
           onClick={() => {
-            console.log(cards)
             setCards([
               ...cards,
-              {
-                id: `${Date.now()}`,
-                column,
-                timer: { name: 'Timer 4', duration: 240, start: false }
-              },
+              {...cards[cards.length - 1], id: (cards.length+1).toString()}
             ])
           }}
           className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:text-slate-500"
@@ -221,12 +211,5 @@ const AddCard = ({ column, setCards, cards }: any) => {
     </>
   );
 };
-
-const DEFAULT_CARDS = [
-  // BACKLOG
-  { id: "1", column: "backlog", timer: timers[0]},
-  { id: "2", column: "backlog", timer: timers[1]},
-  { id: "3", column: "backlog", timer: timers[2]},
-];
 
 export default SortablePreset;
