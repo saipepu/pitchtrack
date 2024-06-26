@@ -15,11 +15,13 @@ const layout = ({
   console.log(slots)
 
   return (
-    <SlotContext.Provider value={{slots, setSlots}}>
-      <div className='w-full h-full overflow-hidden'>
-        {children}
-      </div>
-    </SlotContext.Provider>
+    <>
+      <SlotContext.Provider value={{slots, setSlots}}>
+        <div className='w-full h-full overflow-hidden'>
+          {children}
+        </div>
+      </SlotContext.Provider>
+    </>
   )
 }
 
