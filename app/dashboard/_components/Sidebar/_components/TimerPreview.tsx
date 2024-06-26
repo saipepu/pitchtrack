@@ -4,9 +4,15 @@ import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ChevronDown, ChevronLeft, ChevronRight, Clock, Link, Palette, Play, SkipBack, SkipForward } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const TimerPreview = () => {
+
+  const [currentTime, setCurrentTime] = useState<any>()
+
+  useEffect(() => {
+    setCurrentTime(`${new Date().getDate()}:${new Date().getHours()}:${new Date().getSeconds()}`)
+  },[])
 
   // show the mini preview of timer
   return (
@@ -86,7 +92,7 @@ const TimerPreview = () => {
           <div className='w-[15px] h-[1px] bg-slate-400'></div>
           <div className='w-full flex justify-center items-center gap-1'>
             <Clock size={16} />
-            <p>{new Date().getDate()}:{new Date().getHours()}:{new Date().getSeconds()}</p>
+            <p>{currentTime}</p>
           </div>
           <div className='w-full flex justify-center items-center gap-1'>
             <p className='text-sm leading-tight tracking-tighter text-slate-400'>Asia / Bangkok</p>
