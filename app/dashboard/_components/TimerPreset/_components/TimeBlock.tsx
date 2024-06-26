@@ -10,7 +10,8 @@ import React, { use, useContext, useEffect, useState } from 'react'
 import General from '../../TimeBlockSetting/_components/General'
 import Duration from '../../TimeBlockSetting/_components/Duration'
 import StartTime from '../../TimeBlockSetting/_components/StartTime'
-import { SlotContext } from '@/app/dashboard/layout'
+import { SlotContext } from '@/app/dashboard/page';
+
 
 enum PopoverType {
   General = 'General',
