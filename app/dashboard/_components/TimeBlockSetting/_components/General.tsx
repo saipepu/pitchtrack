@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { PopoverClose } from '@/components/ui/popover';
 import React from 'react'
 
-const General = ({ timer }: any) => {
+const General = ({ slot, setSlot, handleSave }: any) => {
 
   return (
     <>
@@ -14,40 +14,47 @@ const General = ({ timer }: any) => {
         <Label htmlFor="title">Title</Label>
         <Input
           id="title"
-          defaultValue={timer.name}
+          value={slot.title}
           className='w-full col-span-3 p-1 px-2 border-0 bg-white'
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSlot({ ...slot, title: e.target.value })}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSave()}
         />
       </div>
       <div className="grid grid-cols-4 items-center gap-2">
         <Label htmlFor="speaker">Speaker</Label>
         <Input
           id="speaker"
-          defaultValue={"presentor jack"}
+          value={slot.speaker}
           className='w-full col-span-3 p-1 px-2 border-0 bg-white'
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSlot({ ...slot, speaker: e.target.value })}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSave()}
         />
       </div>
       <div className="grid grid-cols-4 items-center gap-2">
         <Label htmlFor="note">Note</Label>
         <Input
           id="note"
-          defaultValue={"some notes"}
+          value={slot.notes}
           className='w-full col-span-3 p-1 px-2 border-0 bg-white'
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSlot({ ...slot, notes: e.target.value })}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSave()}
         />
       </div>
       <div className='w-full flex justify-end items-center gap-2'>
         <PopoverClose>
-          <Button
-            variant="outline" className='text-black p-2 rounded-lg hover:text-slate-400'
+          <div
+            className='text-black p-2 rounded-lg hover:text-slate-400'
           >
             Cancel
-          </Button>
+          </div>
         </PopoverClose>
         <PopoverClose>
-          <Button
+          <div
             className='bg-black text-white p-2 rounded-lg hover:bg-slate-400'
+            onClick={() => handleSave()}
           >
             Save
-          </Button>
+          </div>
         </PopoverClose>
       </div>
     </>
