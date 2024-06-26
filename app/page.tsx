@@ -53,7 +53,7 @@ export default function Home() {
     } else {
         startTimerInterval();
     }
-}, [resumed]);
+  }, [resumed]);
 
 const startTimerInterval = () => {
     const sT = startTime || 0;
