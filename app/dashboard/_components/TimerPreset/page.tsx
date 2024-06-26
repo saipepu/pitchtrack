@@ -1,17 +1,10 @@
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
-import { convertTotalSectoHHMMSS } from '@/utils/convertor/convert-totalsec-to-hhmmss'
-import { Dot, MoreVerticalIcon, Play, Settings, SkipBack, Zap } from 'lucide-react'
+import { Dot, Zap } from 'lucide-react'
 import React from 'react'
-import TimeBlock from './_components/TimeBlock'
 import SortablePreset from './_components/SortableList'
 
 const TimerPreset = () => {
 
-  let timers = [
-    { name: 'Timer 1', duration: 60, start: false },
-    { name: 'Timer 2', duration: 120, start: false },
-    { name: 'Timer 3', duration: 180, start: false },
-  ]
 
   return (
     <div className='w-full border-l-[1px] border-slate-100 p-2 flex flex-col justify-start items-start gap-4 pb-[100px]'
