@@ -8,6 +8,7 @@ import { PencilLine } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import slotList from '@/utils/dummy-data/slots'
+import messageList from '@/utils/dummy-data/messages'
 import { SlotContext } from './hook'
 
 const page = () => {
@@ -17,6 +18,7 @@ const page = () => {
   const [position, setPosition] = React.useState("bottom")
 
   const [slots, setSlots] = useState(slotList)
+  const [messages, setMessages] = useState(messageList)
 
   const DropDown = () => {
     return (
@@ -38,7 +40,7 @@ const page = () => {
   }
 
   return (
-    <SlotContext.Provider value={{slots, setSlots}}>
+    <SlotContext.Provider value={{slots, setSlots, messages, setMessages}}>
       <div className='w-full h-full overflow-hidden'>
 
         {/* Header */}
