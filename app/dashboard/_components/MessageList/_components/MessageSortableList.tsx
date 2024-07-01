@@ -1,52 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
 import MessageEditor from "./MessageEditor";
 import { Toast } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-
-enum COLORS {
-  RED = 'red',
-  GREEN = 'green',
-  BLUE = 'blue',
-  BLACK = 'black'
-}
-let messageList = [
-  { 
-    id: "1",
-    message: 'Hello, how are you?',
-    color: COLORS.BLUE,
-    bold: true,
-    column: "backlog",
-    capitalized: true,
-  },
-  { 
-    id: "2",
-    message: 'I am fine, thank you.',
-    color: COLORS.GREEN,
-    bold: false,
-    column: "backlog",
-    capitalized: false,
-  },
-  { 
-    id: "3",
-    message: 'I am fine',
-    color: COLORS.GREEN,
-    bold: false,
-    column: "backlog",
-    capitalized: false,
-  }
-]
+import { SlotContext } from "@/app/dashboard/hook";
 
 const MessageSortableList = () => {
-  const [cards, setCards] = useState(messageList)
+
+  const { messages, setMessages } = useContext(SlotContext);
 
   return (
     <div className='w-full flex flex-col justify-start items-start'>
-      <Column cards={cards} setCards={setCards} column="backlog"/>
+      <Column cards={messages} setCards={setMessages} column="backlog"/>
     </div>
   )
 }
@@ -54,7 +23,6 @@ const MessageSortableList = () => {
 const Column = ({ cards, setCards, column }: any) => {
 
   const { toast } = useToast();
-  const [messages, setMessages] = useState(messageList)
   const [active, setActive] = useState(false);
 
   const handleDragStart = (e: any, card: any) => {
@@ -184,7 +152,7 @@ const Column = ({ cards, setCards, column }: any) => {
                 className="cursor-grab active:cursor-grabbing"
                 data-cardtype="message"
               >
-                <MessageEditor i={i} setMessage={setMessages} message={message} key={i} />
+                <MessageEditor i={i} setMessages={setCards} message={message} key={i} />
               </motion.div>
             </div>
           )
