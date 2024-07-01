@@ -66,7 +66,7 @@ const Clock = ({ isFlashing }: ClockProps ) => {
           {Timer.generalMessage}
         </p>
         <p className="text-[120px] md:text-[240px] lg:text-[500px] font-bold text-center leading-[0px]">
-          {convertTotalSectoHHMMSS(countDown)}
+          {convertTotalSectoHHMMSS(countDown).substring(3, 8)}
         </p>
         <p className='text-3xl font-bold py-4 text-center'>
           {Timer.presentor}
