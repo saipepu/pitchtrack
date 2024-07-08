@@ -112,7 +112,7 @@ const TimeBlock = ({ timer, i }: any) => {
           <Popover onOpenChange={(open) => !open && handleSave()}>
             <PopoverTrigger asChild>
               <div className='min-w-[65px] flex justify-center items-center gap-2 group'>
-                <p className='text-lg font-semibold whitespace-nowrap'>{timer.title}</p>
+                <p className='text-lg font-semibold whitespace-nowrap'>{slot.title}</p>
                 <Pencil size={16} className='opacity-0 group-hover/slot:opacity-100 duration-500'/>
               </div>
             </PopoverTrigger>
