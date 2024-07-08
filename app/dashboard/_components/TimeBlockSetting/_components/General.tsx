@@ -10,52 +10,41 @@ const General = ({ slot, setSlot, handleSave }: any) => {
 
   return (
     <>
-      <div className="grid grid-cols-4 items-center gap-2">
-        <Label htmlFor="title">Title</Label>
+      <div className="w-full grid grid-cols-7 items-center gap-2">
+        <div className="w-full col-span-1 flex justify-start items-center gap-2">
+          <Label htmlFor="title">Title</Label>
+        </div>
         <Input
           id="title"
           value={slot.title}
-          className='w-full col-span-3 p-1 px-2 border-0 bg-white'
+          className='w-full col-span-6 p-1 px-2 border-0 bg-white'
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSlot({ ...slot, title: e.target.value })}
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSave()}
         />
       </div>
-      <div className="grid grid-cols-4 items-center gap-2">
-        <Label htmlFor="speaker">Speaker</Label>
+      <div className="w-full grid grid-cols-7 items-center gap-2">
+        <div className="w-full min-w-[200px] col-span-1 flex justify-start items-center gap-2">
+          <Label htmlFor="title">Speaker</Label>
+        </div>
         <Input
           id="speaker"
           value={slot.speaker}
-          className='w-full col-span-3 p-1 px-2 border-0 bg-white'
+          className='w-full col-span-6 p-1 px-2 border-0 bg-white'
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSlot({ ...slot, speaker: e.target.value })}
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSave()}
         />
       </div>
-      <div className="grid grid-cols-4 items-center gap-2">
-        <Label htmlFor="note">Note</Label>
+      <div className="w-full grid grid-cols-7 items-center gap-2">
+        <div className="w-full col-span-1 flex justify-start items-center gap-2">
+          <Label htmlFor="title">Notes</Label>
+        </div>
         <Input
           id="note"
           value={slot.notes}
-          className='w-full col-span-3 p-1 px-2 border-0 bg-white'
+          className='w-full col-span-6 p-1 px-2 border-0 bg-white'
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSlot({ ...slot, notes: e.target.value })}
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSave()}
         />
-      </div>
-      <div className='w-full flex justify-end items-center gap-2'>
-        <PopoverClose>
-          <div
-            className='text-black p-2 rounded-lg hover:text-slate-400'
-          >
-            Cancel
-          </div>
-        </PopoverClose>
-        <PopoverClose>
-          <div
-            className='bg-black text-white p-2 rounded-lg hover:bg-slate-400'
-            onClick={() => handleSave()}
-          >
-            Save
-          </div>
-        </PopoverClose>
       </div>
     </>
   )

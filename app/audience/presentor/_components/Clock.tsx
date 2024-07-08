@@ -65,7 +65,7 @@ const Clock = ({ isFlashing }: ClockProps ) => {
         <p className='text-2xl md:text-4xl font-bold pt-8 text-center'>
           {Timer.generalMessage}
         </p>
-        <p className="text-[120px] md:text-[240px] lg:text-[500px] font-bold text-center leading-[0px]">
+        <p className="text-[100px] md:text-[280px] lg:text-[400px] xl:text-[500px] font-bold text-center leading-[0px] tracking-tighter">
           {convertTotalSectoHHMMSS(countDown).substring(3, 8)}
         </p>
         <p className='text-3xl font-bold py-4 text-center'>
@@ -73,7 +73,7 @@ const Clock = ({ isFlashing }: ClockProps ) => {
         </p>
       </div>
 
-      {/* Footer */}
+      {/* Footer Width Animation */}
       <div className="relative w-full h-[5vh] flex justify-between items-center">
         <div className={`bg-green h-full`} style={{ width: `${safeWidth}%`}}>
         </div>

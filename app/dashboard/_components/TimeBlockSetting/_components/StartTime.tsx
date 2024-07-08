@@ -58,7 +58,7 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
 
   return (
     <>
-      <div className="grid grid-cols-4 items-center gap-2">
+      <div className="w-full grid grid-cols-4 items-center gap-2">
         <Select onValueChange={(value) => setSlot({ ...slot, startType: value})}>
           <SelectTrigger className="w-full col-span-4 p-1 px-2 border-0 bg-white">
             <SelectValue placeholder={slot.startType} />
@@ -71,7 +71,7 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
           </SelectContent>
         </Select>
       </div>
-      <div className="grid grid-cols-4 items-center gap-2">
+      <div className="w-full grid grid-cols-4 items-center gap-2">
         <Label htmlFor="title">Time</Label>
         <div className='w-full col-span-3 border-0 flex justify-start items-center'>
           <Input
@@ -121,7 +121,7 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-4 items-center gap-2">
+      <div className="w-full grid grid-cols-4 items-center gap-2">
         <Label htmlFor="title">Date</Label>
         <div className='w-full col-span-3 border-0 flex justify-start items-center'>
           <Popover>
@@ -145,24 +145,6 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
             </PopoverContent>
           </Popover>
         </div>
-      </div>
-      <div className='w-full flex justify-end items-center gap-2'>
-        <PopoverClose>
-          <div
-            className='text-black p-2 rounded-lg hover:text-slate-400'
-          >
-            Cancel
-          </div>
-        </PopoverClose>
-        <PopoverClose>
-          <div
-            className='bg-black text-white p-2 rounded-lg hover:bg-slate-400'
-            // onClick={() => handleSubmit()}
-            onClick={() => handleSave()}
-          >
-            Save
-          </div>
-        </PopoverClose>
       </div>
     </>
   )

@@ -4,11 +4,14 @@ import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ChevronDown, ChevronLeft, ChevronRight, Clock, Link, Palette, Play, SkipBack, SkipForward } from 'lucide-react'
+import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 const TimerPreview = () => {
 
   const [currentTime, setCurrentTime] = useState<any>()
+  const pathname = usePathname();
+  console.log(pathname)
 
   useEffect(() => {
     setCurrentTime(`${new Date().getDate()}:${new Date().getHours()}:${new Date().getSeconds()}`)
@@ -37,7 +40,7 @@ const TimerPreview = () => {
       <div className='border-[1px] border-slate-300 rounded-md w-full overflow-hidden'>
         <iframe
           // src="http://localhost:3000/audience/presentor"
-          src="https://pitchtrack.vercel.app/audience/presentor"
+          src="/audience/presentor"
           width="100%"
           height="300"
           style={{ border: 'none' }}

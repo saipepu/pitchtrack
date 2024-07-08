@@ -34,8 +34,10 @@ const Duration = ({ slot, setSlot, handleSave }: any) => {
 
   return (
     <>
-      <div className="grid grid-cols-4 items-center gap-2">
-        <Label htmlFor="title">Title</Label>
+      <div className="w-full grid grid-cols-4 items-center gap-2">
+        <div className='w-full flex justify-start items-center gap-2'>
+          <Label htmlFor="title">Time</Label>
+        </div>
         <div className='w-full col-span-3 border-0 flex justify-start items-center'>
           <Input
             className="text-center w-full col-span-3 p-1 px-2 border-0 bg-white"
@@ -84,10 +86,12 @@ const Duration = ({ slot, setSlot, handleSave }: any) => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-4 items-center gap-2">
-        <Label htmlFor="appearance">Apperance</Label>
+      <div className="w-full grid grid-cols-4 items-center gap-2">
+        <div className='w-full col-span-1 flex justify-start items-center gap-2 truncate text-ellipsis'>
+          <Label htmlFor="Appearance">Appearance</Label>
+        </div>
         <Select>
-          <SelectTrigger className="w-full col-span-3 p-1 px-2 border-0 bg-white">
+          <SelectTrigger className="w-full text-left col-span-3 p-1 px-2 border-0 bg-white">
             <SelectValue placeholder="Select a Timer Appearance" />
           </SelectTrigger>
           <SelectContent className='bg-white text-black'>
@@ -97,23 +101,6 @@ const Duration = ({ slot, setSlot, handleSave }: any) => {
             </SelectGroup>
           </SelectContent>
         </Select>
-      </div>
-      <div className='w-full flex justify-end items-center gap-2'>
-        <PopoverClose>
-          <div
-            className='text-black p-2 rounded-lg hover:text-slate-400'
-          >
-            Cancel
-          </div>
-        </PopoverClose>
-        <PopoverClose>
-          <div
-            className='bg-black text-white p-2 rounded-lg hover:bg-slate-400'
-            onClick={() => handleSave()}
-          >
-            Save
-          </div>
-        </PopoverClose>
       </div>
     </>
   )
