@@ -21,27 +21,27 @@ enum PopoverType {
   Actions = 'Actions',
 }
 
-const TimeBlock = ({ timer, i }: any) => {
+const TimeBlock = ({ timer, currentSlot }: any) => {
 
   const { slots, setSlots } = useContext(SlotContext)
 
-  const [slot, setSlot] = useState(slots[i]) // make a copy of the original slot
+  const [slot, setSlot] = useState(slots[currentSlot]) // make a copy of the original slot
   const [showSetting, setShowSetting] = useState(false)
 
-  let s = parseInt(slot.startTime)
+  let s = parseInt(slot?.startTime)
   let startTime = new Date(s).getHours().toString().padStart(2, '0  ') + ':' + new Date(s).getMinutes().toString().padStart(2, '0') + ':' + new Date(s).getSeconds().toString().padStart(2, '0')
 
-  let duration: any = convertTotalSectoHHMMSS(slot.duration).split(':').map((i: string) => i)
+  let duration: any = convertTotalSectoHHMMSS(slot?.duration).split(':').map((i: string) => i)
   duration = duration[0] == '00' ? duration.slice(1).join(':') : duration.join(':')
   
   const handleSave = () => {
 
-    slots[i] = slot
+    slots[currentSlot] = slot
     setSlots([...slots])
   }
 
   useEffect(() => {
-    setSlot(slots[i])
+    setSlot(slots[currentSlot])
   }, [slots])
 
   const PopoverHandler = () => {
@@ -67,18 +67,19 @@ const TimeBlock = ({ timer, i }: any) => {
   }
 
   return (
-    <div className='group/slot w-full h-[80px] flex justify-between items-center rounded-lg p-2 gap-2 bg-slate-100'>
+    <div id={`${slots[currentSlot].tag + "-" + slots[currentSlot].id}`} className='group/slot w-full h-[80px] flex justify-between items-center rounded-lg p-2 gap-2 bg-slate-100'>
       {showSetting && (
         <TimeBlockSetting setShowSetting={setShowSetting} slot={slot} setSlot={setSlot} handleSave={handleSave}/>
       )}
-      <div className='h-full flex justify-start items-center gap-4'>
+      <div className='h-full flex justify-start items-center gap-1 md:gap-4'>
+
         <div className='relative min-w-[16px] h-full flex justify-center items-center'>
-          <p className='absolute group-hover/slot:opacity-0 text-lg font-semibold text-slate-500 duration-500'>{i+1}</p>
+          <p className='absolute group-hover/slot:opacity-0 text-lg font-semibold text-slate-500 duration-500'>{currentSlot+1}</p>
           <div className='absolute block'>
             <Equal size={16} className='group-hover/slot:opacity-100 opacity-0 duration-500'/>
           </div>
         </div>
-        <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md px-2'>
+        <div className='hidden md:flex cursor-pointer w-full h-full justify-center items-center gap-[2px] rounded-md px-2'>
           <Popover onOpenChange={(open) => !open && handleSave()}>
             <PopoverTrigger asChild>
               <div className='min-w-[65px] relative'>
@@ -112,7 +113,7 @@ const TimeBlock = ({ timer, i }: any) => {
           <Popover onOpenChange={(open) => !open && handleSave()}>
             <PopoverTrigger asChild>
               <div className='min-w-[65px] flex justify-center items-center gap-2 group'>
-                <p className='text-lg font-semibold whitespace-nowrap'>{slot.title}</p>
+                <p className='text-lg font-semibold whitespace-nowrap'>{slot?.title}</p>
                 <Pencil size={16} className='opacity-0 group-hover/slot:opacity-100 duration-500'/>
               </div>
             </PopoverTrigger>
@@ -122,8 +123,9 @@ const TimeBlock = ({ timer, i }: any) => {
             </PopoverContent>
           </Popover>
         </div>
-        
+
       </div>
+
       <div className='h-full max-h-[32px] flex justify-start items-center gap-2'>
         <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'>
             <SkipBack size={16} />
@@ -141,6 +143,7 @@ const TimeBlock = ({ timer, i }: any) => {
             <MoreVerticalIcon size={16} />
         </div>
       </div>
+      
     </div>
   )
 }

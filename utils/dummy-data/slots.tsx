@@ -1,6 +1,6 @@
 interface Slot {
   id: string,
-  column: string,
+  tag: string,
   _id: string,
   title: string,
   speaker: string,
@@ -28,7 +28,7 @@ interface Slot {
 
 let slot: Slot = {
   id: "1",
-  column: "backlog",
+  tag: "timeslot",
   _id: '1',
   title: 'Slot 1',
   speaker: 'Speaker 1',
@@ -54,4 +54,4 @@ let slot: Slot = {
   eventId: '1'
 }
 
-export default [{...slot, id: '1'}, {...slot, id: '2'}, {...slot, id: '3'}]
+export default [{...slot, title: 'Slot 1', id: '1'}, {...slot, title: 'Slot 2', id: '2'}, {...slot, title: 'Slot 3', id: '3'}]

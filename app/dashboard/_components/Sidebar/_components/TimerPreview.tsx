@@ -89,7 +89,7 @@ const TimerPreview = () => {
       </div>
 
       {/* Extra Details */}
-      <div className='w-full flex flex-col justify-center items-center gap-1 p-4'>
+      <div className='hidden w-full md:flex flex-col justify-center items-center gap-1 p-4'>
 
         <div className='w-full flex justify-center items-center gap-1'>
           <div className='w-[15px] h-[1px] bg-slate-400'></div>

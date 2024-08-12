@@ -2,13 +2,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/u
 import { Dot, Zap } from 'lucide-react'
 import React from 'react'
 import SortablePreset from './_components/SortableList'
+import SortableList2 from './_components/SortableList2'
 
 const TimerPreset = () => {
 
-
   return (
-    <div className='w-full border-l-[1px] border-slate-100 p-2 flex flex-col justify-start items-start gap-4 pb-[100px]'
-    >
+    <div className='w-full h-full border-l-[1px] p-2 flex flex-col justify-start items-start gap-4'>
+
       {/* Header */}
       <div className='w-full h-[30px] flex justify-between items-center'>
         <div className='flex h-full justify-end items-center gap-1'>
@@ -35,7 +35,8 @@ const TimerPreset = () => {
       </div>
       </div>
 
-      <SortablePreset />
+      <SortableList2 tag={"timeslot"}/>
+
     </div>
   )
 }

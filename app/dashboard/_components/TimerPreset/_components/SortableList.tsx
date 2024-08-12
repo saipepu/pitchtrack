@@ -10,7 +10,7 @@ const SortablePreset = () => {
   const { slots, setSlots } = useContext(SlotContext);
   
   return (
-    <div className='w-full flex justify-start items-start'>
+    <div className='w-full min-h-full flex justify-start items-start overflow-y-scroll md:pb-[50px]'>
       <Board slots={slots} setSlots={setSlots} />
     </div>
   );
@@ -19,7 +19,7 @@ const SortablePreset = () => {
 const Board = ({ slots, setSlots } : any ) => {
 
   return (
-    <div className="flex w-full gap-3 ">
+    <div className="flex w-full">
       <Column
         column="backlog"
         headingColor="text-neutral-500"

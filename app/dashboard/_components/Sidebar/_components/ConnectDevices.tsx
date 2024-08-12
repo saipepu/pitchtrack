@@ -22,7 +22,7 @@ const ConnectDevices = () => {
 
   // show the connected devices from ws
   return (
-    <div className='w-full flex flex-col justify-start items-start gap-1'>
+    <div className='hidden w-full md:flex flex-col justify-start items-start gap-1'>
       <div className='w-full flex justify-between items-center'>
         <h2 className='text-md font-medium'>Connected Devices</h2>
         <div className='flex justify-center items-center gap-1'>

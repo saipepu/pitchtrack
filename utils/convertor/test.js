@@ -1,7 +1,7 @@
 // import { parse, differenceInMilliseconds, startOfDay } from 'date-fns';
 const { parse, differenceInSeconds, startOfDay } = require('date-fns');
 
-export const convertHHMMSStoTotalSec = (timeString: any) => {
+const convertHHMMSStoTotalSec = (timeString) => {
   // Parse the time string
   const time = parse(timeString, 'HH:mm:ss', new Date());
   

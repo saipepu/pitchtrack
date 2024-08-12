@@ -20,6 +20,8 @@ const page = () => {
   const [slots, setSlots] = useState(slotList)
   const [messages, setMessages] = useState(messageList)
 
+  console.log(slots)
+
   const DropDown = () => {
     return (
       <DropdownMenu>
@@ -41,7 +43,7 @@ const page = () => {
 
   return (
     <SlotContext.Provider value={{slots, setSlots, messages, setMessages}}>
-      <div className='w-full h-full overflow-hidden'>
+      <div className='w-full h-full flex flex-col justify-start items-start overflow-y-scroll md:overflow-y-hidden'>
 
         {/* Header */}
         <div className='w-full flex justify-center items-center border-b-[1px] border-slate-100 p-2'>
@@ -79,7 +81,7 @@ const page = () => {
             </>
             )}
           </div>
-          <div className='w-1/2 h-10 flex justify-end items-center'>
+          <div className='w-1/2 h-10 flex justify-end items-center px-2'>
             <DropDown />
             <div className='cursor-pointer text-sm font-medium'>
               Sign In
@@ -87,20 +89,20 @@ const page = () => {
           </div>
         </div>
 
-        <div className='w-full h-full flex justify-start items-start'
-        >
+        <div className='w-full md:max-h-full bg-white flex flex-col lg:flex-row justify-start items-start gap-5 md:gap-0 md:overflow-y-hidden'>
+
           {/* Sidebar */}
-          <div className='hidden md:flex flex-2 w-[35vw] min-w-[300px] h-full overflow-x-hidden overflow-y-scroll'>
+          <div className='flex md:flex-2 md:w-[35vw] md:min-w-[300px] w-full md:h-full md:overflow-y-scroll'>
             <Sidebar />
           </div>
 
           {/* Timer Preset */}
-          <div className='flex-4 w-full h-full overflow-x-hidden overflow-y-scroll'>
+          <div className='md:flex-4 w-full md:h-full'>
             <TimerPreset />
           </div>
 
           {/* Message List */}
-          <div className='hidden lg:flex flex-2 max-w-[25vw] w-full h-full overflow-x-hidden overflow-y-scroll'>
+          <div className='lg:flex flex md:flex-2 w-full md:max-w-[25vw] overflow-x-hidden md:overflow-y-scroll'>
             <MessageList />
           </div>
 
