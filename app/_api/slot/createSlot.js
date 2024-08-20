@@ -1,15 +1,13 @@
-"use server";
-
-import { api } from '@/server/api'
+import { api } from '@/app/_api/api'
 
 export const createSlot = async ({ eventId, slot }) => {
-  
+        
     console.log("Creating slot")
     const response = await fetch(`${api}/events/${eventId}/slots`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(slot)
     })
@@ -17,5 +15,5 @@ export const createSlot = async ({ eventId, slot }) => {
     .catch(error => console.log(error))
   
     return response
-  
+
 }

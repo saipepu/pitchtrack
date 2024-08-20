@@ -16,10 +16,9 @@ import {
 } from "@/components/ui/alert-dialog"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { createEvent } from '@/server/event/createEvent'
 import { useToast } from '@/components/ui/use-toast';
-import { updateEventById } from '@/server/event/updateEventById'
 import { useParams, useRouter } from 'next/navigation';
+import { createEvent, updateEventById } from '@/app/_api/event';
 
 const Header = ({ event, events, fetchAllEvents }: any) => {
 

@@ -2,7 +2,15 @@
 
 import React, { use, useEffect, useState } from 'react'
 import Clock from './_components/Clock';
-import { Timer } from '@/server/presentor/getTimer';
+
+export const Timer = {
+  team: "Test Team",
+  presentor: "Test Presentor",
+  time: "00:00:10",
+  warning: "00:00:05",
+  danger: "00:00:02",
+  generalMessage: "Test General Message"
+}
 
 const Presentor = () => {
   

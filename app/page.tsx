@@ -14,9 +14,9 @@ interface Timer {
   stoppedTime: number;
   action: ACTION
 }
-const socket = io('http://localhost:8080');
-socket.on('connect', () => {
-})
+// const socket = io('http://localhost:8080');
+// socket.on('connect', () => {
+// })
 
 export default function Home() {
 
@@ -29,24 +29,24 @@ export default function Home() {
   const [resumed, setResumed] = useState<boolean>(true)
   const intervalRef = useRef<number | null>(null);
 
-  socket.on("message", (message) => {
-    setMessage(message)
-  })
+  // socket.on("message", (message) => {
+  //   setMessage(message)
+  // })
 
-  socket.on("resume", (message) => {
-    setStartTime(currentTime);
-    setResumed(true)
-  })
+  // socket.on("resume", (message) => {
+  //   setStartTime(currentTime);
+  //   setResumed(true)
+  // })
 
-  socket.on("pause", (message) => {
-    console.log('PAUSED')
-    setResumed(false)
-  })
+  // socket.on("pause", (message) => {
+  //   console.log('PAUSED')
+  //   setResumed(false)
+  // })
 
-  const EmitSocket = (path: string, payload: Timer) => {
-    console.log('Emitting', path, payload)
-    socket.emit(path, payload);
-  }
+  // const EmitSocket = (path: string, payload: Timer) => {
+  //   console.log('Emitting', path, payload)
+  //   socket.emit(path, payload);
+  // }
 
   useEffect(() => {
     if (!resumed) {
@@ -68,12 +68,12 @@ export default function Home() {
 
   useEffect(() => {
     // Redirect to /dashboard
-    router.push('/dashboard')
+    router.push('/1/dashboard')
   }, [])
 
   return (
     <>
-      <h1>Hello</h1>
+      {/* <h1>Hello</h1>
       <h1 className="two-xl text-blue-200 bg-blue">Timer - {currentTime}</h1>
       <input type="number" onChange={(e) => setTime(parseInt(e.target.value))} />
       <button onClick={() => EmitSocket('resume', {
@@ -83,7 +83,7 @@ export default function Home() {
       <button onClick={() => EmitSocket('pause', {
         stoppedTime: currentTime,
         action: ACTION.PAUSE
-      })}>PAUSE</button>
+      })}>PAUSE</button> */}
     </>
   );
 }

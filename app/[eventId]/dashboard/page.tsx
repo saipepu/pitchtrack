@@ -1,16 +1,13 @@
 "use client"
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Sidebar from './_components/Sidebar/page'
 import TimerPreset from './_components/TimerPreset/page'
 import MessageList from './_components/MessageList/page'
-import slotList from '@/utils/dummy-data/slots'
-import messageList from '@/utils/dummy-data/messages'
 import { SlotContext } from '../../hooks/SlotContext'
 import Header from './_components/Header/Header'
 import { useParams } from 'next/navigation'
-import { getOneEvent } from '@/server/event/getOneEvent'
-import { getAllEvents } from '@/server/event/getAllEvents'
+import { getEventById, getAllEvents } from '@/app/_api/event'
 import { useToast } from '@/components/ui/use-toast'
 
 const page = () => {
@@ -23,7 +20,7 @@ const page = () => {
   const [messages, setMessages] = useState([])
 
   // FETCH EVENT
-  const fetchEvent = async () => {
+  const fetchEventById = async () => {
 
     let e: any = localStorage.getItem('pitchtrack-event')
     
@@ -34,7 +31,7 @@ const page = () => {
       return
     }
 
-    const response = await getOneEvent({ eventId })
+    const response = await getEventById({ eventId })
 
     if(response.success) {
       setEvent(response.message)
@@ -66,9 +63,8 @@ const page = () => {
   // FETCH ALL EVENTS
   const fetchAllEvents = async () => {
 
-    const response = await getAllEvents();
+    const response = await getAllEvents()
 
-    console.log(response)
     if(response.success) {
       setEvents(response.message)
     } else {
@@ -77,12 +73,13 @@ const page = () => {
       })
       console.log('Failed to fetch events')
     }
+    console.log(response, 'ALL EVENTS')
 
   }
   
   useEffect(() => {
 
-    fetchEvent()
+    fetchEventById()
     fetchAllEvents()
 
   }, [eventId])

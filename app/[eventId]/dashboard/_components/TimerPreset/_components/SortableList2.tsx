@@ -4,8 +4,8 @@ import TimeBlock from './TimeBlock'
 import { toast } from '@/components/ui/use-toast'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
-import { createSlot } from '@/server/slot/createSlot'
 import { useParams } from "next/navigation";
+import { createSlot } from '@/app/_api/slot'
 
 const SortableList2 = ({ tag } : { tag: string }) => {
 

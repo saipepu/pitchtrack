@@ -1,11 +1,20 @@
 "use client"
-import { Timer } from '@/server/presentor/getTimer';
 import { convertHHMMSStoTotalSec } from '@/utils/convertor/convert-hhmmss-to-totalsec';
 import { convertTotalSectoHHMMSS } from '@/utils/convertor/convert-totalsec-to-hhmmss'
 import React, { useEffect, useState } from 'react'
 
 interface ClockProps {
   isFlashing: boolean;
+}
+
+// Dummay Timer Data
+const Timer = {
+  team: "Test Team",
+  presentor: "Test Presentor",
+  time: "00:00:10",
+  warning: "00:00:05",
+  danger: "00:00:02",
+  generalMessage: "Test General Message"
 }
 
 const Clock = ({ isFlashing }: ClockProps ) => {
