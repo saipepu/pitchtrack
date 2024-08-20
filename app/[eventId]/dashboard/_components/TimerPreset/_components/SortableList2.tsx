@@ -1,9 +1,11 @@
-import { SlotContext } from '@/app/dashboard/hook'
+import { SlotContext } from "@/app/hooks/SlotContext";
 import React, { useContext } from 'react'
 import TimeBlock from './TimeBlock'
 import { toast } from '@/components/ui/use-toast'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
+import { createSlot } from '@/server/slot/createSlot'
+import { useParams } from "next/navigation";
 
 const SortableList2 = ({ tag } : { tag: string }) => {
 
@@ -137,7 +139,7 @@ const Column = ({ tag, cards, setCards }: any) => {
     }
   };
 
-  const filteredCards = cards.filter((card: any) => card.tag == tag)
+  const filteredCards = cards?.filter((card: any) => card.tag == tag)
 
   return (
     <div
@@ -146,7 +148,7 @@ const Column = ({ tag, cards, setCards }: any) => {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      {filteredCards.map((card: any, i: any) => {
+      {filteredCards?.map((card: any, i: any) => {
 
         return (
           <Card
@@ -197,14 +199,44 @@ const DropIndicator = ({ beforeId, tag }: any) => {
 
 const AddCard = ({ column, setCards, cards }: any) => {
 
+  const { eventId } = useParams();
+  const createNewSlot = async (newSlot: any) => {
+
+    const response = await createSlot({ eventId, slot: newSlot });
+
+    console.log(response)
+
+    if(response.success) {
+      toast({
+        title: "Slot created"
+      })
+    } else {
+      toast({
+        title: "Failed to create slot"
+      })
+      console.log('Failed to create slot')
+    }
+
+  }
+
   return (
     <>
       <Button
           onClick={() => {
+            let newSlot = {
+              "title": "New Slot",
+              "speaker": "Speaker1",
+              "notes": "Note1",
+              "appearance": "countdown",
+              "startTimeType": "manual",
+              "startTime": "2024-08-15T12:40:40.000+07:00",
+              "duration": "23:50:00"
+            }
             setCards([
               ...cards,
-              {...cards[cards.length - 1], id: (cards.length+1).toString()}
+              {...newSlot, tag: 'timeslot'}
             ])
+            createNewSlot(newSlot)
           }}
           className="flex w-full justify-start items-center gap-1 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:text-slate-500"
       >

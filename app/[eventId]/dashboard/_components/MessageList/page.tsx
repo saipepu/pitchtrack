@@ -79,7 +79,7 @@ const page = () => {
 
       {/* Message List */}
       <div className='w-full flex flex-col justify-start items-start gap-2 pb-[100px]'>
-        <MessageSortableList />
+        {/* <MessageSortableList /> */}
         <div className='w-full flex justify-center items-center'>
           <div
             onClick={() => {

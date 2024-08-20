@@ -40,7 +40,7 @@ const TimerPreview = () => {
       <div className='border-[1px] border-slate-300 rounded-md w-full overflow-hidden'>
         <iframe
           // src="http://localhost:3000/audience/presentor"
-          src="/audience/presentor"
+          src="/1/audience/presentor"
           width="100%"
           height="300"
           style={{ border: 'none' }}

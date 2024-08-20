@@ -1,13 +1,10 @@
 "use client";
 
 import React, { useContext, useState } from "react";
-import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { FaFire } from "react-icons/fa";
 import MessageEditor from "./MessageEditor";
-import { Toast } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-import { SlotContext } from "@/app/dashboard/hook";
+import { SlotContext } from "@/app/hooks/SlotContext";
 
 const MessageSortableList = () => {
 

@@ -1,0 +1,123 @@
+"use client"
+
+import React, { useContext, useEffect, useState } from 'react'
+import Sidebar from './_components/Sidebar/page'
+import TimerPreset from './_components/TimerPreset/page'
+import MessageList from './_components/MessageList/page'
+import slotList from '@/utils/dummy-data/slots'
+import messageList from '@/utils/dummy-data/messages'
+import { SlotContext } from '../../hooks/SlotContext'
+import Header from './_components/Header/Header'
+import { useParams } from 'next/navigation'
+import { getOneEvent } from '@/server/event/getOneEvent'
+import { getAllEvents } from '@/server/event/getAllEvents'
+import { useToast } from '@/components/ui/use-toast'
+
+const page = () => {
+
+  const { toast } = useToast()
+  const { eventId } = useParams();
+  const [event, setEvent] = useState<any>({})
+  const [events, setEvents] = useState([])
+  const [slots, setSlots] = useState([])
+  const [messages, setMessages] = useState([])
+
+  // FETCH EVENT
+  const fetchEvent = async () => {
+
+    let e: any = localStorage.getItem('pitchtrack-event')
+    
+    if(e?._id === eventId) {
+      setEvent(JSON.parse(e))
+      setSlots(JSON.parse(e).slots)
+      setMessages(JSON.parse(e).messages)
+      return
+    }
+
+    const response = await getOneEvent({ eventId })
+
+    if(response.success) {
+      setEvent(response.message)
+      let slotList = response.message.slots.map((slot: any, i: number) => {
+        return {
+          ...slot,
+          tag: 'timeslot',
+        }
+      })
+      setSlots(slotList)
+      let messageList = response.message.messages.map((message: any, i: number) => {
+        return {
+          ...message,
+          tag: 'message',
+        }
+      })
+      setMessages(messageList)
+      localStorage.setItem('pitchtrack-event', JSON.stringify(response.message))
+    } else {
+      toast({
+        title: "Failed to fetch event"
+      })
+      console.log('Failed to fetch event')
+    }
+    console.log(response)
+
+  }
+
+  // FETCH ALL EVENTS
+  const fetchAllEvents = async () => {
+
+    const response = await getAllEvents();
+
+    console.log(response)
+    if(response.success) {
+      setEvents(response.message)
+    } else {
+      toast({
+        title: "Failed to fetch events"
+      })
+      console.log('Failed to fetch events')
+    }
+
+  }
+  
+  useEffect(() => {
+
+    fetchEvent()
+    fetchAllEvents()
+
+  }, [eventId])
+
+  console.log(slots)
+
+  return (
+    <SlotContext.Provider value={{slots, setSlots, messages, setMessages}}>
+      <div className='w-full h-full flex flex-col justify-start items-start overflow-y-scroll lg:overflow-y-hidden'>
+
+        {/* Header */}
+        <Header event={event} events={events} fetchAllEvents={fetchAllEvents}/>
+
+        <div className='w-full lg:max-h-full bg-white flex flex-col lg:flex-row justify-start items-start gap-5 lg:gap-0 lg:overflow-y-hidden'>
+
+          {/* Sidebar */}
+          <div className='flex lg:flex-2 lg:w-[35vw] lg:min-w-[300px] w-full lg:h-full lg:overflow-y-scroll'>
+            <Sidebar />
+          </div>
+
+          {/* Timer Preset */}
+          <div className='lgflex-4 w-full lgh-full'>
+            <TimerPreset />
+          </div>
+
+          {/* Message List */}
+          <div className='lg:flex flex lgflex-2 w-full lgmax-w-[25vw] overflow-x-hidden lgoverflow-y-scroll'>
+            <MessageList />
+          </div>
+
+        </div>
+
+      </div>
+    </SlotContext.Provider>
+  )
+}
+
+export default page
