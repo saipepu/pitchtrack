@@ -3,7 +3,7 @@
 import React, { use, useEffect, useState } from 'react'
 import Clock from './_components/Clock';
 
-export const Timer = {
+const Timer = {
   team: "Test Team",
   presentor: "Test Presentor",
   time: "00:00:10",
