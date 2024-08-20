@@ -98,12 +98,12 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
           <Popover onOpenChange={(open) => !open && handleSave()}>
             <PopoverTrigger asChild>
               <div className='min-w-[65px] relative'>
-                <p className='group-hover/slot:opacity-100 opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Duration</p>
-                <p className='min-w-[65px] text-lg font-semibold whitespace-nowrap select-none'>{duration}</p>
+                <p className='group-hover/slot:opacity-100 md:opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Duration</p>
+                <p className='min-w-[65px] text-sm md:text-lg font-semibold whitespace-nowrap select-none'>{duration.split(':').slice(1).join(':')}</p>
                 <p className='group-hover/slot:opacity-100 opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Countdown</p>
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-80 bg-slate-100 text-black p-2 grid grid-cols-1 gap-2">
+            <PopoverContent className="w-[300px] bg-slate-100 text-black p-2 grid grid-cols-1 gap-2 translate-x-5">
               <Duration slot={slot} setSlot={setSlot} handleSave={handleSave}/>
               <PopoverHandler />
             </PopoverContent>
@@ -113,11 +113,11 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
           <Popover onOpenChange={(open) => !open && handleSave()}>
             <PopoverTrigger asChild>
               <div className='min-w-[65px] flex justify-center items-center gap-2 group'>
-                <p className='text-lg font-semibold whitespace-nowrap select-none'>{slot?.title}</p>
+                <p className='text-sm md:text-lg font-semibold whitespace-nowrap select-none'>{slot?.title}</p>
                 <Pencil size={16} className='opacity-0 group-hover/slot:opacity-100 duration-500'/>
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-[420px] bg-slate-100 text-black p-2 grid grid-cols-1 gap-2">
+            <PopoverContent className="w-[300px] md:w-[420px] bg-slate-100 text-black p-2 grid grid-cols-1 gap-2">
               <General slot={slot} setSlot={setSlot} handleSave={handleSave}/>
               <PopoverHandler />
             </PopoverContent>
@@ -126,17 +126,17 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
 
       </div>
 
-      <div className='h-full max-h-[32px] flex justify-start items-center gap-2'>
-        <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'>
+      <div className='h-full max-h-[24px] md:max-h-[32px] flex justify-start items-center gap-1 md:gap-2'>
+        <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-1 md:px-2'>
             <SkipBack size={16} />
         </div>
         <div
-          className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'
+          className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-1 md:px-2'
           onClick={() => setShowSetting(true)}
         >
             <Settings size={16} />
         </div>
-        <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'>
+        <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-1 md:px-2'>
             <Play size={16} />
         </div>
         <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md  px-2'>

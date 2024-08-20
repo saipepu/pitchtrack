@@ -18,9 +18,9 @@ const page = ({ setShowSetting, slot, setSlot, handleSave } : any) => {
   let startTime = new Date(s).getHours().toString().padStart(2, '0  ') + ':' + new Date(s).getMinutes().toString().padStart(2, '0') + ':' + new Date(s).getSeconds().toString().padStart(2, '0')
 
   return (
-    <div className='z-10 absolute flex justify-center items-center w-full h-full top-0 left-0 cursor-auto'>
+    <div className='z-10 absolute flex justify-center items-start w-full min-h-[100vh] top-0 left-0 cursor-auto pt-5 overflow-hidden'>
 
-      <div className="z-20 w-[70vw] max-w-[750px] flex flex-col justify-start items-start gap-5 bg-slate-100 rounded-lg p-4">
+      <div className="z-20 w-[85vw] md:w-[70vw] max-w-[750px] max-h-[90vh] flex flex-col justify-start items-start gap-5 bg-slate-100 rounded-lg p-4 overflow-y-scroll">
 
         <div className="w-full flex justify-between items-center gap-2">
           <div className='w-full flex justify-start items-center gap-2'>
@@ -73,7 +73,7 @@ const page = ({ setShowSetting, slot, setSlot, handleSave } : any) => {
 
 
       {/* Background */}
-      <div className='absolute w-full h-full bg-black opacity-50'>
+      <div className='absolute w-full h-full bg-black opacity-50 top-0 left-0'>
       </div>
 
     </div>

@@ -27,8 +27,9 @@ const Support = () => {
         </div>
       </div>
 
-      <div className='w-full grid grid-flow-col grid-cols-3 justify-start items-center gap-5'>
+      <div className='w-full grid grid-cols-1 md:grid-cols-3 justify-start items-center gap-2 md:gap-5 mb-2 md:mb-0'>
 
+        {/* WARNING */}
         <div className='col-span-1 w-full grid grid-cols-2 items-center'>
           <div className='col-span-1 flex items-center gap-1'>
             <div className='w-3 h-3 bg-yellow rounded-full'></div>
@@ -66,8 +67,9 @@ const Support = () => {
           </div>
         </div>
 
+        {/* CHIME */}
         <div className='col-span-1 w-full grid grid-cols-2 items-center'>
-          <div className='col-span-1 flex items-center justify-end px-2'>
+          <div className='col-span-1 flex items-center md:justify-end px-2'>
             <Label htmlFor="warning">Chime</Label>
           </div>
           <div className='w-full col-span-1 border-0 flex justify-start items-center'>
@@ -77,19 +79,20 @@ const Support = () => {
               </SelectTrigger>
               <SelectContent className='bg-white text-black'>
                 <SelectGroup>
-                  <SelectItem className="cursor-pointer bg-white" value='1'>1</SelectItem>
-                  <SelectItem className="cursor-pointer bg-white" value='2'>2</SelectItem>
-                  <SelectItem className="cursor-pointer bg-white" value='3'>3</SelectItem>
-                  <SelectItem className="cursor-pointer bg-white" value='4'>4</SelectItem>
-                  <SelectItem className="cursor-pointer bg-white" value='5'>5</SelectItem>
+                  <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value='1'>1</SelectItem>
+                  <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value='2'>2</SelectItem>
+                  <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value='3'>3</SelectItem>
+                  <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value='4'>4</SelectItem>
+                  <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value='5'>5</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
           </div>
         </div>
 
+        {/* FLASH */}
         <div className='col-span-1 w-full grid grid-cols-2 items-center'>
-          <div className='col-span-1 flex items-center justify-end px-2'>
+          <div className='col-span-1 flex items-center md:justify-end px-2'>
             <Label htmlFor="warning">Flash</Label>
           </div>
           <div className='w-full col-span-1 border-0 flex justify-start items-center'>
@@ -112,13 +115,15 @@ const Support = () => {
 
       </div>
 
-      <div className='w-full grid grid-flow-col grid-cols-3 justify-start items-center gap-5'>
+      <div className='w-full grid grid-cols-1 md:grid-cols-3 justify-start items-center gap-2 md:gap-5'>
 
+        {/* DANGER */}
         <div className='col-span-1 w-full grid grid-cols-2 items-center'>
           <div className='col-span-1 flex items-center gap-1'>
             <div className='w-3 h-3 bg-red rounded-full'></div>
             <Label htmlFor="warning">Danger</Label>
           </div>
+
           <div className='w-full col-span-1 border-0 flex justify-start items-center'>
             <Input
               className="text-center w-full col-span-3 p-1 px-2 border-0 bg-white"
@@ -151,8 +156,9 @@ const Support = () => {
           </div>
         </div>
 
+        {/* CHIME */}
         <div className='col-span-1 w-full grid grid-cols-2 items-center'>
-          <div className='col-span-1 flex items-center justify-end px-2'>
+          <div className='col-span-1 flex items-center md:justify-end px-2'>
             <Label htmlFor="warning">Chime</Label>
           </div>
           <div className='w-full col-span-1 border-0 flex justify-start items-center'>
@@ -173,8 +179,9 @@ const Support = () => {
           </div>
         </div>
 
+        {/* FLASH */}
         <div className='col-span-1 w-full grid grid-cols-2 items-center'>
-          <div className='col-span-1 flex items-center justify-end px-2'>
+          <div className='col-span-1 flex items-center md:justify-end px-2'>
             <Label htmlFor="warning">Flash</Label>
           </div>
           <div className='w-full col-span-1 border-0 flex justify-start items-center'>

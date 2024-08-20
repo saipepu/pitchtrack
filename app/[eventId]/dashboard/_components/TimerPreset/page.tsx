@@ -1,8 +1,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { Dot, Zap } from 'lucide-react'
 import React from 'react'
-import SortablePreset from './_components/SortableList'
-import SortableList2 from './_components/SortableList2'
+import SortableList from '../SortableList'
 
 const TimerPreset = () => {
 
@@ -35,7 +34,7 @@ const TimerPreset = () => {
       </div>
       </div>
 
-      <SortableList2 tag={"timeslot"}/>
+      <SortableList tag={"timeslot"}/>
 
     </div>
   )

@@ -93,7 +93,7 @@ const page = () => {
         {/* Header */}
         <Header event={event} events={events} fetchAllEvents={fetchAllEvents}/>
 
-        <div className='w-full lg:max-h-full bg-white flex flex-col lg:flex-row justify-start items-start gap-5 lg:gap-0 lg:overflow-y-hidden'>
+        <div className='w-full h-full lg:max-h-full bg-white flex flex-col lg:flex-row justify-start items-start gap-5 lg:gap-0 lg:overflow-y-hidden'>
 
           {/* Sidebar */}
           <div className='flex lg:flex-2 lg:w-[35vw] lg:min-w-[300px] w-full lg:h-full lg:overflow-y-scroll'>
@@ -101,12 +101,12 @@ const page = () => {
           </div>
 
           {/* Timer Preset */}
-          <div className='lgflex-4 w-full lgh-full'>
+          <div className='lg:flex-4 w-full lg:h-full'>
             <TimerPreset />
           </div>
 
           {/* Message List */}
-          <div className='lg:flex flex lgflex-2 w-full lgmax-w-[25vw] overflow-x-hidden lgoverflow-y-scroll'>
+          <div className='lg:flex lg:flex-2 w-full lg:h-full lg:max-w-[25vw]'>
             <MessageList />
           </div>
 

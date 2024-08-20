@@ -59,14 +59,19 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
   return (
     <>
       <div className="w-full grid grid-cols-4 items-center gap-2">
-        <Select onValueChange={(value) => setSlot({ ...slot, startType: value})}>
+        <Select
+          onValueChange={(value) => {
+              setSlot({ ...slot, startType: value})
+            }
+          }
+        >
           <SelectTrigger className="w-full col-span-4 p-1 px-2 border-0 bg-white">
             <SelectValue placeholder={slot.startType} />
           </SelectTrigger>
           <SelectContent className='bg-white text-black'>
             <SelectGroup>
-              <SelectItem className="cursor-pointer bg-white" value={StartType.Manual}>{StartType.Manual}</SelectItem>
-              <SelectItem className="cursor-pointer bg-white" value={StartType.Scheduled}>{StartType.Scheduled}</SelectItem>
+              <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Manual}>{StartType.Manual}</SelectItem>
+              <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Scheduled}>{StartType.Scheduled}</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -139,8 +144,8 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
                   setDate(date)
                 }}
                 className="rounded-md border"
-                initialFocus
-                fromDate={new Date(parseInt(slot.startTime))}
+                // initialFocus
+                fromDate={new Date()}
               />
             </PopoverContent>
           </Popover>

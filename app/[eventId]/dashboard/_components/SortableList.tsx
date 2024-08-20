@@ -1,32 +1,35 @@
+import { createMessage } from '@/app/_api/message';
+import { createSlot } from '@/app/_api/slot';
 import { SlotContext } from "@/app/hooks/SlotContext";
-import React, { useContext } from 'react'
-import TimeBlock from './TimeBlock'
-import { toast } from '@/components/ui/use-toast'
-import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/use-toast';
+import { Plus } from 'lucide-react';
 import { useParams } from "next/navigation";
-import { createSlot } from '@/app/_api/slot'
+import { useContext } from 'react';
+import MessageEditor from "./MessageList/_components/MessageEditor";
+import TimeBlock from './TimerPreset/_components/TimeBlock';
 
-const SortableList2 = ({ tag } : { tag: string }) => {
+const SortableList = ({ tag } : { tag: string }) => {
 
-  const { slots, setSlots } = useContext(SlotContext)
+  const { slots, setSlots, messages, setMessages } = useContext(SlotContext)
 
   return (
     <div className='w-full flex justify-start items-start overflow-y-scroll md:pb-[50px]'>
-      <Board slots={slots} setSlots={setSlots} tag={tag} />
+      {tag === 'timeslot' && <Board cards={slots} setCards={setSlots} tag={tag} />}
+      {tag === 'message' && <Board cards={messages} setCards={setMessages} tag={tag} />}
     </div>
   )
 
 }
 
-const Board = ({ slots, setSlots, tag } : any ) => {
+const Board = ({ cards, setCards, tag } : any ) => {
 
   return (
     <div className="flex w-full">
       <Column
         tag={tag}
-        cards={slots}
-        setCards={setSlots}
+        cards={cards}
+        setCards={setCards}
       />
     </div>
   )
@@ -162,7 +165,7 @@ const Column = ({ tag, cards, setCards }: any) => {
         )
       })}
       <DropIndicator beforeId={null} tag={tag} />
-      <AddCard column={tag} setCards={setCards} cards={cards} />
+      <AddCard tag={tag} setCards={setCards} cards={cards} />
     </div>
   )
 }
@@ -180,7 +183,8 @@ const Card = ({ tag, card, setCards, currentSlot, handleDragStart }: any) => {
           handleDragStart(e, card)
         }}
       >
-        <TimeBlock card={card} setCards={setCards} currentSlot={currentSlot} handleDragStart={handleDragStart} />
+        {tag === 'timeslot' &&  <TimeBlock card={card} setCards={setCards} currentSlot={currentSlot} handleDragStart={handleDragStart} /> }
+        {tag === 'message' && <MessageEditor message={card} setMessages={setCards} />}
       </div>
       </>
     )
@@ -197,9 +201,11 @@ const DropIndicator = ({ beforeId, tag }: any) => {
   )
 }
 
-const AddCard = ({ column, setCards, cards }: any) => {
+const AddCard = ({ tag, setCards, cards }: any) => {
 
   const { eventId } = useParams();
+
+  // CREATE NEW SLOT
   const createNewSlot = async (newSlot: any) => {
 
     const response = await createSlot({ eventId, slot: newSlot });
@@ -210,41 +216,71 @@ const AddCard = ({ column, setCards, cards }: any) => {
       toast({
         title: "Slot created"
       })
+      setCards([...cards, {...response.message.slots.pop(), tag: 'timeslot'}])
     } else {
       toast({
         title: "Failed to create slot"
       })
       console.log('Failed to create slot')
     }
+    
+  }
+  
+  // CREATE NEW MESSAGE
+  const createNewMessage = async (newMessage: any) => {
+    
+    const response = await createMessage({ eventId, message: newMessage });
+    
+    console.log(response)
+    
+    if(response.success) {
+      toast({
+        title: "Message created"
+      })
+      setCards([...cards, {...response.message.messages.pop(), tag: 'message'}])
+    } else {
+      toast({
+        title: "Failed to create message"
+      })
+      console.log('Failed to create message')
+    }
+
+  }
+
+  const handleAddCard = () => {
+      
+      if(tag === 'timeslot') {
+        createNewSlot({
+          "title": "Slot1",
+          "speaker": "Speaker1",
+          "notes": "Note1",
+          "appearance": "countdown",
+          "startTimeType": "manual",
+          "startTime": "2024-08-15T12:40:40.000+07:00",
+          "duration": "23:50:00"
+        })
+      } else {
+        createNewMessage({
+          name: "New Message",
+          weight: 'normal',
+          color: 'green',
+          isCap: false,
+        })
+      }
 
   }
 
   return (
     <>
       <Button
-          onClick={() => {
-            let newSlot = {
-              "title": "New Slot",
-              "speaker": "Speaker1",
-              "notes": "Note1",
-              "appearance": "countdown",
-              "startTimeType": "manual",
-              "startTime": "2024-08-15T12:40:40.000+07:00",
-              "duration": "23:50:00"
-            }
-            setCards([
-              ...cards,
-              {...newSlot, tag: 'timeslot'}
-            ])
-            createNewSlot(newSlot)
-          }}
+          onClick={() => handleAddCard()}
           className="flex w-full justify-start items-center gap-1 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:text-slate-500"
       >
-          <p>Add card</p>
+          <p>New {tag === 'timeslot' ? 'Slot' : 'Message'}</p>
           <Plus width={12} height={12} />
       </Button>
     </>
   );
 };
 
-export default SortableList2
+export default SortableList

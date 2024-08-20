@@ -187,7 +187,7 @@ const Header = ({ event, events, fetchAllEvents }: any) => {
 
       {showCreateNewEventForm && <CreateNewEventForm />}
 
-      <div className='w-1/2 h-10 flex justify-start items-center'>
+      <div className='w-full h-10 flex justify-start items-center'>
         {isEventNameChanging ? (
           <>
             <Input
@@ -211,7 +211,7 @@ const Header = ({ event, events, fetchAllEvents }: any) => {
                 setIsEventNameChanging(false)
                 updateEvent({ eventName: eventName })
               }}
-              className='text-2xl max-w-full w-fit bg-transparent font-bold focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0 focus-visible:border-0 placeholder:text-slate-400'
+              className='text-base md:text-2xl max-w-full w-fit bg-transparent font-bold focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0 focus-visible:border-0 placeholder:text-slate-400'
             />
             <PencilLine size={18}/>
           </>
@@ -219,7 +219,7 @@ const Header = ({ event, events, fetchAllEvents }: any) => {
         (
           <>
             <div
-              className='text-2xl max-w-full w-fit bg-transparent font-bold px-3 py-2'
+              className='text-base md:text-2xl max-w-full w-fit bg-transparent font-bold px-3 py-2'
               onClick={() => setIsEventNameChanging(true)}
             >
               {eventName}
@@ -229,9 +229,9 @@ const Header = ({ event, events, fetchAllEvents }: any) => {
         )}
       </div>
 
-      <div className='w-1/2 h-10 flex justify-end items-center px-2'>
+      <div className='h-10 flex justify-end items-center px-2'>
         <DropDown />
-        <div className='cursor-pointer text-sm font-medium'>
+        <div className='cursor-pointer text-sm font-medium whitespace-nowrap'>
           Sign In
         </div>
       </div>

@@ -23,7 +23,8 @@ const MessageEditor = ({ message, i, setMessages } : any) => {
       <div className='w-full h-full flex flex-col justify-start items-start gap-2'>
         <Textarea
           placeholder='Type your message here'
-          value={message.isCap ? message.desc.toUpperCase() : message.desc }
+          // value={message.isCap ? message.desc?.toUpperCase() : message.desc }
+          value ={message.isCap ? message.name?.toUpperCase() : message.name}
           className={`resize-none w-full h-[32px] bg-transparent ${message.bold ? 'font-bold' : ''} ${message.capitalized ? 'uppercase' : ''}`}
           style={{ color: message.color, border: 'none', background: 'white' }}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
