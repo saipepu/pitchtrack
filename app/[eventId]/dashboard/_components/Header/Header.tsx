@@ -44,10 +44,10 @@ const Header = ({ event, events, fetchAllEvents }: any) => {
               return (
                 <DropdownMenuCheckboxItem
                   key={i}
-                  checked={event._id === eventId}
-                  onClick={() => router.push(`/${event._id}/dashboard`)}
+                  checked={event?._id === eventId}
+                  onClick={() => router.push(`/${event?._id}/dashboard`)}
                 >
-                  {event.title}
+                  {event?.title}
                 </DropdownMenuCheckboxItem>
               )
 
@@ -117,7 +117,6 @@ const Header = ({ event, events, fetchAllEvents }: any) => {
 
     if(newEvent.success) {
 
-      console.log('Event created successfully')
       toast({
         title: "Event creation Successful",
       })
@@ -125,15 +124,12 @@ const Header = ({ event, events, fetchAllEvents }: any) => {
       fetchAllEvents()
 
     } else {
-      console.log('Event creation failed')
       
       toast({
         title: "Event creation failed",
       })
 
     }
-
-    console.log(newEvent)
 
   }
 
@@ -151,12 +147,10 @@ const Header = ({ event, events, fetchAllEvents }: any) => {
       return
     }
 
-    console.log(dto)
     const newEvent = await updateEventById({ event: dto, eventId })
 
     if(newEvent.success) {
 
-      console.log('Event updated successfully')
       toast({
         title: "Event updated Successful",
       })
@@ -164,21 +158,18 @@ const Header = ({ event, events, fetchAllEvents }: any) => {
       fetchAllEvents()
 
     } else {
-      console.log('Event update failed')
       
       toast({
         title: "Event update failed",
       })
 
     }
-
-    console.log(newEvent)
   
   }
 
   useEffect(() => {
 
-    setEventName(event.title)
+    setEventName(event?.title)
 
   }, [event])
 

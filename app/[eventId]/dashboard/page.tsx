@@ -56,7 +56,6 @@ const page = () => {
       })
       console.log('Failed to fetch event')
     }
-    console.log(response)
 
   }
 
@@ -73,7 +72,6 @@ const page = () => {
       })
       console.log('Failed to fetch events')
     }
-    console.log(response, 'ALL EVENTS')
 
   }
   
@@ -84,10 +82,8 @@ const page = () => {
 
   }, [eventId])
 
-  console.log(slots)
-
   return (
-    <SlotContext.Provider value={{slots, setSlots, messages, setMessages}}>
+    <SlotContext.Provider value={{slots, setSlots, messages, setMessages, event}}>
       <div className='w-full h-full flex flex-col justify-start items-start overflow-y-scroll lg:overflow-y-hidden'>
 
         {/* Header */}

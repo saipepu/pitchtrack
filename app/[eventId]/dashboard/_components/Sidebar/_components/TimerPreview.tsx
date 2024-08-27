@@ -11,7 +11,6 @@ const TimerPreview = () => {
 
   const [currentTime, setCurrentTime] = useState<any>()
   const pathname = usePathname();
-  console.log(pathname)
 
   useEffect(() => {
     setCurrentTime(`${new Date().getDate()}:${new Date().getHours()}:${new Date().getSeconds()}`)

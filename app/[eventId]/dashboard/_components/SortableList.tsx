@@ -9,6 +9,36 @@ import { useContext } from 'react';
 import MessageEditor from "./MessageList/_components/MessageEditor";
 import TimeBlock from './TimerPreset/_components/TimeBlock';
 
+let slotDefaultSchema = {
+    "tag": "Tag1",
+    "title": "Slot1",
+    "speaker": "Speaker1",
+    "notes": "Note1",
+    "appearance": "countdown",
+    "startTimeType": "manual",
+    "startTime": "2024-08-15T12:40:40.000+07:00",
+    "duration": "3500",
+    "pauseTime": "3500",
+    "warningTime": "35",
+    "dangerTime": "5",
+    "warningColor": "yellow",
+    "dangerColor": "red",
+    "dangerSound": "danger",
+    "warningSound": "warning",
+    "flash": true,
+    "flashCount": 3,
+    "sortOrder": 1,
+    "status": "active",
+    "active": false
+}
+let messageDefaultSchema = {
+  "tag": "Tag1",
+  "desc": "Message1",
+  "isCap": true,
+  "onDisplay": true,
+  "color": "green"
+}
+
 const SortableList = ({ tag } : { tag: string }) => {
 
   const { slots, setSlots, messages, setMessages } = useContext(SlotContext)
@@ -249,23 +279,15 @@ const AddCard = ({ tag, setCards, cards }: any) => {
 
   const handleAddCard = () => {
       
+      console.log(cards)
       if(tag === 'timeslot') {
-        createNewSlot({
-          "title": "Slot1",
-          "speaker": "Speaker1",
-          "notes": "Note1",
-          "appearance": "countdown",
-          "startTimeType": "manual",
-          "startTime": "2024-08-15T12:40:40.000+07:00",
-          "duration": "23:50:00"
-        })
+
+        createNewSlot(slotDefaultSchema)
+
       } else {
-        createNewMessage({
-          name: "New Message",
-          weight: 'normal',
-          color: 'green',
-          isCap: false,
-        })
+
+        createNewMessage(messageDefaultSchema)
+
       }
 
   }

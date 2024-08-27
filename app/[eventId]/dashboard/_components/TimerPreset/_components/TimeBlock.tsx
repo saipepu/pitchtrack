@@ -1,17 +1,15 @@
 "use client";
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { convertTotalSectoHHMMSS } from '@/utils/convertor/convert-totalsec-to-hhmmss'
-import { Equal, MoreVerticalIcon, Pencil, Play, Settings, SkipBack } from 'lucide-react'
-import React, { use, useContext, useEffect, useState } from 'react'
+import { Copy, Equal, MoreVerticalIcon, Pencil, Play, Settings, SkipBack, Trash } from 'lucide-react'
+import React, { useContext, useEffect, useState } from 'react'
 import General from '../../TimeBlockSetting/_components/General'
 import Duration from '../../TimeBlockSetting/_components/Duration'
 import StartTime from '../../TimeBlockSetting/_components/StartTime'
 import TimeBlockSetting from '../../TimeBlockSetting/page'
 import { SlotContext } from "@/app/hooks/SlotContext";
+import { updateSlot, deleteSlot } from "@/app/_api/slot";
 
 enum PopoverType {
   General = 'General',
@@ -23,21 +21,53 @@ enum PopoverType {
 
 const TimeBlock = ({ timer, currentSlot }: any) => {
 
-  const { slots, setSlots } = useContext(SlotContext)
-
+  const { slots, setSlots, event } = useContext(SlotContext)
   const [slot, setSlot] = useState(slots[currentSlot]) // make a copy of the original slot
+  let eventId = event._id
+  let slotId = slot._id
   const [showSetting, setShowSetting] = useState(false)
 
-  let s = parseInt(slot?.startTime)
+  let s = slot?.startTime ? new Date(slot?.startTime) : new Date()
+  console.log(s, 'start time', slot.title)
   let startTime = new Date(s).getHours().toString().padStart(2, '0  ') + ':' + new Date(s).getMinutes().toString().padStart(2, '0') + ':' + new Date(s).getSeconds().toString().padStart(2, '0')
 
   let duration: any = convertTotalSectoHHMMSS(slot?.duration).split(':').map((i: string) => i)
   duration = duration[0] == '00' ? duration.slice(1).join(':') : duration.join(':')
   
-  const handleSave = () => {
+  const handleSave = async () => {
 
+    // TO BE OPTIMIZED
     slots[currentSlot] = slot
     setSlots([...slots])
+
+    let dto = { ...slot}
+    delete dto._id
+
+    // UPDATE SLOT
+    const response = await updateSlot({ eventId, slotId, slot: dto })
+
+    if(response.success) {
+      console.log('Slot updated successfully')
+    } else {
+      console.log('Failed to update slot')
+    }
+    console.log(response, 'updated slot response')
+
+  }
+
+  const handleDelete = async () => {
+  
+      // DELETE SLOT
+      const response = await deleteSlot({ eventId, slotId })
+  
+      if(response.success) {
+        console.log('Slot deleted successfully')
+        slots.splice(currentSlot, 1)
+        setSlots([...slots])
+      } else {
+        console.log('Failed to delete slot')
+      }
+      console.log(response, 'deleted slot response')
   }
 
   useEffect(() => {
@@ -99,7 +129,7 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
             <PopoverTrigger asChild>
               <div className='min-w-[65px] relative'>
                 <p className='group-hover/slot:opacity-100 md:opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Duration</p>
-                <p className='min-w-[65px] text-sm md:text-lg font-semibold whitespace-nowrap select-none'>{duration.split(':').slice(1).join(':')}</p>
+                <p className='min-w-[65px] text-sm md:text-lg font-semibold whitespace-nowrap select-none'>{duration}</p>
                 <p className='group-hover/slot:opacity-100 opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Countdown</p>
               </div>
             </PopoverTrigger>
@@ -140,7 +170,21 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
             <Play size={16} />
         </div>
         <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md  px-2'>
-            <MoreVerticalIcon size={16} />
+          <Popover onOpenChange={(open) => {}}>
+            <PopoverTrigger asChild>
+              <MoreVerticalIcon size={16} />
+            </PopoverTrigger>
+            <PopoverContent className='w-fit bg-slate-100 text-black p-2 grid grid-cols-1 gap-2'>
+              <PopoverClose className="flex justify-start items-center gap-2 cursor-pointer" onClick={() => handleDelete()}>
+                <Trash size={16} className='stroke-red-600'/>
+                <p className='text-sm font-medium text-red-600'>Delete</p>
+              </PopoverClose>
+              <div className="flex justify-start items-center gap-2 opacity-15">
+                <Copy size={16} className='stroke-purple-600'/>
+                <p className='text-sm font-medium text-purple-600'>Clone</p>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
       

@@ -20,7 +20,7 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
   const [minute, setMinute] = useState(mm)
   const [second, setSecond] = useState(ss)
 
-  const [date, setDate] = useState<Date | undefined>(new Date(parseInt(slot.startTime)))
+  const [date, setDate] = useState<Date | undefined>(new Date(slot.startTime))
 
   const [payload, setPayload] = useState<any>({})
   
@@ -30,13 +30,14 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
     day.setMinutes(parseInt(minute))
     day.setSeconds(parseInt(second))
     let timestamp = day.getTime()
+    console.log(day.toISOString())
 
     let obj = {
       startTime: timestamp.toString(),
     }
     setPayload(obj)
 
-    setSlot({...slot, startTime: timestamp.toString()})
+    setSlot({...slot, startTime: day.toISOString()})
 
   }
 
@@ -44,17 +45,6 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
     if(hour == '' || minute == '' || second == '') return
     handleInputChange()
   }, [date, hour, minute, second])
-
-  const handleSubmit = () => {
-
-    setPayload(payload)
-
-    console.log('PAYLOAD', payload)
-    // ========================
-    // API Logic here. Send timestamp to the backend
-    // ========================
-  }
-
 
   return (
     <>

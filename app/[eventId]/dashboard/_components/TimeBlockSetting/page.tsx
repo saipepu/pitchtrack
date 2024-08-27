@@ -14,7 +14,8 @@ interface PageProps {
 
 const page = ({ setShowSetting, slot, setSlot, handleSave } : any) => {
 
-  let s = parseInt(slot.startTime)
+  let s = slot?.startTime ? new Date(slot?.startTime) : new Date()
+  console.log(s, 'start time', slot.title)
   let startTime = new Date(s).getHours().toString().padStart(2, '0  ') + ':' + new Date(s).getMinutes().toString().padStart(2, '0') + ':' + new Date(s).getSeconds().toString().padStart(2, '0')
 
   return (

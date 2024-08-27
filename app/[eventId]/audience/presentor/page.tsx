@@ -40,7 +40,7 @@ const Presentor = () => {
           </div>
         </div>
 
-        <Clock isFlashing={isFlashing} />
+        {/* <Clock isFlashing={isFlashing} /> */}
 
       </div>
     </div>
