@@ -1,21 +1,18 @@
 import { Button } from '@/components/ui/button'
 import { Cross, Settings, X } from 'lucide-react'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import General from './_components/General'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import Duration from './_components/Duration'
 import StartTime from './_components/StartTime'
 import Support from './_components/Support'
+import { useParams } from 'next/navigation'
+import { SlotContext } from '@/app/hooks/SlotContext'
 
-interface PageProps {
-  setShowSetting: (show: boolean) => void
-}
-
-const page = ({ setShowSetting, slot, setSlot, handleSave } : any) => {
+const TimeBlockSetting = ({ setShowSetting, slot, setSlot, handleSave } : any) => {
 
   let s = slot?.startTime ? new Date(slot?.startTime) : new Date()
-  console.log(s, 'start time', slot.title)
   let startTime = new Date(s).getHours().toString().padStart(2, '0  ') + ':' + new Date(s).getMinutes().toString().padStart(2, '0') + ':' + new Date(s).getSeconds().toString().padStart(2, '0')
 
   return (
@@ -28,7 +25,10 @@ const page = ({ setShowSetting, slot, setSlot, handleSave } : any) => {
             <Settings size={24} />
             <p className='text-lg font-semibold'>Settings for {slot.title}</p>
           </div>
-          <X size={24} onClick={() => setShowSetting(false)} className='cursor-pointer'/>
+          <X size={24} onClick={() => {
+            setShowSetting(false)
+            handleSave(slot)
+          }} className='cursor-pointer'/>
         </div>
 
         <div className='w-full flex flex-col justify-start items-start gap-2'>
@@ -52,7 +52,7 @@ const page = ({ setShowSetting, slot, setSlot, handleSave } : any) => {
         <div className="w-full h-[2px] bg-slate-200"></div>
         
         <div className='w-full flex flex-col justify-start items-start gap-2'>
-          <Support />
+          <Support slot={slot} setSlot={setSlot}/>
         </div>
 
         <div className='w-full flex justify-end items-center gap-2'>
@@ -64,7 +64,10 @@ const page = ({ setShowSetting, slot, setSlot, handleSave } : any) => {
           </Button>
           <Button
             className='text-green-600' variant={'outline'}
-            onClick={() => setShowSetting(false)}
+            onClick={() => {
+              setShowSetting(false)
+              handleSave(slot)
+            }}
           >
             Confirm
           </Button>
@@ -81,4 +84,4 @@ const page = ({ setShowSetting, slot, setSlot, handleSave } : any) => {
   )
 }
 
-export default page
+export default TimeBlockSetting

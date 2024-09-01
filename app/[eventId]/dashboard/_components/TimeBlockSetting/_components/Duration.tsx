@@ -9,8 +9,8 @@ import { convertTotalSectoHHMMSS } from '@/utils/convertor/convert-totalsec-to-h
 import React, { useEffect, useState } from 'react'
 
 enum Appearance {
-  Countdown = 'Countdown',
-  Countup = 'Countup'
+  Countdown = 'countdown',
+  Countup = 'countup'
 }
 
 const Duration = ({ slot, setSlot, handleSave }: any) => {
@@ -90,9 +90,15 @@ const Duration = ({ slot, setSlot, handleSave }: any) => {
         <div className='w-full col-span-1 flex justify-start items-center gap-2 truncate text-ellipsis'>
           <Label htmlFor="Appearance">Appearance</Label>
         </div>
-        <Select>
+        <Select
+          onValueChange={(value) => {
+              setSlot({ ...slot, appearance: value})
+            }
+          }
+          defaultValue={slot.appearance}
+        >
           <SelectTrigger className="w-full text-left col-span-3 p-1 px-2 border-0 bg-white">
-            <SelectValue placeholder="Select a Timer Appearance" />
+            <SelectValue placeholder={slot.appearance} />
           </SelectTrigger>
           <SelectContent className='bg-white text-black'>
             <SelectGroup>

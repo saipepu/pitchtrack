@@ -189,7 +189,7 @@ const Column = ({ tag, cards, setCards }: any) => {
             key={i}
             card={card}
             setCards={setCards}
-            currentSlot={i}
+            index={i}
             handleDragStart={handleDragStart}
           />
         )
@@ -200,7 +200,7 @@ const Column = ({ tag, cards, setCards }: any) => {
   )
 }
 
-const Card = ({ tag, card, setCards, currentSlot, handleDragStart }: any) => {
+const Card = ({ tag, card, setCards, index, handleDragStart }: any) => {
 
     return (
       <>
@@ -213,7 +213,7 @@ const Card = ({ tag, card, setCards, currentSlot, handleDragStart }: any) => {
           handleDragStart(e, card)
         }}
       >
-        {tag === 'timeslot' &&  <TimeBlock card={card} setCards={setCards} currentSlot={currentSlot} handleDragStart={handleDragStart} /> }
+        {tag === 'timeslot' &&  <TimeBlock index={index} /> }
         {tag === 'message' && <MessageEditor message={card} setMessages={setCards} />}
       </div>
       </>

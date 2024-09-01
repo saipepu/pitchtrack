@@ -16,10 +16,12 @@ const General = ({ slot, setSlot, handleSave }: any) => {
         </div>
         <Input
           id="title"
-          value={slot.title}
+          value={slot.title || ""}
           className='w-full col-span-6 p-1 px-2 border-0 bg-white'
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSlot({ ...slot, title: e.target.value })}
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSave()}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            e.key === 'Enter' && handleSave(slot)
+          }}
         />
       </div>
       <div className="w-full grid grid-cols-7 items-center gap-2">
@@ -31,7 +33,7 @@ const General = ({ slot, setSlot, handleSave }: any) => {
           value={slot.speaker}
           className='w-full col-span-6 p-1 px-2 border-0 bg-white'
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSlot({ ...slot, speaker: e.target.value })}
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSave()}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSave(slot)}
         />
       </div>
       <div className="w-full grid grid-cols-7 items-center gap-2">
@@ -43,7 +45,7 @@ const General = ({ slot, setSlot, handleSave }: any) => {
           value={slot.notes}
           className='w-full col-span-6 p-1 px-2 border-0 bg-white'
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSlot({ ...slot, notes: e.target.value })}
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSave()}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSave(slot)}
         />
       </div>
     </>

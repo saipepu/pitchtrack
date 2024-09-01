@@ -1,30 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { io } from 'socket.io-client'
-import { socketApi } from "./_api/api";
-
-const socket = io(socketApi,{
-  transports: ['websocket'],
-});
-socket.on('connect', () => {
-  console.log('Connected')
-})
+import socket from "@/utils/socket/index";
+import { EmitSocket } from "@/utils/socket/SocketEmit";
 
 export default function Home() {
 
   const [time, setTime] = useState<number>(0)
   const [currentTime, setCurrentTime] = useState<number>(0)
 
-  socket.on("timerUpdate", (message) => {
-    console.log('message', message)
-    setCurrentTime(message.remainingTime)
-  })
-
-  const EmitSocket = (path: string, payload?: any) => {
-    console.log('path', path)
-    socket.emit(path, payload);
-  }
+  // socket.on("timerUpdate", (message) => {
+  //   setCurrentTime(message.remainingTime)
+  // })
 
   useEffect(() => {
     // Redirect to /dashboard

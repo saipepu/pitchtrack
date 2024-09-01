@@ -4,12 +4,39 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import React from 'react'
+import { convertTotalSectoHHMMSS } from '@/utils/convertor/convert-totalsec-to-hhmmss';
+import React, { useEffect, useState } from 'react'
 
-const Support = () => {
+const Support = ({ slot, setSlot }: any) => {
 
-  const [hour, setHour] = React.useState('00')
-  const [minute, setMinute] = React.useState('00')
+  const [duration, setDuration] = useState({ minute: 0, second: 0, totalSeconds: 0 })
+  const [warningTime, setWarningTime] = useState({ minute: 0, second: 0, totalSeconds: 0 })
+  const [dangerTime, setDangerTime] = useState({ minute: 0, second: 0, totalSeconds: 0 })
+
+  useEffect(() => {
+
+    setDuration({
+      minute: parseInt(convertTotalSectoHHMMSS(slot.duration).split(':')[1]),
+      second: parseInt(convertTotalSectoHHMMSS(slot.duration).split(':')[2]),
+      totalSeconds: slot.duration
+    })
+    setWarningTime({
+      minute: parseInt(convertTotalSectoHHMMSS(slot.warningTime).split(':')[1]),
+      second: parseInt(convertTotalSectoHHMMSS(slot.warningTime).split(':')[2]),
+      totalSeconds: slot.warningTime
+    })
+    setDangerTime({
+      minute: parseInt(convertTotalSectoHHMMSS(slot.dangerTime).split(':')[1]),
+      second: parseInt(convertTotalSectoHHMMSS(slot.dangerTime).split(':')[2]),
+      totalSeconds: slot.dangerTime
+    })
+
+  }, [])
+
+  useEffect(() => {
+    setSlot({ ...slot, warningTime: warningTime.totalSeconds, dangerTime: dangerTime.totalSeconds })
+  }, [warningTime, dangerTime])
+
 
   return (
     <>
@@ -40,11 +67,22 @@ const Support = () => {
               className="text-center w-full col-span-3 p-1 px-2 border-0 bg-white"
               id="HH"
               type="number"
-              value={parseInt(hour).toString().padStart(2, '0')}
+              value={warningTime.minute.toString().padStart(2, '0')}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if(parseInt(e.target.value) > 23) e.target.value = '23'
+
                 if(e.target.value == '') e.target.value = '0'
-                setHour(e.target.value)
+
+                // IF THE WARNING TIME IS GREATER THAN OR EQUAL THE DURATION
+                // SET THE WARNING TIME TO THE DURATION - 1 SECOND
+                let totalSec = parseInt(e.target.value) * 60 + warningTime.second
+                if(totalSec >= duration.totalSeconds) {
+                  e.target.value = convertTotalSectoHHMMSS(duration.totalSeconds - 1).split(':')[1]
+                  let second = convertTotalSectoHHMMSS(duration.totalSeconds - 1).split(':')[2]
+                  setWarningTime({ ...warningTime, minute: parseInt(e.target.value), second: parseInt(second), totalSeconds: duration.totalSeconds - 1 })
+                } else {
+                  setWarningTime({ ...warningTime, minute: parseInt(e.target.value), second: warningTime.second, totalSeconds: totalSec })
+                }
+
               }}
             />
             <span className='text-lg font-semibold mx-2'>:</span>
@@ -53,15 +91,27 @@ const Support = () => {
               id="MM"
               type="number"
               maxLength={3}
-              value={parseInt(minute).toString().padStart(2, '0')}
+              value={warningTime.second.toString().padStart(2, '0')}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if(parseInt(e.target.value) > 100) {
-                  e.target.value = minute
-                } else {
-                  if(parseInt(e.target.value) > 59) e.target.value = '59'
-                }
+
                 if(e.target.value == '') e.target.value = '0'
-                setMinute(e.target.value)
+
+                // IF THE WARNING TIME IS GREATER THAN 59 SET IT TO 59
+                if(parseInt(e.target.value) > 59) {
+                  e.target.value = '59'
+                }
+
+                // IF THE WARNING TIME IS GREATER THAN OR EQUAL THE DURATION
+                // SET THE WARNING TIME TO THE DURATION - 1 SECOND                
+                let totalSec = warningTime.minute * 60 + parseInt(e.target.value)
+                if(totalSec >= duration.totalSeconds) {
+                  e.target.value = convertTotalSectoHHMMSS(duration.totalSeconds - 1).split(':')[2]
+                  let minute = convertTotalSectoHHMMSS(duration.totalSeconds - 1).split(':')[1]
+                  setWarningTime({ ...warningTime, minute: parseInt(minute), second: parseInt(e.target.value), totalSeconds: duration.totalSeconds - 1 })
+                } else {
+                  setWarningTime({ ...warningTime, minute: warningTime.minute, second: parseInt(e.target.value), totalSeconds: totalSec })
+                }
+
               }}
             />
           </div>
@@ -129,11 +179,22 @@ const Support = () => {
               className="text-center w-full col-span-3 p-1 px-2 border-0 bg-white"
               id="HH"
               type="number"
-              value={parseInt(hour).toString().padStart(2, '0')}
+              value={dangerTime.minute.toString().padStart(2, '0')}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if(parseInt(e.target.value) > 23) e.target.value = '23'
+
                 if(e.target.value == '') e.target.value = '0'
-                setHour(e.target.value)
+
+                // IF THE DANGER TIME IS GREATER THAN OR EQUAL THE WARNING TIME
+                // SET THE DANGER TIME TO THE WARNING TIME - 1 SECOND
+                let totalSec = parseInt(e.target.value) * 60 + dangerTime.second
+                if(totalSec >= warningTime.totalSeconds) {
+                  e.target.value = convertTotalSectoHHMMSS(warningTime.totalSeconds - 1).split(':')[1]
+                  let second = convertTotalSectoHHMMSS(warningTime.totalSeconds - 1).split(':')[2]
+                  setDangerTime({ ...dangerTime, minute: parseInt(e.target.value), second: parseInt(second), totalSeconds: warningTime.totalSeconds - 1 })
+                } else {
+                  setDangerTime({ ...dangerTime, minute: parseInt(e.target.value), second: dangerTime.second, totalSeconds: totalSec })
+                }
+
               }}
             />
             <span className='text-lg font-semibold mx-2'>:</span>
@@ -142,15 +203,27 @@ const Support = () => {
               id="MM"
               type="number"
               maxLength={3}
-              value={parseInt(minute).toString().padStart(2, '0')}
+              value={dangerTime.second.toString().padStart(2, '0')}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if(parseInt(e.target.value) > 100) {
-                  e.target.value = minute
-                } else {
-                  if(parseInt(e.target.value) > 59) e.target.value = '59'
-                }
+
                 if(e.target.value == '') e.target.value = '0'
-                setMinute(e.target.value)
+                
+                // IF THE DANGER TIME IS GREATER THAN 59 SET IT TO 59
+                if(parseInt(e.target.value) > 59) {
+                  e.target.value = '59'
+                }
+
+                // IF THE DANGER TIME IS GREATER THAN OR EQUAL THE WARNING TIME
+                // SET THE DANGER TIME TO THE WARNING TIME - 1 SECOND
+                let totalSec = dangerTime.minute * 60 + parseInt(e.target.value)
+                if(totalSec >= warningTime.totalSeconds) {
+                  e.target.value = convertTotalSectoHHMMSS(warningTime.totalSeconds - 1).split(':')[2]
+                  let minute = convertTotalSectoHHMMSS(warningTime.totalSeconds - 1).split(':')[1]
+                  setDangerTime({ ...dangerTime, minute: parseInt(minute), second: parseInt(e.target.value), totalSeconds: warningTime.totalSeconds - 1 })
+                } else {
+                  setDangerTime({ ...dangerTime, minute: dangerTime.minute, second: parseInt(e.target.value), totalSeconds: totalSec })
+                }
+
               }}
             />
           </div>

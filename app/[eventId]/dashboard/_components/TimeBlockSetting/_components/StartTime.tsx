@@ -9,8 +9,8 @@ import { CalendarDays } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 
 enum StartType {
-  Manual = 'Manual',
-  Scheduled = 'Scheduled'
+  Manual = 'manual',
+  Scheduled = 'scheduled'
 }
 
 const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
@@ -30,14 +30,13 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
     day.setMinutes(parseInt(minute))
     day.setSeconds(parseInt(second))
     let timestamp = day.getTime()
-    console.log(day.toISOString())
 
     let obj = {
       startTime: timestamp.toString(),
     }
     setPayload(obj)
 
-    setSlot({...slot, startTime: day.toISOString()})
+    setSlot({...slot, startTime: day?.toISOString()})
 
   }
 
@@ -51,12 +50,13 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
       <div className="w-full grid grid-cols-4 items-center gap-2">
         <Select
           onValueChange={(value) => {
-              setSlot({ ...slot, startType: value})
+              setSlot({ ...slot, startTimeType: value})
             }
           }
+          defaultValue={slot.startTimeType}
         >
           <SelectTrigger className="w-full col-span-4 p-1 px-2 border-0 bg-white">
-            <SelectValue placeholder={slot.startType} />
+            <SelectValue placeholder={slot.startTimeType} />
           </SelectTrigger>
           <SelectContent className='bg-white text-black'>
             <SelectGroup>

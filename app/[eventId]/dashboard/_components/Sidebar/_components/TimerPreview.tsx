@@ -1,24 +1,27 @@
 "use client";
 
-import { Button } from '@/components/ui/button'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ChevronDown, ChevronLeft, ChevronRight, Clock, Link, Palette, Play, SkipBack, SkipForward } from 'lucide-react'
-import { usePathname } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import { SlotContext } from '@/app/hooks/SlotContext';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { EmitSocket } from '@/utils/socket/SocketEmit';
+import { ChevronLeft, ChevronRight, Clock, Link, Palette, Pause, Play, SkipBack, SkipForward } from 'lucide-react'
+import { useParams } from 'next/navigation';
+import React, { useContext, useEffect, useState } from 'react'
+import PlayButton from '../../PlayButton/PlayButton';
 
-type TimerPreviewProps = {
-  eventId: string
-}
+const TimerPreview = () => {
 
-const TimerPreview = ({ eventId } : TimerPreviewProps ) => {
-
-  const [currentTime, setCurrentTime] = useState<any>()
-  const pathname = usePathname();
+  const { eventId } = useParams();
+  const [currentTime, setCurrentTime] = useState('00:00:00')
+  const { slots } = useContext(SlotContext)
+  const [slot, setSlot] = useState<any>(undefined)
 
   useEffect(() => {
     setCurrentTime(`${new Date().getDate()}:${new Date().getHours()}:${new Date().getSeconds()}`)
   },[])
+
+  useEffect(() => {
+    setSlot(slots.find((slot: any) => slot.status == 'active' ||  slot.status == 'paused' || slot.status == 'completed' ))
+  }, [slots])
 
   // show the mini preview of timer
   return (
@@ -68,9 +71,10 @@ const TimerPreview = ({ eventId } : TimerPreviewProps ) => {
         <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center'>
           <SkipBack size={16} />
         </div>
-        <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center'>
-          <Play size={16} />
-        </div>
+
+        {/* CUSTOMIZE PLAY BUTTON */}
+        <PlayButton slot={slot} eventId={eventId} />
+
         <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center'>
           <SkipForward size={16} />
         </div>

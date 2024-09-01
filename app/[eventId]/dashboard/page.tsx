@@ -9,15 +9,7 @@ import Header from './_components/Header/Header'
 import { useParams } from 'next/navigation'
 import { getEventById, getAllEvents } from '@/app/_api/event'
 import { useToast } from '@/components/ui/use-toast'
-import { io } from 'socket.io-client'
-import { socketApi } from '@/app/_api/api'
-
-const socket = io(socketApi,{
-  transports: ['websocket'],
-});
-socket.on('connect', () => {
-  console.log('Connected')
-})
+import socket from '@/utils/socket'
 
 const page = () => {
 
@@ -39,6 +31,8 @@ const page = () => {
       setMessages(JSON.parse(e).messages)
       return
     }
+
+    console.log('fetching event')
 
     const response = await getEventById({ eventId })
 
@@ -94,7 +88,6 @@ const page = () => {
   }, [eventId])
 
   socket.on('slotsUpdated', (response) => {
-    console.log('Slots Updated', response)
     if(response.success) {
       let slotList = response.message.map((slot: any, i: number) => {
         return {
@@ -107,7 +100,7 @@ const page = () => {
   })
 
   return (
-    <SlotContext.Provider value={{slots, setSlots, messages, setMessages, event}}>
+    <SlotContext.Provider value={{slots, setSlots, messages, setMessages, event }}>
       <div className='w-full h-full flex flex-col justify-start items-start overflow-y-scroll lg:overflow-y-hidden'>
 
         {/* Header */}
@@ -117,7 +110,7 @@ const page = () => {
 
           {/* Sidebar */}
           <div className='flex lg:flex-2 lg:w-[35vw] lg:min-w-[300px] w-full lg:h-full lg:overflow-y-scroll'>
-            <Sidebar eventId={eventId} />
+            <Sidebar />
           </div>
 
           {/* Timer Preset */}

@@ -2,34 +2,25 @@
 
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { convertTotalSectoHHMMSS } from '@/utils/convertor/convert-totalsec-to-hhmmss'
-import { Copy, Equal, MoreVerticalIcon, Pause, Pencil, Play, Settings, SkipBack, Trash } from 'lucide-react'
+import { Copy, Equal, MoreVerticalIcon, Pencil, Settings, SkipBack, Trash } from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
 import General from '../../TimeBlockSetting/_components/General'
 import Duration from '../../TimeBlockSetting/_components/Duration'
 import StartTime from '../../TimeBlockSetting/_components/StartTime'
-import TimeBlockSetting from '../../TimeBlockSetting/page'
+import TimeBlockSetting from '../../TimeBlockSetting/TimeBlockSetting'
 import { SlotContext } from "@/app/hooks/SlotContext";
 import { updateSlot, deleteSlot } from "@/app/_api/slot";
+import { useParams } from 'next/navigation';
+import PlayButton from '../../PlayButton/PlayButton';
+import { toast } from '@/components/ui/use-toast';
 
-import { io } from 'socket.io-client'
-import { socketApi } from '@/app/_api/api';
+const TimeBlock = ({ index }: any) => {
 
-const socket = io(socketApi,{
-  transports: ['websocket'],
-});
-socket.on('connect', () => {
-  console.info("SOCKET CONNECTED")
-})
-
-const TimeBlock = ({ timer, currentSlot }: any) => {
-
-  const [isTimerRunning, setIsTimerRunning] = useState(false)
-  const { slots, setSlots, event } = useContext(SlotContext)
-  const [slot, setSlot] = useState(slots[currentSlot]) // MAKE A COPY OF THE SLOT
-  let eventId = event._id
+  const { eventId } = useParams();
+  const { slots, setSlots } = useContext(SlotContext)
+  const [slot, setSlot] = useState(slots[index]) // MAKE A COPY OF THE SLOT
   let slotId = slot._id
   const [showSetting, setShowSetting] = useState(false)
-
 
   // FORMAT START TIME UTC TIME TO HH:MM:SS
   let s = slot?.startTime ? new Date(slot?.startTime) : new Date()
@@ -39,10 +30,11 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
   let duration: any = convertTotalSectoHHMMSS(slot?.duration).split(':').map((i: string) => i)
   duration = duration[0] == '00' ? duration.slice(1).join(':') : duration.join(':')
   
-  const handleSave = async () => {
+  const handleSave = async (slot: any) => {
 
+    console.log('Saving slot', slot.warningTime)
     // TO BE OPTIMIZED
-    slots[currentSlot] = slot
+    slots[index] = {...slot, tag: 'timeslot' }
     setSlots([...slots])
 
     let dto = { ...slot}
@@ -53,20 +45,26 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
 
     if(response.success) {
       console.log('Slot updated successfully')
+      toast({
+        title: "Slot updated successfully"
+      })
     } else {
-      console.log('Failed to update slot')
+      console.log('Failed to update slot', response)
+      toast({
+        title: "Slot updated failed"
+      })
     }
 
   }
 
-  const handleDelete = async () => {
+  const handleDelete = async ({ eventId, slotId } : any) => {
   
       // DELETE SLOT
       const response = await deleteSlot({ eventId, slotId })
   
       if(response.success) {
         console.log('Slot deleted successfully')
-        slots.splice(currentSlot, 1)
+        slots.splice(index, 1)
         setSlots([...slots])
       } else {
         console.log('Failed to delete slot')
@@ -75,27 +73,23 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
   }
 
   useEffect(() => {
-    setSlot(slots[currentSlot])
+    setSlot(slots[index])
   }, [slots])
-
-  const EmitSocket = (path: string, payload?: any) => {
-    socket.emit(path, payload);
-  }
 
   const PopoverHandler = () => {
     return (
       <div className='w-full flex justify-end items-center gap-2'>
-        <PopoverClose>
+        <PopoverClose className="popover-close">
           <div
             className='text-black p-2 rounded-lg hover:text-slate-400'
           >
             Cancel
           </div>
         </PopoverClose>
-        <PopoverClose>
+        <PopoverClose className='popover-close'>
           <div
             className='bg-black text-white p-2 rounded-lg hover:bg-slate-400'
-            onClick={() => handleSave()}
+            onClick={() => handleSave(slot)}
           >
             Save
           </div>
@@ -106,8 +100,11 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
 
   return (
     <div
-      id={`${slots[currentSlot].tag + "-" + slots[currentSlot].id}`}
-      className={`group/slot w-full h-[80px] flex justify-between items-center rounded-lg p-2 gap-2 ${slot.status == 'active' ? 'bg-animate-active-slot' : 'bg-slate-100'} transition-all duration-300`}
+      id={`${slots[index].tag + "-" + slots[index].id}`}
+      className={`
+                  group/slot w-full h-[80px] flex justify-between items-center rounded-lg p-2 gap-2
+                  ${slot.status != 'stopped' ? 'border-2 border-slate-400' : 'bg-slate-100'} transition-all duration-300
+                `}
     >
       {showSetting && (
         <TimeBlockSetting setShowSetting={setShowSetting} slot={slot} setSlot={setSlot} handleSave={handleSave}/>
@@ -115,13 +112,13 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
       <div className='h-full flex justify-start items-center gap-1 md:gap-4'>
 
         <div className='relative min-w-[16px] h-full flex justify-center items-center'>
-          <p className='absolute group-hover/slot:opacity-0 text-lg font-semibold text-slate-500 duration-500 select-none'>{currentSlot+1}</p>
+          <p className='absolute group-hover/slot:opacity-0 text-lg font-semibold text-slate-500 duration-500 select-none'>{index+1}</p>
           <div className='absolute block'>
             <Equal size={16} className='group-hover/slot:opacity-100 opacity-0 duration-500'/>
           </div>
         </div>
         <div className='hidden md:flex cursor-pointer w-full h-full justify-center items-center gap-[2px] rounded-md px-2'>
-          <Popover onOpenChange={(open) => !open && handleSave()}>
+          <Popover onOpenChange={(open) => !open && handleSave(slot)}>
             <PopoverTrigger asChild>
               <div className='min-w-[65px] relative'>
                 <p className='group-hover/slot:opacity-100 opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Start time</p>
@@ -136,7 +133,7 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
           </Popover>
         </div>
         <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md px-2'>
-          <Popover onOpenChange={(open) => !open && handleSave()}>
+          <Popover onOpenChange={(open) => !open && handleSave(slot)}>
             <PopoverTrigger asChild>
               <div className='min-w-[65px] relative'>
                 <p className='group-hover/slot:opacity-100 md:opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Duration</p>
@@ -151,9 +148,9 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
           </Popover>
         </div>
         <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md  px-2'>
-          <Popover onOpenChange={(open) => !open && handleSave()}>
+          <Popover onOpenChange={(open) => !open && handleSave(slot)}>
             <PopoverTrigger asChild>
-              <div className='min-w-[65px] flex justify-center items-center gap-2 group'>
+              <div className='min-w-[65px] flex justify-start items-center gap-2 group'>
                 <p className='text-sm md:text-lg font-semibold whitespace-nowrap select-none'>{slot?.title}</p>
                 <Pencil size={16} className='opacity-0 group-hover/slot:opacity-100 duration-500'/>
               </div>
@@ -177,33 +174,16 @@ const TimeBlock = ({ timer, currentSlot }: any) => {
         >
             <Settings size={16} />
         </div>
-        <div
-          className={`group cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-1 md:px-2 ${slot.status == 'active' ? 'bg-red-300' : 'bg-slate-100 lg:hover:bg-green-400'} transition-all duration-300`}
-          onClick={() => {
-            if(slot.status == 'active') {
-              EmitSocket('pause', {
-                duration: slot.duration,
-                eventId: event._id,
-                slotId: slot._id
-              })
-            } else {
-              EmitSocket('start', {
-                duration: slot.duration,
-                eventId: event._id,
-                slotId: slot._id
-              })
-            }
-          }}
-        >
-          {slot.status == 'active' ? <Pause size={16} fill={"white"} stroke={"white"} /> : <Play size={16} fill="black" strokeWidth="0" className='lg:group-hover:fill-white lg:group-hover:stroke-white' /> }
-        </div>
+
+        <PlayButton slot={slot} eventId={eventId} />
+
         <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md  px-2'>
           <Popover onOpenChange={(open) => {}}>
             <PopoverTrigger asChild>
               <MoreVerticalIcon size={16} />
             </PopoverTrigger>
             <PopoverContent className='w-fit bg-slate-100 text-black p-2 grid grid-cols-1 gap-2'>
-              <PopoverClose className="flex justify-start items-center gap-2 cursor-pointer" onClick={() => handleDelete()}>
+              <PopoverClose className="flex justify-start items-center gap-2 cursor-pointer" onClick={() => handleDelete({ eventId, slotId })}>
                 <Trash size={16} className='stroke-red-600'/>
                 <p className='text-sm font-medium text-red-600'>Delete</p>
               </PopoverClose>
