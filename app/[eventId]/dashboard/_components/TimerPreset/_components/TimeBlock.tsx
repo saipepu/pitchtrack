@@ -12,9 +12,9 @@ import { SlotContext } from "@/app/hooks/SlotContext";
 import { updateSlot, deleteSlot } from "@/app/_api/slot";
 
 import { io } from 'socket.io-client'
-import { localSocketApi } from '@/app/_api/api';
+import { socketApi } from '@/app/_api/api';
 
-const socket = io(localSocketApi,{
+const socket = io(socketApi,{
   transports: ['websocket'],
 });
 socket.on('connect', () => {
