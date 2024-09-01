@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { io } from 'socket.io-client'
+import { localSocketApi } from "./_api/api";
 
-const socket = io('http://localhost:8080',{
+const socket = io(localSocketApi,{
   transports: ['websocket'],
 });
 socket.on('connect', () => {

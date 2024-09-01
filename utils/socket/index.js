@@ -1,12 +1,12 @@
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 
-let socketUrl = "http://localhost:8080";
+// let socketUrl = "http://localhost:8080";
 
-const socket = io(socketUrl, {
-  transport: ['websocket'],
-});
-socket.on('connect', () => {
-  console.log('socket connected');
-})
+// const socket = io(socketUrl, {
+//   transport: ['websocket'],
+// });
+// socket.on('connect', () => {
+//   console.log('socket connected');
+// })
 
-export default socket;
+// export default socket;

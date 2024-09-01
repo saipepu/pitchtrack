@@ -10,9 +10,9 @@ import { useParams } from 'next/navigation'
 import { getEventById, getAllEvents } from '@/app/_api/event'
 import { useToast } from '@/components/ui/use-toast'
 import { io } from 'socket.io-client'
-import { localApi } from '@/app/_api/api'
+import { localSocketApi } from '@/app/_api/api'
 
-const socket = io(localApi,{
+const socket = io(localSocketApi,{
   transports: ['websocket'],
 });
 socket.on('connect', () => {

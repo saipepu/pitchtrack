@@ -1,12 +1,13 @@
 "use client"
-import { localApi } from '@/app/_api/api';
+import { localSocketApi } from '@/app/_api/api';
 import { convertHHMMSStoTotalSec } from '@/utils/convertor/convert-hhmmss-to-totalsec';
 import { convertTotalSectoHHMMSS } from '@/utils/convertor/convert-totalsec-to-hhmmss'
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
 
-const socket = io(localApi,{
+console.log('localSocketApi', localSocketApi)
+const socket = io(localSocketApi,{
   transports: ['websocket'],
 });
 socket.on('connect', () => {
