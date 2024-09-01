@@ -9,11 +9,20 @@ import Header from './_components/Header/Header'
 import { useParams } from 'next/navigation'
 import { getEventById, getAllEvents } from '@/app/_api/event'
 import { useToast } from '@/components/ui/use-toast'
+import { io } from 'socket.io-client'
+import { localApi } from '@/app/_api/api'
+
+const socket = io(localApi,{
+  transports: ['websocket'],
+});
+socket.on('connect', () => {
+  console.log('Connected')
+})
 
 const page = () => {
 
   const { toast } = useToast()
-  const { eventId } = useParams();
+  const { eventId }: { eventId: string } = useParams();
   const [event, setEvent] = useState<any>({})
   const [events, setEvents] = useState([])
   const [slots, setSlots] = useState([])
@@ -80,7 +89,22 @@ const page = () => {
     fetchEventById()
     fetchAllEvents()
 
+    socket.emit('joinRoom', { eventId: eventId })
+
   }, [eventId])
+
+  socket.on('slotsUpdated', (response) => {
+    console.log('Slots Updated', response)
+    if(response.success) {
+      let slotList = response.message.map((slot: any, i: number) => {
+        return {
+          ...slot,
+          tag: 'timeslot',
+        }
+      })
+      setSlots(slotList)
+    }
+  })
 
   return (
     <SlotContext.Provider value={{slots, setSlots, messages, setMessages, event}}>
@@ -93,7 +117,7 @@ const page = () => {
 
           {/* Sidebar */}
           <div className='flex lg:flex-2 lg:w-[35vw] lg:min-w-[300px] w-full lg:h-full lg:overflow-y-scroll'>
-            <Sidebar />
+            <Sidebar eventId={eventId} />
           </div>
 
           {/* Timer Preset */}

@@ -7,7 +7,11 @@ import { ChevronDown, ChevronLeft, ChevronRight, Clock, Link, Palette, Play, Ski
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
-const TimerPreview = () => {
+type TimerPreviewProps = {
+  eventId: string
+}
+
+const TimerPreview = ({ eventId } : TimerPreviewProps ) => {
 
   const [currentTime, setCurrentTime] = useState<any>()
   const pathname = usePathname();
@@ -38,8 +42,7 @@ const TimerPreview = () => {
       {/* Timer Mini Preview */}
       <div className='border-[1px] border-slate-300 rounded-md w-full overflow-hidden'>
         <iframe
-          // src="http://localhost:3000/audience/presentor"
-          src="/1/audience/presentor"
+          src={`/${eventId || 'FALLBACK-EVENTID'}/audience/presentor`}
           width="100%"
           height="300"
           style={{ border: 'none' }}

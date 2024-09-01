@@ -1,7 +1,17 @@
 "use client"
+import { localApi } from '@/app/_api/api';
 import { convertHHMMSStoTotalSec } from '@/utils/convertor/convert-hhmmss-to-totalsec';
 import { convertTotalSectoHHMMSS } from '@/utils/convertor/convert-totalsec-to-hhmmss'
+import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import { io } from 'socket.io-client'
+
+const socket = io(localApi,{
+  transports: ['websocket'],
+});
+socket.on('connect', () => {
+  console.log('Connected')
+})
 
 interface ClockProps {
   isFlashing: boolean;
@@ -17,12 +27,9 @@ const Timer = {
   generalMessage: "Test General Message"
 }
 
-const Clock = ({ isFlashing }: ClockProps ) => {
-
-  const [isMounted, setIsMoutned] = useState(false);
-  const [countDown, setCountDown] = useState(convertHHMMSStoTotalSec(Timer.time));
-
-  // safe zone(with) mean the time that the presentor can talk without any warning
+// TO CALCULATE THE SAFE AND DANGER ZONE WIDTH
+const TimerTrackerBar = (Timer: any) => {
+    // safe zone(with) mean the time that the presentor can talk without any warning
   // CALCULATION (totalTime - warningTime) [before the warning time is safe time]
   const safeWidth = Math.floor((convertHHMMSStoTotalSec(Timer.time) - convertHHMMSStoTotalSec(Timer.warning)) / convertHHMMSStoTotalSec(Timer.time) * 100)
 
@@ -33,23 +40,27 @@ const Clock = ({ isFlashing }: ClockProps ) => {
   // warning zone(with) mean the time that the presentor should start to wrap up
   // CALCULATION (totalTime - warningTime - dangerTime) [before the danger time and after the safe time is warning time]
   const warningWidth = Math.floor(100 - safeWidth - dangerWidth)
+
+  return { safeWidth, warningWidth, dangerWidth }
+}
+
+const Clock = ({ isFlashing }: ClockProps ) => {
+
+  const { eventId } = useParams();
+  const [isMounted, setIsMoutned] = useState(false);
+  const [countDown, setCountDown] = useState(convertHHMMSStoTotalSec(Timer.time));
+  const { safeWidth, warningWidth, dangerWidth } = TimerTrackerBar(Timer);
+
   const [currentPointer, setCurrentPointer] = useState(0);
 
   // Count down the time
   useEffect(() => {
     setIsMoutned(true);
-    const interval = setInterval(() => {
-      setCountDown((prevCountDown: number) => {
-        if (prevCountDown > 0) {
-          return prevCountDown - 1;
-        } else {
-          return convertHHMMSStoTotalSec(Timer.time);
-        }
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
   },[])
+
+  useEffect(() => {
+    socket.emit("joinRoom", { eventId: eventId })
+  },[eventId])
 
   // Calculate the current pointer position
   useEffect(() => {
@@ -60,6 +71,11 @@ const Clock = ({ isFlashing }: ClockProps ) => {
   if (!isMounted) {
     return null; // Avoid rendering mismatched content on the server
   }
+
+  socket.on("timerUpdate", (message) => {
+    console.log("Timer Update", message)
+    setCountDown(message.remainingTime)
+  })
 
   return (
     <>

@@ -44,6 +44,21 @@ body {
   animation: flash 0.5s infinite;
 }
 
+.bg-animate-active-slot {
+  background: linear-gradient(-45deg, #99fea7, #99fea7, #fdfff5, #99fea7, #99fea7);
+  background-size: 500% 500%;
+  animation: gradient 4s ease-in-out infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% -50%;
+	}
+	100% {
+		background-position: -150% -50%;
+	}
+}
+
 @keyframes flash {
   0% {
     background-color: transparent;
