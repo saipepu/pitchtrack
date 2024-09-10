@@ -2,23 +2,16 @@
 
 import { ChevronDown, ChevronUp, RefreshCcw } from 'lucide-react'
 import React, { useState } from 'react'
+import socket from '@/utils/socket';
 
 const ConnectDevices = () => {
 
+  const [devices, setDevices] = useState<any>([])
   const [showDevices, setShowDevices] = useState<boolean>(true)
 
-  let devices = [
-    {
-      id: 1,
-      name: 'Device 1',
-      status: 'connected'
-    },
-    {
-      id: 2,
-      name: 'Device 2',
-      status: 'disconnected'
-    }
-  ]
+  socket.on('connectedDevices', (response) => {
+    setDevices(response)
+  })
 
   // show the connected devices from ws
   return (
@@ -36,10 +29,10 @@ const ConnectDevices = () => {
       </div>
       {showDevices && (
         <div className='w-full flex flex-col gap-1'>
-          {devices.map(device => (
-            <div key={device.id} className='w-full flex justify-between items-center px-2 py-1 bg-slate-100 rounded-md'>
-              <span className='text-sm font-bold'>{device.name}</span>
-              <span className={`text-sm text-white px-2 py-1 rounded-md ${device.status === 'connected' ? 'bg-green-500' : 'bg-red-500'}`}>{device.status}</span>
+          {devices.map((device: any, i: number) => (
+            <div key={i} className='w-full flex justify-between items-center px-2 py-1 bg-slate-100 rounded-md'>
+              <span className='text-xs font-light'>{i+1 + ". " +device}</span>
+              <span className={`text-sm text-white px-2 py-1 rounded-md bg-green-500`}>Connected</span>
             </div>
           ))}
         </div>
