@@ -50,10 +50,15 @@ const Presentor = () => {
 
   useEffect(() => {
 
-    socket.emit("joinRoom", { eventId: eventId })
     fetchEventById()
 
   }, [eventId])
+
+  useEffect(() => {
+    if(eventId) {
+      socket.emit('joinRoom', { eventId })
+    }
+  }, [])
 
   useEffect(() => {
 
