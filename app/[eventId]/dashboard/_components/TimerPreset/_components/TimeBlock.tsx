@@ -13,6 +13,7 @@ import { updateSlot, deleteSlot } from "@/app/_api/slot";
 import { useParams } from 'next/navigation';
 import PlayButton from '../../PlayButton/PlayButton';
 import { toast } from '@/components/ui/use-toast';
+import socket from '@/utils/socket';
 
 const TimeBlock = ({ index }: any) => {
 
@@ -21,6 +22,8 @@ const TimeBlock = ({ index }: any) => {
   const [slot, setSlot] = useState(slots[index]) // MAKE A COPY OF THE SLOT
   let slotId = slot._id
   const [showSetting, setShowSetting] = useState(false)
+  const [isRunning, setIsRunning] = useState(false)
+  const [isActive, setIsActive] = useState(false)
 
   // FORMAT START TIME UTC TIME TO HH:MM:SS
   let s = slot?.startTime ? new Date(slot?.startTime) : new Date()
@@ -76,6 +79,13 @@ const TimeBlock = ({ index }: any) => {
     setSlot(slots[index])
   }, [slots])
 
+  socket.on("timerUpdate", (message) => {
+    console.log(message)
+    setIsRunning(message.isRunning)
+    setIsActive(message.slotId === slotId)
+    console.log(message.slotId, slotId)
+  })
+
   const PopoverHandler = () => {
     return (
       <div className='w-full flex justify-end items-center gap-2'>
@@ -103,7 +113,8 @@ const TimeBlock = ({ index }: any) => {
       id={`${slots[index].tag + "-" + slots[index].id}`}
       className={`
                   group/slot w-full h-[80px] flex justify-between items-center rounded-lg p-2 gap-2
-                  ${slot.status != 'stopped' ? 'border-2 border-slate-400' : 'bg-slate-100'} transition-all duration-300
+                  ${isActive ? 'bg-white border-2 border-slate-200' : 'bg-slate-100'}
+                  transition-all duration-300
                 `}
     >
       {showSetting && (
@@ -175,7 +186,8 @@ const TimeBlock = ({ index }: any) => {
             <Settings size={16} />
         </div>
 
-        <PlayButton slot={slot} eventId={eventId} />
+        {/* PLAY BUTTON */}
+        <PlayButton slot={slot} eventId={eventId} isRunning={isRunning} setIsRunning={setIsRunning} isActive={isActive} />
 
         <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md  px-2'>
           <Popover onOpenChange={(open) => {}}>
