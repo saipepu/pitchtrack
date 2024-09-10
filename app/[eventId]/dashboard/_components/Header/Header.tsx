@@ -18,9 +18,9 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast';
 import { useParams, useRouter } from 'next/navigation';
-import { createEvent, updateEventById } from '@/app/_api/event';
+import { createEvent, getAllEvents, updateEventById } from '@/app/_api/event';
 
-const Header = ({ event, events, fetchAllEvents }: any) => {
+const Header = ({ event, events, setEvents }: any) => {
 
   const { eventId } = useParams()
   const router = useRouter()
@@ -97,6 +97,21 @@ const Header = ({ event, events, fetchAllEvents }: any) => {
         </AlertDialogContent>
       </AlertDialog>
     )
+  }
+
+  // FETCH ALL EVENTS
+  const fetchAllEvents = async () => {
+
+    const response = await getAllEvents()
+    if(response.success) {
+      setEvents(response.message)
+    } else {
+      toast({
+        title: "Failed to fetch events"
+      })
+      console.log('Failed to fetch events')
+    }
+
   }
 
   // CREATE NEW EVENT
