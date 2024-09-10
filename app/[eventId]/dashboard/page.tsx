@@ -7,85 +7,85 @@ import MessageList from './_components/MessageList/page'
 import { SlotContext } from '../../hooks/SlotContext'
 import Header from './_components/Header/Header'
 import { useParams } from 'next/navigation'
-import { getEventById, getAllEvents } from '@/app/_api/event'
 import { useToast } from '@/components/ui/use-toast'
 import socket from '@/utils/socket'
+import { getOrgById } from '@/app/_api/org'
+import { useRouter } from 'next/navigation'
 
 const page = () => {
 
   const { toast } = useToast()
+  const router = useRouter()
   const { eventId }: { eventId: string } = useParams();
   const [event, setEvent] = useState<any>({})
   const [events, setEvents] = useState([])
   const [slots, setSlots] = useState([])
   const [messages, setMessages] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
-  // FETCH EVENT
-  const fetchEventById = async () => {
+  // FETCH ORGANIZER DATA
+  const fetchOrganizerData = async (id: string) => {
 
-    let e: any = localStorage.getItem('pitchtrack-event')
-    
-    if(e?._id === eventId) {
-      setEvent(JSON.parse(e))
-      setSlots(JSON.parse(e).slots)
-      setMessages(JSON.parse(e).messages)
-      return
-    }
-
-    console.log('fetching event')
-
-    const response = await getEventById({ eventId })
+    const response = await getOrgById({ id })
 
     if(response.success) {
-      setEvent(response.message)
-      let slotList = response.message.slots.map((slot: any, i: number) => {
+
+      localStorage.setItem('pitchtrack-organizer', JSON.stringify(response.message))
+
+      setEvents(response.message.events)
+      setEvent(response.message.events[0])
+      setSlots(response.message.events[0].slots.map((slot: any, i: number) => {
         return {
           ...slot,
           tag: 'timeslot',
         }
-      })
-      setSlots(slotList)
-      let messageList = response.message.messages.map((message: any, i: number) => {
+      }))
+      setMessages(response.message.events[0].messages.map((message: any, i: number) => {
         return {
           ...message,
           tag: 'message',
         }
-      })
-      setMessages(messageList)
-      localStorage.setItem('pitchtrack-event', JSON.stringify(response.message))
+      }))
+      router.push(`/${response.message.events[0]._id}/dashboard`)
+
     } else {
       toast({
-        title: "Failed to fetch event"
+        title: "Session Expired"
       })
-      console.log('Failed to fetch event')
-    }
-
-  }
-
-  // FETCH ALL EVENTS
-  const fetchAllEvents = async () => {
-
-    const response = await getAllEvents()
-
-    if(response.success) {
-      setEvents(response.message)
-    } else {
-      toast({
-        title: "Failed to fetch events"
-      })
-      console.log('Failed to fetch events')
+      console.log('Failed to fetch organizer data')
+      if(response.message == 'Unauthorized') {
+        router.push('/landing')
+      }
     }
 
   }
   
   useEffect(() => {
 
-    fetchEventById()
-    fetchAllEvents()
+    // LOADING STAGE
+    setIsLoading(true)
 
-    socket.emit('joinRoom', { eventId: eventId })
+    let token = localStorage.getItem('pitchtrack-token') || ""
+
+    // JWT DECODER
+    const parseJwt = (token: any) => {
+      if (!token) { return; }
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace('-', '+').replace('_', '/');
+      return JSON.parse(window.atob(base64));
+    }
+
+    const { sub } = parseJwt(token)
+    fetchOrganizerData(sub)
+    setIsLoading(false)
 
   }, [eventId])
+
+  useEffect(() => {
+    if(eventId) {
+      socket.emit('joinRoom', { eventId })
+    }
+  }, [])
 
   socket.on('slotsUpdated', (response) => {
     if(response.success) {
@@ -99,12 +99,18 @@ const page = () => {
     }
   })
 
+  if (isLoading) return (
+    <div className='w-full h-full flex justify-center items-center'>
+      <p>Loading...</p>
+    </div>
+  )
+
   return (
     <SlotContext.Provider value={{slots, setSlots, messages, setMessages, event }}>
       <div className='w-full h-full flex flex-col justify-start items-start overflow-y-scroll lg:overflow-y-hidden'>
 
         {/* Header */}
-        <Header event={event} events={events} fetchAllEvents={fetchAllEvents}/>
+        <Header event={event} events={events} setEvents={setEvents}/>
 
         <div className='w-full h-full lg:max-h-full bg-white flex flex-col lg:flex-row justify-start items-start gap-5 lg:gap-0 lg:overflow-y-hidden'>
 
