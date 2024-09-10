@@ -46,6 +46,8 @@ const Clock = ({ isFlashing, slot }: ClockProps ) => {
         danger: parseInt(slot?.dangerTime)
       })
     )
+    if(slot.status === 'paused') return
+    setCurrentPointer(0)
   }, [slot])
 
   socket.on("timerUpdate", (message) => {
@@ -57,15 +59,14 @@ const Clock = ({ isFlashing, slot }: ClockProps ) => {
       {/* Body */}
       <div id="box" className='relative w-full flex-1 flex flex-col justify-between items-center'
         style={{
-          backgroundColor: countDown > slot?.warningTime - 1 ? 'white' : countDown > slot?.dangerTime - 1 ? 'yellow' : 'red',
+          backgroundColor: countDown > slot?.warningTime - 1 ? 'white' : countDown > slot?.dangerTime - 1 ? 'yellow' : 'white',
           animation: isFlashing && countDown < slot?.dangerTime ? 'flash 0.5s infinite' : 'none'
         }}
-
       >
         <p className='text-2xl lg:text-4xl font-bold pt-8 text-center'>
           {slot?.generalMessage || 'No Message' }
         </p>
-        <p className="text-[100px] lg:text-[400px] xl:text-[500px] font-bold text-center leading-[0px] tracking-tighter">
+        <p className="text-[100px] lg:text-[400px] xl:text-[500px] font-bold leading-tight text-center tracking-tighter">
           {convertTotalSectoHHMMSS(countDown).substring(3, 8)}
         </p>
         <p className='text-3xl font-bold py-4 text-center'>
@@ -81,7 +82,7 @@ const Clock = ({ isFlashing, slot }: ClockProps ) => {
         </div>
         <div className={`bg-red h-full`} style={{ width: `${progressBarColorWidth.dangerWidth}%`}}>
         </div>
-        <div className="absolute w-[5px] h-full bg-black duration-1000 transition-all ease-linear"
+        <div className={`absolute w-[5px] h-full bg-black transition-left ease-linear ${currentPointer == 0 ? 'duration-0' : 'duration-1000'}`}
           style={{ left: `${currentPointer}%` }}
         >
         </div>
