@@ -7,7 +7,8 @@ export const updateEventById = async ({ eventId, event }) => {
         method: "PUT",
         headers: {
           "Accept": "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("pitchtrack-token") || ""
         },
         body: JSON.stringify(event)
       })

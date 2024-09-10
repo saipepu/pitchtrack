@@ -1,9 +1,9 @@
 import { api, token } from '@/app/_api/api'
 
-export const getAllEvents = async () => {
+export const getOrgById = async ({ id }) => {
     
   console.log("Getting all events")
-  const response = await fetch(`${api}/events`, {
+  const response = await fetch(`${api}/orgs/${id}`, {
     method: "GET",
     headers: {
       "Accept": "application/json",

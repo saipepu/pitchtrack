@@ -1,4 +1,4 @@
-import { api } from '@/app/_api/api'
+import { api, token } from '@/app/_api/api'
 
 export const getEventById = async ({ eventId }) => {
       
@@ -7,7 +7,8 @@ export const getEventById = async ({ eventId }) => {
       method: "GET",
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("pitchtrack-token") || ""
       }
     })
     .then(response => response.json())
