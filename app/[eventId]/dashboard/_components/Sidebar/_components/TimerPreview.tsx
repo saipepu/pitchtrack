@@ -65,7 +65,7 @@ const TimerPreview = () => {
         ) : (
           <div className='cursor-pointer bg-green-400 w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] px-2'>
             <ClipboardCopy size={16} strokeWidth={2.5} className='text-white'/>
-            <p className='text-sm font-medium text-center text-white'>Share</p>
+            <p className='text-sm font-medium text-center text-white'>Copied</p>
           </div>
         )}
       </div>
