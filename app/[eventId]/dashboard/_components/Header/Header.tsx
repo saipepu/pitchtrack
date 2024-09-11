@@ -18,9 +18,9 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast';
 import { useParams, useRouter } from 'next/navigation';
-import { createEvent, getAllEvents, updateEventById } from '@/app/_api/event';
+import { createEvent, updateEventById } from '@/app/_api/event';
 
-const Header = ({ event, events, setEvents }: any) => {
+const Header = ({ organizer, event, events, fetchOrganizerData }: any) => {
 
   const { eventId } = useParams()
   const router = useRouter()
@@ -45,7 +45,10 @@ const Header = ({ event, events, setEvents }: any) => {
                 <DropdownMenuCheckboxItem
                   key={i}
                   checked={event?._id === eventId}
-                  onClick={() => router.push(`/${event?._id}/dashboard`)}
+                  onClick={() => {
+                    router.refresh()
+                    router.push(`/${event?._id}/dashboard`)
+                  }}
                 >
                   {event?.title}
                 </DropdownMenuCheckboxItem>
@@ -99,21 +102,6 @@ const Header = ({ event, events, setEvents }: any) => {
     )
   }
 
-  // FETCH ALL EVENTS
-  const fetchAllEvents = async () => {
-
-    const response = await getAllEvents()
-    if(response.success) {
-      setEvents(response.message)
-    } else {
-      toast({
-        title: "Failed to fetch events"
-      })
-      console.log('Failed to fetch events')
-    }
-
-  }
-
   // CREATE NEW EVENT
   const createNewEvent = async ({ eventName }: any) => {
       
@@ -128,7 +116,7 @@ const Header = ({ event, events, setEvents }: any) => {
       return
     }
 
-    const newEvent = await createEvent({ event: dto })
+    const newEvent = await createEvent({ orgId: organizer._id, event: dto })
 
     if(newEvent.success) {
 
@@ -136,7 +124,7 @@ const Header = ({ event, events, setEvents }: any) => {
         title: "Event creation Successful",
       })
       setShowCreateNewEventForm(false)
-      fetchAllEvents()
+      fetchOrganizerData()
 
     } else {
       
@@ -170,7 +158,7 @@ const Header = ({ event, events, setEvents }: any) => {
         title: "Event updated Successful",
       })
       setShowCreateNewEventForm(false)
-      fetchAllEvents()
+      fetchOrganizerData()
 
     } else {
       
