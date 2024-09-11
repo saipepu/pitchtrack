@@ -2,9 +2,10 @@ import React from 'react'
 import { EmitSocket } from '@/utils/socket/SocketEmit'
 import { Pause, Play } from 'lucide-react'
 
-const PlayButton = ({ slot, eventId, isRunning, setIsRunning, isActive } : any ) => {
+const PlayButton = ({ slot, eventId, isRunning, setIsRunning, isActive, setIsLoading } : any ) => {
 
   const handlePlayButton = () => {
+    setIsLoading && setIsLoading(true)
     if(isActive && isRunning) {
       EmitSocket('pause', {
         duration: slot.duration,
@@ -32,7 +33,7 @@ const PlayButton = ({ slot, eventId, isRunning, setIsRunning, isActive } : any )
   return (
     <div
       className={
-        `group cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-1 md:px-2
+        `z-50 group cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-1 md:px-2
         ${isRunning && isActive ? 'bg-slate-500' : isActive ? 'bg-green-500' : 'bg-transparent'}
         transition-all duration-300`
       }
