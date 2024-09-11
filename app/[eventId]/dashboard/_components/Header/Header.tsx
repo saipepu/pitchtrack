@@ -46,7 +46,6 @@ const Header = ({ organizer, event, events, fetchOrganizerData }: any) => {
                   key={i}
                   checked={event?._id === eventId}
                   onClick={() => {
-                    router.refresh()
                     router.push(`/${event?._id}/dashboard`)
                   }}
                 >
