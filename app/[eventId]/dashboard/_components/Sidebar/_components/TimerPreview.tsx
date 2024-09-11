@@ -2,18 +2,19 @@
 
 import { SlotContext } from '@/app/hooks/SlotContext';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { EmitSocket } from '@/utils/socket/SocketEmit';
-import { ChevronLeft, ChevronRight, Clock, Link, Palette, Pause, Play, SkipBack, SkipForward } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ClipboardCopy, Clock, Link, Palette, Pause, Play, Save, SaveAllIcon, SkipBack, SkipForward } from 'lucide-react'
 import { useParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react'
 import PlayButton from '../../PlayButton/PlayButton';
 import socket from '@/utils/socket';
+import { toast } from '@/components/ui/use-toast';
 
 const TimerPreview = () => {
 
   const { eventId } = useParams();
   const [currentTime, setCurrentTime] = useState('00:00:00')
   const { slots, isRunning, setIsRunning, runningSlot, setRunningSlot, isActive } = useContext(SlotContext)
+  const [isCopied, setIsCopied] = useState(false)
 
   useEffect(() => {
     setCurrentTime(`${new Date().getDate()}:${new Date().getHours()}:${new Date().getSeconds()}`)
@@ -29,6 +30,17 @@ const TimerPreview = () => {
 
   })
 
+  const handleClipBoardCopy = () => {
+    navigator.clipboard.writeText(`http://20.2.64.76/${eventId}/audience/presentor`)
+    setIsCopied(true)
+    toast({
+      title: 'Link copied to Clipboard'
+    })
+    setTimeout(() => {
+      setIsCopied(false)
+    }, 2000)
+  }
+
   // show the mini preview of timer
   return (
     <div className='w-full flex flex-col justify-start items-start gap-2'>
@@ -38,14 +50,24 @@ const TimerPreview = () => {
         <div className='w-full h-full flex justify-center items-center'>
           <p className='text-md font-medium text-center'>Dashboard</p>
         </div>
-        <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'>
+        {/* <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'>
           <Palette size={16} />
           <p className='text-sm font-medium text-center'>Customize</p>
-        </div>
-        <div className='cursor-pointer bg-slate-100 w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'>
-          <Link size={16} strokeWidth={2.5}/>
-          <p className='text-sm font-medium text-center'>Share</p>
-        </div>
+        </div> */}
+        {!isCopied ? (
+          <div
+            className='cursor-pointer bg-slate-100 w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'
+            onClick={() => handleClipBoardCopy()}
+          >
+            <Link size={16} strokeWidth={2.5}/>
+            <p className='text-sm font-medium text-center'>Share</p>
+          </div>
+        ) : (
+          <div className='cursor-pointer bg-green-400 w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] px-2'>
+            <ClipboardCopy size={16} strokeWidth={2.5} className='text-white'/>
+            <p className='text-sm font-medium text-center text-white'>Share</p>
+          </div>
+        )}
       </div>
 
       {/* Timer Mini Preview */}
