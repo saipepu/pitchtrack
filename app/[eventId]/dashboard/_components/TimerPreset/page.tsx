@@ -18,7 +18,7 @@ const TimerPreset = () => {
             </SelectTrigger>
             <SelectContent className='bg-white text-black'>
               <SelectItem value='edit'>Edit</SelectItem>
-              <SelectItem value='delete'>Delete</SelectItem>
+              <SelectItem value='delete' className='ring-0 border-0 outline-none'>Delete</SelectItem>
             </SelectContent>
           </Select>
         </div>
