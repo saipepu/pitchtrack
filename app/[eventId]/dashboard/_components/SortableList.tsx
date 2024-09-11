@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import { useContext } from 'react';
 import MessageEditor from "./MessageList/_components/MessageEditor";
 import TimeBlock from './TimerPreset/_components/TimeBlock';
+import { reorderSlot } from '@/app/_api/slot';
 
 let slotDefaultSchema = {
     "tag": "Tag1",
@@ -16,11 +17,11 @@ let slotDefaultSchema = {
     "notes": "Note1",
     "appearance": "countdown",
     "startTimeType": "manual",
-    "startTime": "2024-08-15T12:40:40.000+07:00",
-    "duration": "3500",
-    "pauseTime": "3500",
-    "warningTime": "35",
-    "dangerTime": "5",
+    "startTime": new Date(),
+    "duration": "300",
+    "pauseTime": "300",
+    "warningTime": "100",
+    "dangerTime": "50",
     "warningColor": "yellow",
     "dangerColor": "red",
     "dangerSound": "danger",
@@ -67,8 +68,28 @@ const Board = ({ cards, setCards, tag } : any ) => {
 
 const Column = ({ tag, cards, setCards }: any) => {
 
+  const { eventId } = useParams();
+  const handleReorderSlot = async ({ dto }: any) => {
+    console.log('Saving slot', dto)
+    const response = await reorderSlot({ eventId, dto })
+
+      console.log(response.message.slots.map((slot: any, i: number) => slot._id))
+      if(response.success) {
+        console.log('Slot updated successfully')
+        toast({
+          title: "Slot updated successfully"
+        })
+      } else {
+        console.log('Failed to update slot', response)
+        toast({
+          title: "Slot updated failed"
+      })
+    }
+  }
+
   const handleDragStart = (e: any, card: any) => {
-    e.dataTransfer.setData("cardId", card.id)
+    console.log(card)
+    e.dataTransfer.setData("cardId", card._id)
     e.dataTransfer.setData("tag", "timeslot")
   }
 
@@ -135,7 +156,6 @@ const Column = ({ tag, cards, setCards }: any) => {
   const handleDrop = (e: any) => {
 
     clearHighlights();
-    console.log(e.dataTransfer)
     if(e.dataTransfer.getData("tag") !== "timeslot") return;
 
     const cardId = e.dataTransfer.getData("cardId");
@@ -146,20 +166,19 @@ const Column = ({ tag, cards, setCards }: any) => {
     const before = element.dataset.before || "-1";
 
     if (before !== cardId) {
-      let copy = [...cards];
 
-      let cardToTransfer = copy.find((c) => c.id === cardId);
+      let copy = [...cards];
+      let cardToTransfer = copy.find((c) => c._id === cardId);
       if (!cardToTransfer) return;
       cardToTransfer = { ...cardToTransfer, tag };
-
-      copy = copy.filter((c) => c.id !== cardId);
+      copy = copy.filter((c) => c._id !== cardId);
 
       const moveToBack = before === "-1";
 
       if (moveToBack) {
         copy.push(cardToTransfer);
       } else {
-        const insertAtIndex = copy.findIndex((el) => el.id === before);
+        const insertAtIndex = copy.findIndex((el) => el._id === before);
         if (insertAtIndex === undefined) return;
 
         copy.splice(insertAtIndex, 0, cardToTransfer);
@@ -169,6 +188,11 @@ const Column = ({ tag, cards, setCards }: any) => {
         title: "Timer Sorted",
       })
       setCards(copy);
+
+
+      // SORT SLOT API INTEGRATION
+      handleReorderSlot({ dto: { newOrder: copy.map((slot: any, i: number) => slot._id)}})
+
     }
   };
 
@@ -204,9 +228,9 @@ const Card = ({ tag, card, setCards, index, handleDragStart }: any) => {
 
     return (
       <>
-      <DropIndicator beforeId={card.id} tag={card.tag}/>
+      <DropIndicator beforeId={card._id} tag={card.tag}/>
       <div
-        id={`${tag}-${card.id}`}
+        id={`${tag}-${card._id}`}
         draggable={true}
         className="cursor-grab active:cursor-grabbing"
         onDragStart={(e) => {
