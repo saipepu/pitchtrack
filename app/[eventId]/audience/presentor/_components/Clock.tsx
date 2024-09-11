@@ -49,9 +49,6 @@ const Clock = ({ isFlashing, countDown, slot }: any ) => {
     setCurrentPointer(cur);
   }, [countDown])
 
-  console.log(slot.duration, slot.warningTime, slot.dangerTime)
-  console.log(progressBarColorWidth)
-
   return (
     <>
       {/* Body */}
