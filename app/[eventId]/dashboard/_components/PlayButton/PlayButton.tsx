@@ -5,7 +5,6 @@ import { Pause, Play } from 'lucide-react'
 const PlayButton = ({ slot, eventId, isRunning, setIsRunning, isActive } : any ) => {
 
   const handlePlayButton = () => {
-    console.log('isRunning', isRunning, 'isActive', isActive)
     if(isActive && isRunning) {
       EmitSocket('pause', {
         duration: slot.duration,
@@ -19,12 +18,14 @@ const PlayButton = ({ slot, eventId, isRunning, setIsRunning, isActive } : any )
         eventId: eventId,
         slotId: slot._id
       })
+      setIsRunning(true)
     } else {
       EmitSocket('start', {
         duration: slot.duration,
         eventId: eventId,
         slotId: slot._id
       })
+      setIsRunning(true)
     }
   }
 
