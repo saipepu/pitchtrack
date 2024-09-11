@@ -36,7 +36,7 @@ let messageDefaultSchema = {
   "tag": "Tag1",
   "desc": "Message1",
   "isCap": true,
-  "onDisplay": true,
+  "onDisplay": false,
   "color": "green"
 }
 
@@ -70,19 +70,17 @@ const Column = ({ tag, cards, setCards }: any) => {
 
   const { eventId } = useParams();
   const handleReorderSlot = async ({ dto }: any) => {
-    console.log('Saving slot', dto)
-    const response = await reorderSlot({ eventId, dto })
 
-      console.log(response.message.slots.map((slot: any, i: number) => slot._id))
-      if(response.success) {
-        console.log('Slot updated successfully')
-        toast({
-          title: "Slot updated successfully"
-        })
-      } else {
-        console.log('Failed to update slot', response)
-        toast({
-          title: "Slot updated failed"
+    const response = await reorderSlot({ eventId, dto })
+    if(response.success) {
+      console.log('Slot updated successfully')
+      toast({
+        title: "Slot updated successfully"
+      })
+    } else {
+      console.log('Failed to update slot', response)
+      toast({
+        title: "Slot updated failed"
       })
     }
   }
@@ -238,7 +236,7 @@ const Card = ({ tag, card, setCards, index, handleDragStart }: any) => {
         }}
       >
         {tag === 'timeslot' &&  <TimeBlock index={index} /> }
-        {tag === 'message' && <MessageEditor message={card} setMessages={setCards} />}
+        {tag === 'message' && <MessageEditor index={index} />}
       </div>
       </>
     )
@@ -263,9 +261,6 @@ const AddCard = ({ tag, setCards, cards }: any) => {
   const createNewSlot = async (newSlot: any) => {
 
     const response = await createSlot({ eventId, slot: newSlot });
-
-    console.log(response)
-
     if(response.success) {
       toast({
         title: "Slot created"
@@ -303,13 +298,9 @@ const AddCard = ({ tag, setCards, cards }: any) => {
 
   const handleAddCard = () => {
       
-      console.log(cards)
       if(tag === 'timeslot') {
-
         createNewSlot(slotDefaultSchema)
-
       } else {
-
         createNewMessage(messageDefaultSchema)
 
       }
