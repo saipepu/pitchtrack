@@ -7,21 +7,27 @@ import { ChevronLeft, ChevronRight, Clock, Link, Palette, Pause, Play, SkipBack,
 import { useParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react'
 import PlayButton from '../../PlayButton/PlayButton';
+import socket from '@/utils/socket';
 
 const TimerPreview = () => {
 
   const { eventId } = useParams();
   const [currentTime, setCurrentTime] = useState('00:00:00')
-  const { slots } = useContext(SlotContext)
-  const [slot, setSlot] = useState<any>(undefined)
+  const { slots, isRunning, setIsRunning, runningSlot, setRunningSlot, isActive } = useContext(SlotContext)
 
   useEffect(() => {
     setCurrentTime(`${new Date().getDate()}:${new Date().getHours()}:${new Date().getSeconds()}`)
-  },[])
+    setRunningSlot(slots[0])
+  },[slots])
 
-  useEffect(() => {
-    setSlot(slots.find((slot: any) => slot.status == 'active' ||  slot.status == 'paused' || slot.status == 'completed' ))
-  }, [slots])
+  socket.on('timerUpdate', (message) => {
+
+    setRunningSlot(slots.find((slot: any, i: number) => slot._id == message.slotId))
+    if(eventId == message.eventId) {
+      setIsRunning(message.isRunning)
+    }
+
+  })
 
   // show the mini preview of timer
   return (
@@ -73,7 +79,7 @@ const TimerPreview = () => {
         </div>
 
         {/* CUSTOMIZE PLAY BUTTON */}
-        <PlayButton slot={slot} eventId={eventId} />
+        <PlayButton slot={runningSlot} eventId={eventId} isRunning={isRunning} setIsRunning={setIsRunning} isActive={isActive} />
 
         <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center'>
           <SkipForward size={16} />
