@@ -22,11 +22,12 @@ const page = () => {
   const [events, setEvents] = useState([])
   const [slots, setSlots] = useState([])
   const [messages, setMessages] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isRunning, setIsRunning] = useState(false)
   const [isActive, setIsActive] = useState(false)
   const [runningSlot, setRunningSlot] = useState('')
 
+  // PLAY AUDIO
   const playAudio = () => {
     let audio: any = document.getElementById('alarm')
     if(audio) {
@@ -134,7 +135,6 @@ const page = () => {
       <p>Loading...</p>
     </div>
   )
-  console.log('slots', slots)
 
   return (
     <SlotContext.Provider value={{slots, setSlots, messages, setMessages, event, isRunning, setIsRunning, isActive, setIsActive, runningSlot, setRunningSlot }}>
