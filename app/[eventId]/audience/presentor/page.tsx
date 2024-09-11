@@ -15,18 +15,11 @@ const Presentor = () => {
   const [event, setEvent] = useState<any>({});
   const [slot, setSlot] = useState<any>({})
   const [countDown, setCountDown] = useState(0);
+  const [message, setMessage] = useState<any>();
 
   const fetchEventById = async () => {
 
-    let e: any = localStorage.getItem('pitchtrack-event')
-    
-    if(e?._id === eventId) {
-      setEvent(JSON.parse(e))
-      setSlots(JSON.parse(e).slots)
-      return
-    }
-
-    console.log('fetching event')
+    console.log('EVENT NOT FOUND IN LOCAL STORAGE, FETCHING FROM SERVER . . .')
 
     const response = await getEventById({ eventId })
 
@@ -47,7 +40,7 @@ const Presentor = () => {
       })
       console.log('Failed to fetch event')
     }
-
+    
   }
 
   useEffect(() => {
@@ -72,9 +65,6 @@ const Presentor = () => {
     setCountDown(message.remainingTime)
     setSlot(slots.find((slot: any) => slot._id === message.slotId))
   })
-
-  console.log('slot', slot)
-
 
   return (
     <div
@@ -109,10 +99,10 @@ const Presentor = () => {
 
         {/* <Clock isFlashing={isFlashing} slot={slot} countDown={countDown} /> */}
         {slot ? (
-          <Clock isFlashing={isFlashing} slot={slot} countDown={countDown} />
+          <Clock isFlashing={isFlashing} slot={slot} countDown={countDown}/>
         ): (
           <div className='w-full h-full flex justify-center items-center'>
-            <p className='text-2xl font-bold'>No Slot Available</p>
+            <p className='text-lg font-bold'>Slot unselected or delected</p>
           </div>
         )}
 
