@@ -2,7 +2,7 @@
 
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { convertTotalSectoHHMMSS } from '@/utils/convertor/convert-totalsec-to-hhmmss'
-import { Copy, Equal, MoreVerticalIcon, Pencil, Settings, SkipBack, Trash } from 'lucide-react'
+import { Circle, Copy, Equal, LoaderCircle, MoreVerticalIcon, Pencil, Settings, SkipBack, Trash } from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
 import General from '../../TimeBlockSetting/_components/General'
 import Duration from '../../TimeBlockSetting/_components/Duration'
@@ -22,6 +22,8 @@ const TimeBlock = ({ index }: any) => {
   const [slot, setSlot] = useState(slots[index]) // MAKE A COPY OF THE SLOT
   const [showSetting, setShowSetting] = useState(false)
   const [socketSlotId, setSocketSlotId] = useState('')
+  const [warningMessage, setWarningMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   // FORMAT START TIME UTC TIME TO HH:MM:SS
   let s = slot?.startTime ? new Date(slot?.startTime) : new Date()
@@ -33,7 +35,6 @@ const TimeBlock = ({ index }: any) => {
   
   const handleSave = async (slot: any) => {
 
-    console.log('Saving slot', slot.warningTime)
     // TO BE OPTIMIZED
     slots[index] = {...slot, tag: 'timeslot' }
     setSlots([...slots])
@@ -79,7 +80,7 @@ const TimeBlock = ({ index }: any) => {
 
   socket.on("timerUpdate", (message) => {
 
-    console.log('timerUpdate', message)
+    setIsLoading(false)
     // UPDATE THE GLOBAL RUNNING SLOT
     setSocketSlotId(message.slotId)
     if(eventId == message.eventId && slot._id == message.slotId) {
@@ -87,6 +88,7 @@ const TimeBlock = ({ index }: any) => {
       setIsRunning(message.isRunning)
       setIsActive(message.slotId === slot._id)
     }
+
   })
 
   const PopoverHandler = () => {
@@ -115,11 +117,31 @@ const TimeBlock = ({ index }: any) => {
     <div
       id={`${slots[index].tag + "-" + slots[index].id}`}
       className={`
-                  group/slot w-full h-[80px] flex justify-between items-center rounded-lg p-2 gap-2
+                  relative group/slot w-full h-[80px] flex justify-between items-center rounded-lg p-2 gap-2
                   ${isActive && socketSlotId == slot._id ? 'bg-white border-2 border-slate-200' : 'bg-slate-100'}
-                  transition-all duration-300
+                  transition-all duration-300 overflow-hidden
                 `}
     >
+      {isLoading && (
+        <div className="z-20 absolute top-0 left-0 w-full h-full bg-black/50 backdrop-blur-[1px] border-2 border-slate-200 flex justify-center items-center">
+          <LoaderCircle size={32} className='animate-spin text-white/90' strokeWidth={5}/>
+        </div>
+      )}
+      {isRunning && socketSlotId == slot._id && (
+        <div className="z-10 absolute top-0 left-0 w-full h-full border-2 border-slate-200 flex justify-center items-center cursor-not-allowed"
+          onClick={() => {
+            setWarningMessage('Can edit a running slot')
+            setTimeout(() => {
+              setWarningMessage('')
+            }, 2000)
+          }}
+        >
+          {warningMessage &&
+          <div className="w-full h-full flex justify-center items-center bg-black/50 backdrop-blur-[2px]">
+            <p className='font-bold text-white'>{warningMessage}</p>
+          </div>}
+        </div>
+      )}
       {showSetting && (
         <TimeBlockSetting setShowSetting={setShowSetting} slot={slot} setSlot={setSlot} handleSave={handleSave}/>
       )}
@@ -190,7 +212,7 @@ const TimeBlock = ({ index }: any) => {
         </div>
 
         {/* PLAY BUTTON */}
-        <PlayButton slot={slot} eventId={eventId} isRunning={isRunning && socketSlotId == slot._id} setIsRunning={setIsRunning} isActive={isActive && socketSlotId == slot._id} />
+        <PlayButton slot={slot} eventId={eventId} isRunning={isRunning && socketSlotId == slot._id} setIsRunning={setIsRunning} isActive={isActive && socketSlotId == slot._id} setIsLoading={setIsLoading} />
 
         <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md  px-2'>
           <Popover onOpenChange={(open) => {}}>
