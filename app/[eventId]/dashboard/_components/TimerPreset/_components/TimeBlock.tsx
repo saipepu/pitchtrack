@@ -18,12 +18,10 @@ import socket from '@/utils/socket';
 const TimeBlock = ({ index }: any) => {
 
   const { eventId } = useParams();
-  const { slots, setSlots } = useContext(SlotContext)
+  const { slots, setSlots, isRunning, setIsRunning, isActive, setIsActive, runningSlot, setRunningSlot } = useContext(SlotContext)
   const [slot, setSlot] = useState(slots[index]) // MAKE A COPY OF THE SLOT
-  let slotId = slot._id
   const [showSetting, setShowSetting] = useState(false)
-  const [isRunning, setIsRunning] = useState(false)
-  const [isActive, setIsActive] = useState(false)
+  const [socketSlotId, setSocketSlotId] = useState('')
 
   // FORMAT START TIME UTC TIME TO HH:MM:SS
   let s = slot?.startTime ? new Date(slot?.startTime) : new Date()
@@ -44,7 +42,7 @@ const TimeBlock = ({ index }: any) => {
     delete dto._id
 
     // UPDATE SLOT
-    const response = await updateSlot({ eventId, slotId, slot: dto })
+    const response = await updateSlot({ eventId, slotId: slot._id, slot: dto })
 
     if(response.success) {
       console.log('Slot updated successfully')
@@ -60,10 +58,10 @@ const TimeBlock = ({ index }: any) => {
 
   }
 
-  const handleDelete = async ({ eventId, slotId } : any) => {
+  const handleDelete = async () => {
   
       // DELETE SLOT
-      const response = await deleteSlot({ eventId, slotId })
+      const response = await deleteSlot({ eventId, slotId: slot._id })
   
       if(response.success) {
         console.log('Slot deleted successfully')
@@ -80,10 +78,15 @@ const TimeBlock = ({ index }: any) => {
   }, [slots])
 
   socket.on("timerUpdate", (message) => {
-    console.log(message)
-    setIsRunning(message.isRunning)
-    setIsActive(message.slotId === slotId)
-    console.log(message.slotId, slotId)
+
+    console.log('timerUpdate', message)
+    // UPDATE THE GLOBAL RUNNING SLOT
+    setSocketSlotId(message.slotId)
+    if(eventId == message.eventId && slot._id == message.slotId) {
+      setRunningSlot(slots.find((slot: any, i: number) => slot._id == message.slotId))
+      setIsRunning(message.isRunning)
+      setIsActive(message.slotId === slot._id)
+    }
   })
 
   const PopoverHandler = () => {
@@ -113,7 +116,7 @@ const TimeBlock = ({ index }: any) => {
       id={`${slots[index].tag + "-" + slots[index].id}`}
       className={`
                   group/slot w-full h-[80px] flex justify-between items-center rounded-lg p-2 gap-2
-                  ${isActive ? 'bg-white border-2 border-slate-200' : 'bg-slate-100'}
+                  ${isActive && socketSlotId == slot._id ? 'bg-white border-2 border-slate-200' : 'bg-slate-100'}
                   transition-all duration-300
                 `}
     >
@@ -187,7 +190,7 @@ const TimeBlock = ({ index }: any) => {
         </div>
 
         {/* PLAY BUTTON */}
-        <PlayButton slot={slot} eventId={eventId} isRunning={isRunning} setIsRunning={setIsRunning} isActive={isActive} />
+        <PlayButton slot={slot} eventId={eventId} isRunning={isRunning && socketSlotId == slot._id} setIsRunning={setIsRunning} isActive={isActive && socketSlotId == slot._id} />
 
         <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md  px-2'>
           <Popover onOpenChange={(open) => {}}>
@@ -195,7 +198,7 @@ const TimeBlock = ({ index }: any) => {
               <MoreVerticalIcon size={16} />
             </PopoverTrigger>
             <PopoverContent className='w-fit bg-slate-100 text-black p-2 grid grid-cols-1 gap-2'>
-              <PopoverClose className="flex justify-start items-center gap-2 cursor-pointer" onClick={() => handleDelete({ eventId, slotId })}>
+              <PopoverClose className="flex justify-start items-center gap-2 cursor-pointer" onClick={() => handleDelete()}>
                 <Trash size={16} className='stroke-red-600'/>
                 <p className='text-sm font-medium text-red-600'>Delete</p>
               </PopoverClose>
