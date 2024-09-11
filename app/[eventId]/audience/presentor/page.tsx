@@ -13,7 +13,8 @@ const Presentor = () => {
   const [isFlashing, setIsFlashing] = useState(false);
   const [slots, setSlots] = useState([]);
   const [event, setEvent] = useState<any>({});
-  const [slot, setSlot] = useState<any>(undefined);
+  const [slot, setSlot] = useState<any>({})
+  const [countDown, setCountDown] = useState(0);
 
   const fetchEventById = async () => {
 
@@ -38,6 +39,7 @@ const Presentor = () => {
         }
       })
       setSlots(slotList)
+      setSlot(slotList[0])
       localStorage.setItem('pitchtrack-event', JSON.stringify(response.message))
     } else {
       toast({
@@ -52,33 +54,9 @@ const Presentor = () => {
 
     fetchEventById()
 
-  }, [eventId])
-
-  useEffect(() => {
-    if(eventId) {
-      socket.emit('joinRoom', { eventId })
-    }
   }, [])
 
-  useEffect(() => {
-
-    // SET THE CURRENT SLOT WHICH IS ACTIVE OR PAUSED
-    // IF NO ACTIVE OR PAUSED SLOT, SET THE FIRST SLOT
-    if(slots.length > 0) {
-      let currentSlot = slots.find((slot: any) => {
-        return slot.status === 'active' || slot.status === 'paused'
-      })
-      if(!currentSlot) {
-        setSlot(slots[0])
-      } else {
-        setSlot(currentSlot)
-      }
-    }
-
-  }, [slots])
-
   socket.on('slotsUpdated', (response) => {
-    console.log('Slots updated', response)
     if(response.success) {
       let slotList = response.message.map((slot: any, i: number) => {
         return {
@@ -90,6 +68,13 @@ const Presentor = () => {
     }
   })
 
+  socket.on("timerUpdate", (message) => {
+    setCountDown(message.remainingTime)
+    setSlot(slots.find((slot: any) => slot._id === message.slotId))
+  })
+
+  console.log('slot', slot)
+
 
   return (
     <div
@@ -97,7 +82,13 @@ const Presentor = () => {
     >
       <div className='w-full h-full flex flex-col justify-start items-center'>
         {/* Header */}
-        <div className="w-full flex justify-between items-center py-2 px-2 md:px-8">
+        <div className="w-full flex justify-between items-center py-2 px-2 md:px-8 transition-all"
+          style={{
+            backgroundColor: countDown > slot?.warningTime - 1 ? 'white' : countDown > slot?.dangerTime - 1 ? 'yellow' :  countDown == 0 ? '#0e0e0e' : '#FF8888',
+            animation: isFlashing && countDown < slot?.dangerTime ? 'flash 0.5s infinite' : 'none',
+            transitionDuration: countDown == 0 ? '2s' : '1s'
+          }}
+        >
           <div className="w-full flex justify-start items-center">
             <p className="text-2xl md:text-4xl font-bold">PitchTrack</p>
           </div>
@@ -107,16 +98,18 @@ const Presentor = () => {
           <div
             className="hidden md:flex w-full justify-end items-center"
             >
-            <p className={`text-right ${isFlashing ? 'bg-red' : 'bg-white'} text-black px-4 py-2 rounded-lg cursor-pointer`}
+            {/* <p className={`text-right ${isFlashing ? 'bg-red' : 'bg-white'} text-black px-4 py-2 rounded-lg cursor-pointer`}
               onClick={() => setIsFlashing(!isFlashing)}
             >
               Flash
-            </p>
+            </p> */}
+              <p className="text-2xl md:text-4xl font-bold">{event.title}</p>
           </div>
         </div>
 
+        {/* <Clock isFlashing={isFlashing} slot={slot} countDown={countDown} /> */}
         {slot ? (
-          <Clock isFlashing={isFlashing} slot={slot} />
+          <Clock isFlashing={isFlashing} slot={slot} countDown={countDown} />
         ): (
           <div className='w-full h-full flex justify-center items-center'>
             <p className='text-2xl font-bold'>No Slot Available</p>

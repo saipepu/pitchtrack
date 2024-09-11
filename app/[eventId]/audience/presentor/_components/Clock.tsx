@@ -1,10 +1,12 @@
 "use client"
 import { convertTotalSectoHHMMSS } from '@/utils/convertor/convert-totalsec-to-hhmmss'
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import socket from '@/utils/socket';
 
 interface ClockProps {
   isFlashing: boolean;
+  slots: any;
+  setSlot: any;
   slot: any;
 }
 
@@ -26,17 +28,10 @@ const TimerTrackerBar = (Timer: any) => {
   return { safeWidth, warningWidth, dangerWidth }
 }
 
-const Clock = ({ isFlashing, slot }: ClockProps ) => {
+const Clock = ({ isFlashing, countDown, slot }: any ) => {
 
-  const [countDown, setCountDown] = useState(0);
   const [progressBarColorWidth, setProgressBarColorWidth] = useState({ safeWidth: 0, warningWidth: 0, dangerWidth: 0 });
   const [currentPointer, setCurrentPointer] = useState(0);
-
-  // SET THE COUNTDOWN TIMER CURSOR
-  useEffect(() => {
-    let cur = 100 - countDown / slot?.duration * 100;
-    setCurrentPointer(cur);
-  }, [countDown])
 
   useEffect(() => {
     setProgressBarColorWidth(
@@ -46,21 +41,25 @@ const Clock = ({ isFlashing, slot }: ClockProps ) => {
         danger: parseInt(slot?.dangerTime)
       })
     )
-    if(slot.status === 'paused') return
-    setCurrentPointer(0)
   }, [slot])
 
-  socket.on("timerUpdate", (message) => {
-    setCountDown(message.remainingTime)
-  })
+  // SET THE COUNTDOWN TIMER CURSOR
+  useEffect(() => {
+    let cur = 100 - countDown / slot?.duration * 100;
+    setCurrentPointer(cur);
+  }, [countDown])
+
+  console.log(slot.duration, slot.warningTime, slot.dangerTime)
+  console.log(progressBarColorWidth)
 
   return (
     <>
       {/* Body */}
-      <div id="box" className='relative w-full flex-1 flex flex-col justify-between items-center'
+      <div id="box" className='relative w-full flex-1 flex flex-col justify-between items-center transition-all duration-[2s]'
         style={{
-          backgroundColor: countDown > slot?.warningTime - 1 ? 'white' : countDown > slot?.dangerTime - 1 ? 'yellow' : 'white',
-          animation: isFlashing && countDown < slot?.dangerTime ? 'flash 0.5s infinite' : 'none'
+          backgroundColor: countDown > slot?.warningTime - 1 ? 'white' : countDown > slot?.dangerTime - 1 ? 'yellow' :  countDown == 0 ? '#0e0e0e' : '#FF8888',
+          animation: isFlashing && countDown < slot?.dangerTime ? 'flash 0.5s infinite' : 'none',
+          transitionDuration: countDown == 0 ? '2s' : '1s'
         }}
       >
         <p className='text-2xl lg:text-4xl font-bold pt-8 text-center'>
