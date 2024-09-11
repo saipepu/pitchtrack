@@ -17,36 +17,84 @@ const page = () => {
   const { toast } = useToast()
   const router = useRouter()
   const { eventId }: { eventId: string } = useParams();
+  const [organizer, setOrganizer] = useState({})
   const [event, setEvent] = useState<any>({})
   const [events, setEvents] = useState([])
   const [slots, setSlots] = useState([])
   const [messages, setMessages] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isRunning, setIsRunning] = useState(false)
+  const [isActive, setIsActive] = useState(false)
+  const [runningSlot, setRunningSlot] = useState('')
+
+  const playAudio = () => {
+    let audio: any = document.getElementById('alarm')
+    if(audio) {
+      audio.play()
+    }
+  }
 
   // FETCH ORGANIZER DATA
-  const fetchOrganizerData = async (id: string) => {
+  const fetchOrganizerData = async () => {
 
-    const response = await getOrgById({ id })
+    // JWT DECODER
 
+    let token = localStorage.getItem('pitchtrack-token') || ""
+    const parseJwt = (token: any) => {
+      if (!token) { return; }
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace('-', '+').replace('_', '/');
+      return JSON.parse(window.atob(base64));
+    }
+    const { sub } = parseJwt(token)
+
+    const response = await getOrgById({ id: sub })
     if(response.success) {
 
       localStorage.setItem('pitchtrack-organizer', JSON.stringify(response.message))
 
+      setOrganizer(response.message)
       setEvents(response.message.events)
-      setEvent(response.message.events[0])
-      setSlots(response.message.events[0].slots.map((slot: any, i: number) => {
-        return {
-          ...slot,
-          tag: 'timeslot',
-        }
-      }))
-      setMessages(response.message.events[0].messages.map((message: any, i: number) => {
-        return {
-          ...message,
-          tag: 'message',
-        }
-      }))
-      router.push(`/${response.message.events[0]._id}/dashboard`)
+
+      if(eventId == 'loading') {
+
+        // FIRST TIME LOGIN WILL REDIRECT TO THE LOADING STAGE
+        // IF THE EVENT ID IS 'loading', SET THE FIRST EVENT AS THE DEFAULT EVENT
+        setEvent(response.message.events[0])
+        setSlots(response.message.events[0].slots.map((slot: any, i: number) => {
+          return {
+            ...slot,
+            tag: 'timeslot',
+          }
+        }))
+        setMessages(response.message.events[0].messages.map((message: any, i: number) => {
+          return {
+            ...message,
+            tag: 'message',
+          }
+        }))
+        router.push(`/${response.message.events[0]._id}/dashboard`)
+
+      } else {
+
+        let selectedEvent = response.message.events.find((event: any) => event._id == eventId)
+        setEvent(selectedEvent)
+        let s = selectedEvent.slots.map((slot: any, i: number) => {
+          return {
+            ...slot,
+            tag: 'timeslot',
+          }
+        })
+        s = s.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+        setSlots(s)
+        setMessages(selectedEvent.messages.map((message: any, i: number) => {
+          return {
+            ...message,
+            tag: 'message',
+          }
+        }))
+
+      }
 
     } else {
       toast({
@@ -64,28 +112,10 @@ const page = () => {
 
     // LOADING STAGE
     setIsLoading(true)
-
-    let token = localStorage.getItem('pitchtrack-token') || ""
-
-    // JWT DECODER
-    const parseJwt = (token: any) => {
-      if (!token) { return; }
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace('-', '+').replace('_', '/');
-      return JSON.parse(window.atob(base64));
-    }
-
-    const { sub } = parseJwt(token)
-    fetchOrganizerData(sub)
+    fetchOrganizerData()
     setIsLoading(false)
 
   }, [eventId])
-
-  useEffect(() => {
-    if(eventId) {
-      socket.emit('joinRoom', { eventId })
-    }
-  }, [])
 
   socket.on('slotsUpdated', (response) => {
     if(response.success) {
@@ -104,13 +134,21 @@ const page = () => {
       <p>Loading...</p>
     </div>
   )
+  console.log('slots', slots)
 
   return (
-    <SlotContext.Provider value={{slots, setSlots, messages, setMessages, event }}>
+    <SlotContext.Provider value={{slots, setSlots, messages, setMessages, event, isRunning, setIsRunning, isActive, setIsActive, runningSlot, setRunningSlot }}>
       <div className='w-full h-full flex flex-col justify-start items-start overflow-y-scroll lg:overflow-y-hidden'>
+        {/* <audio
+            id="alarm"
+            controls
+            src="/alarm.mp3" className='opacity-0 h-0 z-0 pointer-events-none'>
+                Your browser does not support the
+                <code>audio</code>
+        </audio> */}
 
         {/* Header */}
-        <Header event={event} events={events} setEvents={setEvents}/>
+        <Header organizer={organizer} event={event} events={events} setEvents={setEvents} fetchOrganizerData={fetchOrganizerData}/>
 
         <div className='w-full h-full lg:max-h-full bg-white flex flex-col lg:flex-row justify-start items-start gap-5 lg:gap-0 lg:overflow-y-hidden'>
 
@@ -134,6 +172,7 @@ const page = () => {
       </div>
     </SlotContext.Provider>
   )
+
 }
 
 export default page
