@@ -1,9 +1,9 @@
 import { api } from '@/app/_api/api'
 
-export const deleteSlot = async ({ eventId, slotId }) => {
+export const deleteMessage = async ({ eventId, messageId }) => {
         
-    console.log("Deleting slot")
-    const response = await fetch(`${api}/events/${eventId}/slots/${slotId}`, {
+    console.log("Deleting message")
+    const response = await fetch(`${api}/events/${eventId}/messages/${messageId}`, {
       method: "DELETE",
       headers: {
         "Accept": "application/json",
