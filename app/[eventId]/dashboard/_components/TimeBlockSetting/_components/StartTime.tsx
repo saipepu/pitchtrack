@@ -10,7 +10,8 @@ import React, { useEffect, useState } from 'react'
 
 enum StartType {
   Manual = 'manual',
-  Scheduled = 'scheduled'
+  Scheduled = 'scheduled',
+  Linked = 'linked'
 }
 
 const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
@@ -62,6 +63,7 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
             <SelectGroup>
               <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Manual}>{StartType.Manual}</SelectItem>
               <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Scheduled}>{StartType.Scheduled}</SelectItem>
+              <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Linked}>{StartType.Linked}</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
