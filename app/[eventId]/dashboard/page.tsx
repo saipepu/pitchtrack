@@ -11,6 +11,8 @@ import { useToast } from '@/components/ui/use-toast'
 import socket from '@/utils/socket'
 import { getOrgById } from '@/app/_api/org'
 import { useRouter } from 'next/navigation'
+import { Loader, LoaderCircle } from 'lucide-react'
+import { ToastAction } from '@/components/ui/toast'
 
 const page = () => {
 
@@ -118,15 +120,33 @@ const page = () => {
 
   }, [eventId])
 
-  socket.on('slotsUpdated', (response) => {
+  socket.on('onRoomInfoUpdate', (response) => {
     if(response.success) {
-      let slotList = response.message.map((slot: any, i: number) => {
+      console.log('ws:onRoomInfoUpdate', response)
+      setEvent(response.message)
+      let s = response.message.slots.map((slot: any, i: number) => {
         return {
           ...slot,
           tag: 'timeslot',
         }
       })
-      setSlots(slotList)
+      s = s.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+      setSlots(s)
+      setMessages(response.message.messages.map((message: any, i: number) => {
+        return {
+          ...message,
+          tag: 'message',
+        }
+      }))
+      toast({
+        title: `Syncing ${response.category}` || "Sync Info",
+        action: <ToastAction altText="Undo" onClick={() => console.log('Undo')} className="border-none">
+                  <LoaderCircle size={32} className='animate-spin text-black/40' strokeWidth={5}/>
+                </ToastAction>
+      })
+      setTimeout(() => {
+        toast({}).dismiss()
+      }, 1000)
     }
   })
 

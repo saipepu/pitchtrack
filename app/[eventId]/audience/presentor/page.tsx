@@ -19,7 +19,7 @@ const Presentor = () => {
 
   const fetchEventById = async () => {
 
-    console.log('EVENT NOT FOUND IN LOCAL STORAGE, FETCHING FROM SERVER . . .')
+    console.log('FETCHING EVENT FROM SERVER . . .')
 
     const response = await getEventById({ eventId })
 
@@ -49,15 +49,18 @@ const Presentor = () => {
 
   }, [])
 
-  socket.on('slotsUpdated', (response) => {
+  socket.on('onRoomInfoUpdate', (response) => {
     if(response.success) {
-      let slotList = response.message.map((slot: any, i: number) => {
+      let slotList = response.message.slots.map((slot: any, i: number) => {
         return {
           ...slot,
           tag: 'timeslot',
         }
       })
       setSlots(slotList)
+      if(slot) {
+        setSlot(slotList.find((s: any) => s._id === slot._id))
+      }
     }
   })
 
