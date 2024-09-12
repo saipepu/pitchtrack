@@ -41,6 +41,13 @@ const TimerPreview = () => {
     }, 2000)
   }
 
+  const handleSkipforward = () => {
+    // skip 10s forward
+    socket.emit('skip', {
+      eventId: eventId
+    })
+  }
+
   // show the mini preview of timer
   return (
     <div className='w-full flex flex-col justify-start items-start gap-2'>
@@ -103,7 +110,9 @@ const TimerPreview = () => {
         {/* CUSTOMIZE PLAY BUTTON */}
         <PlayButton slot={runningSlot} eventId={eventId} isRunning={isRunning} setIsRunning={setIsRunning} isActive={isActive} />
 
-        <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center'>
+        <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center'
+          onClick={() => handleSkipforward()}
+        >
           <SkipForward size={16} />
         </div>
         <Select defaultValue='+1m'>
