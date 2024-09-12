@@ -7,6 +7,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { updateMessage } from '@/app/_api/message'
 import { useParams } from 'next/navigation';
 import { toast } from '@/components/ui/use-toast';
+import { deleteMessage } from '@/app/_api/message';
 
 enum COLORS {
   RED = 'red',
@@ -20,6 +21,11 @@ const MessageEditor = ({ index } : any) => {
   const { eventId } = useParams();
   const { messages, setMessages } = useContext(SlotContext)
   const [message, setMessage] = useState(messages[index])
+  const [textColor, setTextColor] = useState('black')
+
+  useEffect(() => {
+    setMessage(messages[index])
+  }, [messages])
 
   const handleSave = async () => {
 
@@ -47,6 +53,24 @@ const MessageEditor = ({ index } : any) => {
 
   }
 
+  const handleDelete = async () => {
+
+    const response = await deleteMessage({ eventId, messageId: message._id })
+
+    if(response.success) {
+      setMessages((prev: any) => {
+        const updated = prev.filter((item: any, i: number) => {
+          return i !== index
+        })
+        return updated
+      })
+      toast({
+        title: 'Message deleted'
+      })
+    }
+
+  }
+
   return (
     <div key={index} className={`relative w-full min-h-[100px] flex justify-start items-center rounded-lg p-2 gap-2 bg-slate-100`}>
       <div className='h-full flex justify-center items-center'>
@@ -57,7 +81,7 @@ const MessageEditor = ({ index } : any) => {
           placeholder='Type your message here'
           value ={message.isCap ? message.desc.toUpperCase() : message.desc}
           className={`resize-none w-full h-[32px] bg-transparent placeholder:text-slate-400 ${message.bold ? 'font-bold' : ''} ${message.capitalized ? 'uppercase' : ''}`}
-          style={{ color: message.color, border: 'none', background: 'white' }}
+          style={{ color: textColor, border: 'none', background: 'white' }}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage({ ...message, desc: e.target.value })}
           onBlur={() => handleSave()}
         />
@@ -67,7 +91,7 @@ const MessageEditor = ({ index } : any) => {
               <div
                 key={j}
                 className='font-serif flex flex-col justify-start items-center gap-1 cursor-pointer'
-                onClick={() => setMessage({ ...message, color: Object.values(COLORS)[j] })}
+                onClick={() => setTextColor(Object.values(COLORS)[j])}
               >
                 <p className='h-[20px] text-md font-bold leading-tight'
                   style={{ color: Object.values(COLORS)[j] }}
@@ -76,7 +100,7 @@ const MessageEditor = ({ index } : any) => {
                 </p>
                 <div className='w-full h-[2px] bg-slate-300'
                   style={
-                    message.color == Object.values(COLORS)[j] ? { backgroundColor: Object.values(COLORS)[j] } : {}
+                    textColor == Object.values(COLORS)[j] ? { backgroundColor: Object.values(COLORS)[j] } : {}
                   }
                 ></div>
               </div>
@@ -104,7 +128,7 @@ const MessageEditor = ({ index } : any) => {
             <ArrowBigUp size={16} />
             <p className='text-md text-center'>Show</p>
           </div>
-          <div className='flex items-end py-2 cursor-pointer'>
+          <div className='flex items-end py-2 cursor-pointer' onClick={() => handleDelete()}>
             <Trash size={16} strokeWidth={2} />
           </div>
         </div>
