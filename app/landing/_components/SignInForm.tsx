@@ -13,7 +13,7 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { X } from "lucide-react"
+import { Loader, X } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -30,6 +30,7 @@ const SignInForm = ({ setShowForm } : any) => {
   const { toast } = useToast()
   const router = useRouter()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,7 +67,11 @@ const SignInForm = ({ setShowForm } : any) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="min-w-[300px] flex flex-col justify-start items-start space-y-4 bg-white p-5 rounded-lg">
         <div className="w-full flex justify-between items-center mb-5">
-          <p className="text-2xl font-semibold">Sign In</p>
+          {isLoading ? (
+            <Loader size={20} className="animate-spin" />
+          ) : (
+            <p className="text-2xl font-semibold">Sign In</p>
+          )}
           <X size={20} className="cursor-pointer" onClick={() => setShowForm(null)}/>
         </div>
 

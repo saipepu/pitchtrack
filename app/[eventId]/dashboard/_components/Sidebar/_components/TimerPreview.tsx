@@ -15,6 +15,9 @@ const TimerPreview = () => {
   const [currentTime, setCurrentTime] = useState('00:00:00')
   const { slots, isRunning, setIsRunning, runningSlot, setRunningSlot, isActive } = useContext(SlotContext)
   const [isCopied, setIsCopied] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  let SkippingValues = [10, 30, 60]
+  const [selectedSkippingValue, setSelectedSkippingValue] = useState(SkippingValues[0])
 
   useEffect(() => {
     setCurrentTime(`${new Date().getDate()}:${new Date().getHours()}:${new Date().getSeconds()}`)
@@ -26,6 +29,7 @@ const TimerPreview = () => {
     setRunningSlot(slots.find((slot: any, i: number) => slot._id == message.slotId))
     if(eventId == message.eventId) {
       setIsRunning(message.isRunning)
+      setIsLoading(false)
     }
 
   })
@@ -43,7 +47,15 @@ const TimerPreview = () => {
 
   const handleSkipforward = () => {
     // skip 10s forward
+    setIsLoading(true)
     socket.emit('skip', {
+      eventId: eventId
+    })
+  }
+  const handleRewind = () => {
+    // skip 10s backward
+    setIsLoading(true)
+    socket.emit('rewind', {
       eventId: eventId
     })
   }
@@ -80,7 +92,7 @@ const TimerPreview = () => {
       {/* Timer Mini Preview */}
       <div className='border-[1px] border-slate-300 rounded-md w-full overflow-hidden'>
         <iframe
-          src={`/${eventId || 'FALLBACK-EVENTID'}/audience/presentor`}
+          src={`/${eventId || 'FALLBACK-EVENTID'}`}
           width="100%"
           height="300"
           style={{ border: 'none' }}
@@ -95,22 +107,24 @@ const TimerPreview = () => {
           </SelectTrigger>
           <SelectContent className='bg-white'>
             <SelectGroup className='text-black bg-white'>
-              {Array.from({ length: 3 }).map((_, i) => (
-                <SelectItem key={i} value={`-${i+1}m`}>
-                  -{i+1}m
+              {SkippingValues.map((key, i) => (
+                <SelectItem key={i} value={`${key}`}>
+                  {key}
                 </SelectItem>
               ))}
             </SelectGroup>
           </SelectContent>
         </Select>
-        <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center'>
+        <div className={`w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center cursor-pointer ${isLoading ? 'opacity-20 cursor-wait' : 'opacity-100'}`}
+          onClick={() => handleRewind()}
+        >
           <SkipBack size={16} />
         </div>
 
         {/* CUSTOMIZE PLAY BUTTON */}
         <PlayButton slot={runningSlot} eventId={eventId} isRunning={isRunning} setIsRunning={setIsRunning} isActive={isActive} />
 
-        <div className='w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center'
+        <div className={`w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center cursor-pointer ${isLoading ? 'opacity-20 cursor-wait' : 'opacity-100'}`}
           onClick={() => handleSkipforward()}
         >
           <SkipForward size={16} />

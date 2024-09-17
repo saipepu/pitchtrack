@@ -224,8 +224,14 @@ const Header = ({ organizer, event, events, fetchOrganizerData }: any) => {
 
       <div className='h-10 flex justify-end items-center px-2'>
         <DropDown />
-        <div className='cursor-pointer text-sm font-medium whitespace-nowrap'>
-          Sign In
+        <div className='cursor-pointer text-sm font-medium whitespace-nowrap'
+          onClick={() => {
+            localStorage.removeItem('pitchtrack-token')
+            router.push('/')
+            }
+          }
+        >
+          Sign Out
         </div>
       </div>
 

@@ -12,15 +12,6 @@ const TimerPreset = () => {
       <div className='w-full h-[30px] flex justify-between items-center'>
         <div className='flex h-full justify-end items-center gap-1'>
           <h3 className='text-lg font-medium whitespace-nowrap'>Timers</h3>
-          <Select>
-            <SelectTrigger className='px-2 h-full border-0'>
-              <p className='text-sm font-medium text-center text-slate-500'>Actions</p>
-            </SelectTrigger>
-            <SelectContent className='bg-white text-black'>
-              <SelectItem value='edit'>Edit</SelectItem>
-              <SelectItem value='delete' className='ring-0 border-0 outline-none'>Delete</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
         <div className='h-full flex justify-end items-center gap-1'>
           <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'>

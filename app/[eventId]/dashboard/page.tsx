@@ -122,7 +122,6 @@ const page = () => {
 
   socket.on('onRoomInfoUpdate', (response) => {
     if(response.success) {
-      console.log('ws:onRoomInfoUpdate', response)
       setEvent(response.message)
       let s = response.message.slots.map((slot: any, i: number) => {
         return {
