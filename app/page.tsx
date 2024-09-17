@@ -9,10 +9,6 @@ export default function Home() {
   const [time, setTime] = useState<number>(0)
   const [currentTime, setCurrentTime] = useState<number>(0)
 
-  // socket.on("timerUpdate", (message) => {
-  //   setCurrentTime(message.remainingTime)
-  // })
-
   useEffect(() => {
     // Redirect to dashboard
     router.push('/landing')
