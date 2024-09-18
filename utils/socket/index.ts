@@ -5,7 +5,7 @@ const socket = io(socketApi, {
   transports: ['websocket'],
 });
 socket.on('connect', () => {
-  console.log('socket connected');
+  console.log('SOCKET CONNECTED');
 })
 
 export default socket;
