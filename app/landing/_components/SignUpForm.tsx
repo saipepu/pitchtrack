@@ -45,7 +45,6 @@ const SignUpForm = ({ setShowForm } : any) => {
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
-    console.log(values)
     const res = await signUp({ dto: { ...values, role: "organizer" } })
 
     if(res.success) {

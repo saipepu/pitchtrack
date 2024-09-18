@@ -43,7 +43,6 @@ const SignInForm = ({ setShowForm } : any) => {
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
-    console.log(values)
     const res = await signIn({ dto: { ...values } })
 
     if(res.success) {
@@ -59,7 +58,6 @@ const SignInForm = ({ setShowForm } : any) => {
       })
       setErrorMessage(res.message)
     }
-    console.log(res)
 
   }
 
