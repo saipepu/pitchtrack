@@ -3,7 +3,7 @@
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CalendarDays } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
@@ -14,7 +14,7 @@ enum StartType {
   Linked = 'linked'
 }
 
-const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
+const StartTime = ({ index, slot, setSlot, startTime } : any ) => {
   
   const [hh, mm, ss] = startTime.split(':')
   const [hour, setHour] = useState(hh)
@@ -63,7 +63,9 @@ const StartTime = ({ slot, setSlot, startTime, handleSave } : any ) => {
             <SelectGroup>
               <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Manual}>{StartType.Manual}</SelectItem>
               <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Scheduled}>{StartType.Scheduled}</SelectItem>
-              <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Linked}>{StartType.Linked}</SelectItem>
+              {index > 0 &&
+                <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Linked}>{StartType.Linked}</SelectItem>
+              }
             </SelectGroup>
           </SelectContent>
         </Select>
