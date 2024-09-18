@@ -27,21 +27,12 @@ const MessageEditor = ({ index } : any) => {
     setMessage(messages[index])
   }, [messages])
 
-  const handleSave = async () => {
+  const handleSave = async (onDisplay?: any) => {
 
-    let dto = {...message} // pass by value
+    let dto = {...message, onDisplay: onDisplay} // pass by value
     delete dto._id
     const response = await updateMessage({ eventId, messageId: message._id, message: dto })
     if(response.success) {
-      setMessages((prev: any) => {
-        const updated = prev.map((item: any, i: number) => {
-          if(i === index) {
-            return message
-          }
-          return item
-        })
-        return updated
-      })
       toast({
         title: 'Message updated'
       })
@@ -83,7 +74,7 @@ const MessageEditor = ({ index } : any) => {
           className={`resize-none w-full h-[32px] bg-transparent placeholder:text-slate-400 ${message.bold ? 'font-bold' : ''} ${message.capitalized ? 'uppercase' : ''}`}
           style={{ color: textColor, border: 'none', background: 'white' }}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage({ ...message, desc: e.target.value })}
-          onBlur={() => handleSave()}
+          onBlur={() => handleSave(message.onDisplay)}
         />
         <div className='w-full flex justify-start items-center gap-2'>
           {Array.from({ length: Object.keys(COLORS).length }).map((_, j) => {
@@ -122,7 +113,9 @@ const MessageEditor = ({ index } : any) => {
         </div>
         <div className='w-full flex justify-between items-center '>
           <div className={`cursor-pointer h-full flex justify-center items-center gap-[1px] rounded-md border-[1px] border-slate-300 p-1 ${message.onDisplay ? 'bg-slate-300' : ''}`}
-            onClick={() => setMessage({ ...message, onDisplay: !message.onDisplay })}
+            onClick={() => {
+              handleSave(!message.onDisplay)
+            }}
           >
             <Dot size={16} strokeWidth={8}/>
             <ArrowBigUp size={16} />
