@@ -41,7 +41,7 @@ const TimeBlock = ({ index }: any) => {
 
     let dto = { ...slot}
     delete dto._id
-
+    
     // UPDATE SLOT
     const response = await updateSlot({ eventId, slotId: slot._id, slot: dto })
 
@@ -166,7 +166,7 @@ const TimeBlock = ({ index }: any) => {
                 </div>
               </PopoverTrigger>
               <PopoverContent className="w-80 bg-slate-100 text-black p-2 grid grid-cols-1 gap-2">
-                <StartTime slot={slot} setSlot={setSlot} startTime={startTime} handleSave={handleSave}/>
+                <StartTime index={index} slot={slot} setSlot={setSlot} startTime={startTime} handleSave={handleSave}/>
                 <PopoverHandler />
               </PopoverContent>
             </Popover>
