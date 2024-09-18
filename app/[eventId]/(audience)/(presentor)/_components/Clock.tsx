@@ -28,7 +28,7 @@ const TimerTrackerBar = (Timer: any) => {
   return { safeWidth, warningWidth, dangerWidth }
 }
 
-const Clock = ({ isFlashing, countDown, slot }: any ) => {
+const Clock = ({ isFlashing, countDown, slot, message }: any ) => {
 
   const [progressBarColorWidth, setProgressBarColorWidth] = useState({ safeWidth: 0, warningWidth: 0, dangerWidth: 0 });
   const [currentPointer, setCurrentPointer] = useState(0);
@@ -59,8 +59,8 @@ const Clock = ({ isFlashing, countDown, slot }: any ) => {
           transitionDuration: countDown == 0 ? '2s' : '1s'
         }}
       >
-        <p className='text-2xl lg:text-4xl font-bold pt-8 text-center'>
-          {slot?.generalMessage || 'No Message' }
+        <p className='text-2xl lg:text-4xl font-bold pt-8 text-center h-4'>
+          {message?.desc || '' }
         </p>
         <p className="text-[100px] lg:text-[400px] xl:text-[500px] font-bold leading-tight text-center tracking-tighter">
           {convertTotalSectoHHMMSS(countDown).substring(3, 8)}
