@@ -41,13 +41,16 @@ const page = () => {
   const fetchOrganizerData = async () => {
 
     // JWT DECODER
-
     let token = localStorage.getItem('pitchtrack-token') || ""
     const parseJwt = (token: any) => {
       if (!token) { return; }
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace('-', '+').replace('_', '/');
       return JSON.parse(window.atob(base64));
+    }
+    if(!token) {
+      router.push('/landing')
+      return
     }
     const { sub } = parseJwt(token)
 
