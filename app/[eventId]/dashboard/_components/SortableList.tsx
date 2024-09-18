@@ -87,7 +87,6 @@ const Column = ({ tag, cards, setCards }: any) => {
   }
 
   const handleDragStart = (e: any, card: any) => {
-    console.log(card)
     e.dataTransfer.setData("cardId", card._id)
     e.dataTransfer.setData("tag", "timeslot")
   }
@@ -280,8 +279,6 @@ const AddCard = ({ tag, setCards, cards }: any) => {
   const createNewMessage = async (newMessage: any) => {
     
     const response = await createMessage({ eventId, message: newMessage });
-    
-    console.log(response)
     
     if(response.success) {
       toast({
