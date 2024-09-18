@@ -33,6 +33,7 @@ const Presentor = () => {
       })
       setSlots(slotList)
       setSlot(slotList[0])
+      setMessage(response.message.messages.find((m: any) => m.onDisplay))
       localStorage.setItem('pitchtrack-event', JSON.stringify(response.message))
     } else {
       toast({
@@ -50,7 +51,6 @@ const Presentor = () => {
   }, [])
 
   socket.on('onRoomInfoUpdate', (response) => {
-    // console.log(slot, 'before')
     if(response.success) {
       console.log('response', response)
       let slotList = response.message.slots.map((slot: any, i: number) => {
@@ -60,8 +60,8 @@ const Presentor = () => {
         }
       })
       setSlots(slotList)
-      setSlot(slotList.find((s: any) => s._id === response.runningSlotId))
-      console.log(slotList.find((s: any) => s._id === response.runningSlotId))
+      setSlot(slotList.find((s: any) => s._id === response.runningSlotId || slotList[0]._id))
+      setMessage(response.message.messages.find((m: any) => m.onDisplay))
     }
   })
 
@@ -103,7 +103,7 @@ const Presentor = () => {
 
         {/* <Clock isFlashing={isFlashing} slot={slot} countDown={countDown} /> */}
         {slot ? (
-          <Clock isFlashing={isFlashing} slot={slot} countDown={countDown}/>
+          <Clock isFlashing={isFlashing} slot={slot} countDown={countDown} message={message} />
         ): (
           <div className='w-full h-full flex justify-center items-center'>
             <p className='text-lg font-bold'>Slot unselected or delected</p>
