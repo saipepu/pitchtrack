@@ -42,6 +42,7 @@ const SignInForm = ({ setShowForm, defaultEmail } : any) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
     setIsLoading(true)
+    const newTab = window.open('', '_blank');
     const res = await signIn({ dto: { ...values } })
 
     if(res.success) {
@@ -51,12 +52,18 @@ const SignInForm = ({ setShowForm, defaultEmail } : any) => {
       localStorage.setItem("pitchtrack-token", res.message.accessToken)
       setShowForm(null)
       setErrorMessage(null)
-      window.open('/loading/dashboard', '_blank')
+      if (newTab) {
+        newTab.location.href = '/loading/dashboard';
+      }
     } else {
       toast({
         title: "Failed to register"
       })
       setErrorMessage(res.message)
+
+      if (newTab) {
+        newTab.close();
+      }
     }
     setIsLoading(false)
 
