@@ -2,7 +2,7 @@ import { api } from '@/app/_api/api'
 
 export const createEvent = async ({ orgId, event }) => {
         
-      console.log("Creating event")
+      console.log("CREATE EVENT...")
       const response = await fetch(`${api}/orgs/${orgId}/event`, {
         method: "POST",
         headers: {

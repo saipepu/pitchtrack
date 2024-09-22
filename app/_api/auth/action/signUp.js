@@ -2,7 +2,7 @@ import { api } from '@/app/_api/api'
 
 export const signUp = async ({ dto }) => {
         
-  console.log("User Register...")
+  console.log("REGISTER...")
   const response = await fetch(`${api}/register`, {
     method: "POST",
     headers: {

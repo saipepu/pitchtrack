@@ -23,11 +23,11 @@ const formSchema = z.object({
   }),
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(4, {
-    message: "Password must be at least 8 characters.",
+    message: "Password must be at least 4 characters.",
   }),
 })
 
-const SignUpForm = ({ setShowForm } : any) => {
+const SignUpForm = ({ setShowForm, setDefaultEmail } : any) => {
 
   const { toast } = useToast()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -45,6 +45,7 @@ const SignUpForm = ({ setShowForm } : any) => {
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
+    setIsLoading(true)
     const res = await signUp({ dto: { ...values, role: "organizer" } })
 
     if(res.success) {
@@ -52,6 +53,7 @@ const SignUpForm = ({ setShowForm } : any) => {
         title: "Successfully registered"
       })
       setShowForm("SignIn")
+      setDefaultEmail(values.email)
       setErrorMessage(null)
     } else {
       toast({
@@ -59,6 +61,7 @@ const SignUpForm = ({ setShowForm } : any) => {
       })
       setErrorMessage(res.message)
     }
+    setIsLoading(false)
 
   }
 
@@ -69,14 +72,15 @@ const SignUpForm = ({ setShowForm } : any) => {
           {isLoading ? (
             <Loader size={20} className="animate-spin" />
           ) : (
-            <p className="text-2xl font-semibold">Sign In</p>
+            <p className="text-2xl font-semibold">Sign Up</p>
           )}
           <X size={20} className="cursor-pointer" onClick={() => setShowForm(null)}/>
         </div>
         <FormField
           control={form.control}
           name="name"
-          render={({ field }: any) => (
+          render={({ field }: any) => {
+            return (
             <FormItem className="w-full">
               <label>Username</label>
               <FormControl>
@@ -84,7 +88,7 @@ const SignUpForm = ({ setShowForm } : any) => {
               </FormControl>
               <FormMessage className="text-red-200" />
             </FormItem>
-          )}
+          )}}
         />
 
         <FormField
@@ -94,7 +98,7 @@ const SignUpForm = ({ setShowForm } : any) => {
             <FormItem className="w-full">
               <label>Email</label>
               <FormControl>
-                <Input placeholder="email" {...field} className="placeholder:text-slate-300 border-slate-300" />
+                <Input type="email" placeholder="email" {...field} className="placeholder:text-slate-300 border-slate-300" />
               </FormControl>
               <FormMessage className="text-red-200" />
             </FormItem>
@@ -114,7 +118,13 @@ const SignUpForm = ({ setShowForm } : any) => {
             </FormItem>
           )}
         />
-        <Button type="submit" variant={"outline"} className="w-full ml-auto lg:hover:bg-black lg:hover:text-white duration-500">Sign Up</Button>
+        <Button type="submit" variant={"outline"} className="w-full ml-auto lg:hover:bg-black lg:hover:text-white duration-500" disabled={isLoading}>
+          {isLoading ? (
+            <Loader size={20} className="animate-spin" />
+          ) : (
+            "Sign Up"
+          )}
+        </Button>
         <p className="text-sm">Already have an account? <span className="text-blue-500 cursor-pointer" onClick={() => setShowForm("SignIn")}>Sign In</span></p>
 
         <p className="text-red-200 h-4">{errorMessage || ""}</p>

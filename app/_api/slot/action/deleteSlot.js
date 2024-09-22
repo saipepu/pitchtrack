@@ -2,7 +2,7 @@ import { api } from '@/app/_api/api'
 
 export const deleteSlot = async ({ eventId, slotId }) => {
         
-    console.log("Deleting slot")
+    console.log("DELETE SLOT...")
     const response = await fetch(`${api}/events/${eventId}/slots/${slotId}`, {
       method: "DELETE",
       headers: {

@@ -6,6 +6,7 @@ import socket from '@/utils/socket';
 import { useParams } from 'next/navigation';
 import { toast } from '@/components/ui/use-toast';
 import { getEventById } from '@/app/_api/event';
+import Header from './_components/Header';
 
 const Presentor = () => {
   
@@ -71,44 +72,18 @@ const Presentor = () => {
   })
 
   return (
-    <div
-      className='w-full h-full flex flex-col justify-start items-start overflow-hidden'
-    >
-      <div className='w-full h-full flex flex-col justify-start items-center'>
-        {/* Header */}
-        <div className="w-full flex justify-between items-center py-2 px-2 md:px-8 transition-all"
-          style={{
-            backgroundColor: countDown > slot?.warningTime - 1 ? 'white' : countDown > slot?.dangerTime - 1 ? 'yellow' :  countDown == 0 ? '#0e0e0e' : '#FF8888',
-            animation: isFlashing && countDown < slot?.dangerTime ? 'flash 0.5s infinite' : 'none',
-            transitionDuration: countDown == 0 ? '2s' : '1s'
-          }}
-        >
-          <div className="w-full flex justify-start items-center">
-            <p className="text-2xl md:text-4xl font-bold">PitchTrack</p>
-          </div>
-          <div className="w-full flex justify-center ite ms-center">
-            <p className="text-2xl md:text-4xl font-bold">{slot?.speaker}</p>
-          </div>
-          <div
-            className="hidden md:flex w-full justify-end items-center"
-            >
-            {/* <p className={`text-right ${isFlashing ? 'bg-red' : 'bg-white'} text-black px-4 py-2 rounded-lg cursor-pointer`}
-              onClick={() => setIsFlashing(!isFlashing)}
-            >
-              Flash
-            </p> */}
-              <p className="text-2xl md:text-4xl font-bold">{event.title}</p>
-          </div>
-        </div>
+    <div className='w-full h-full flex flex-col justify-start items-start overflow-hidden'> {/* WRAPPER */}
+      <div className='w-full h-full flex flex-col justify-start items-center'> {/* CONTAINER */}
+        
+        <Header countDown={countDown} slot={slot} isFlashing={isFlashing} event={event} />
 
-        {/* <Clock isFlashing={isFlashing} slot={slot} countDown={countDown} /> */}
-        {slot ? (
-          <Clock isFlashing={isFlashing} slot={slot} countDown={countDown} message={message} />
-        ): (
-          <div className='w-full h-full flex justify-center items-center'>
+        <div className='w-full h-full flex flex-col justify-center items-center'>
+          {slot ? (
+            <Clock isFlashing={isFlashing} slot={slot} countDown={countDown} message={message} />
+          ): (
             <p className='text-lg font-bold'>Slot unselected or delected</p>
-          </div>
-        )}
+          )}
+        </div>
 
       </div>
     </div>

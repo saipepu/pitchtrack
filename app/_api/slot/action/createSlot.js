@@ -2,7 +2,7 @@ import { api } from '@/app/_api/api'
 
 export const createSlot = async ({ eventId, slot }) => {
         
-    console.log("Creating slot")
+    console.log("CREATE SLOT...")
     const response = await fetch(`${api}/events/${eventId}/slots`, {
       method: "POST",
       headers: {

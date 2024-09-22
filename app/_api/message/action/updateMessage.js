@@ -2,7 +2,7 @@ import { api } from '@/app/_api/api'
 
 export const updateMessage = async ({ eventId, messageId, message }) => {
         
-    console.log("Updating message")
+    console.log("UPDATE MESSAGE...")
     const response = await fetch(`${api}/events/${eventId}/messages/${messageId}`, {
       method: "PUT",
       headers: {

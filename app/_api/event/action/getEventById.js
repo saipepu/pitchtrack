@@ -2,7 +2,7 @@ import { api, token } from '@/app/_api/api'
 
 export const getEventById = async ({ eventId }) => {
       
-    console.log("Getting event by id")
+    console.log("GET EVENT BY ID...")
     const response = await fetch(`${api}/events/${eventId}`, {
       method: "GET",
       headers: {

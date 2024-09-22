@@ -2,7 +2,7 @@ import { api } from '@/app/_api/api'
 
 export const deleteMessage = async ({ eventId, messageId }) => {
         
-    console.log("Deleting message")
+    console.log("DELETE MESSAGE...")
     const response = await fetch(`${api}/events/${eventId}/messages/${messageId}`, {
       method: "DELETE",
       headers: {

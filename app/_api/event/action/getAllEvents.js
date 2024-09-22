@@ -2,7 +2,7 @@ import { api, token } from '@/app/_api/api'
 
 export const getAllEvents = async () => {
     
-  console.log("Getting all events")
+  console.log("GET ALL EVENTS...")
   const response = await fetch(`${api}/events`, {
     method: "GET",
     headers: {

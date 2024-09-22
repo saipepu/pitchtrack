@@ -2,7 +2,7 @@ import { api } from '@/app/_api/api'
 
 export const reorderSlot = async ({ eventId, dto }) => {
         
-    console.log("reorder slots")
+    console.log("REORDER SLOT...")
     const response = await fetch(`${api}/events/${eventId}/reorder-slots`, {
       method: "POST",
       headers: {

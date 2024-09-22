@@ -11,7 +11,7 @@ import { useToast } from '@/components/ui/use-toast'
 import socket from '@/utils/socket'
 import { getOrgById } from '@/app/_api/org'
 import { useRouter } from 'next/navigation'
-import { Loader, LoaderCircle } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { ToastAction } from '@/components/ui/toast'
 
 const page = () => {
@@ -49,7 +49,7 @@ const page = () => {
       return JSON.parse(window.atob(base64));
     }
     if(!token) {
-      router.push('/landing')
+      router.push('/')
       return
     }
     const { sub } = parseJwt(token)
@@ -106,7 +106,7 @@ const page = () => {
       toast({
         title: "Session Expired"
       })
-      console.log('Failed to fetch organizer data')
+      console.log('SESSION EXPIRED')
       if(response.message == 'Unauthorized') {
         router.push('/landing')
       }

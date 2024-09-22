@@ -2,7 +2,7 @@ import { api } from '@/app/_api/api'
 
 export const createMessage = async ({ eventId, message }) => {
         
-    console.log("Creating message")
+    console.log("CREATE MESSAGE...")
     const response = await fetch(`${api}/events/${eventId}/messages`, {
       method: "POST",
       headers: {

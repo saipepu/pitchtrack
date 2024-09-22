@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
-import { PencilLine, Plus } from 'lucide-react'
+import { Loader, LogOut, PencilLine, Plus } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -65,9 +65,42 @@ const Header = ({ organizer, event, events, fetchOrganizerData }: any) => {
     )
   }
 
+  const SignOutDialog = () => {
+    return (
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button className='hover:bg-slate-100'>
+            <LogOut size={18} />
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent className='bg-white text-black max-w-[90vw]'>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Alert! Signing Out</AlertDialogTitle>
+            <AlertDialogDescription>
+              You can always sign back in. Your timers schedule will not be disturbed.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className='border-none'>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                localStorage.removeItem('pitchtrack-token')
+                localStorage.removeItem('pitchtrack-organizer')
+                router.push('/')
+                }
+              }
+              className='bg-red-500 hover:bg-red-700 text-white'
+            >Sign Out</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    )
+  }
+
   const CreateNewEventForm = () => {
 
     const [eventName, setEventName] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
     return (
       <AlertDialog open={showCreateNewEventForm}>
@@ -94,7 +127,14 @@ const Header = ({ organizer, event, events, fetchOrganizerData }: any) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setShowCreateNewEventForm(false)} className='border-none'>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => createNewEvent({ eventName })} className='bg-slate-200 hover:bg-slate-400'>Create</AlertDialogAction>
+            <AlertDialogAction onClick={() => {
+              eventName === '' ? toast({ title: "Event name cannot be empty" }) : createNewEvent({ eventName, setIsLoading })
+            }} className='bg-green-200 hover:bg-green-400'>
+              {isLoading ?
+                <Loader size={18} className='animate-spin text-black/40' strokeWidth={5}/>
+                : 'Create'
+              }
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -102,8 +142,9 @@ const Header = ({ organizer, event, events, fetchOrganizerData }: any) => {
   }
 
   // CREATE NEW EVENT
-  const createNewEvent = async ({ eventName }: any) => {
+  const createNewEvent = async ({ eventName, setIsLoading }: any) => {
       
+    setIsLoading(true)
     let dto = {
       title: eventName,
     }
@@ -132,6 +173,7 @@ const Header = ({ organizer, event, events, fetchOrganizerData }: any) => {
       })
 
     }
+    setIsLoading(false)
 
   }
 
@@ -224,15 +266,7 @@ const Header = ({ organizer, event, events, fetchOrganizerData }: any) => {
 
       <div className='h-10 flex justify-end items-center px-2'>
         <DropDown />
-        <div className='cursor-pointer text-sm font-medium whitespace-nowrap'
-          onClick={() => {
-            localStorage.removeItem('pitchtrack-token')
-            router.push('/')
-            }
-          }
-        >
-          Sign Out
-        </div>
+        <SignOutDialog />
       </div>
 
     </div>

@@ -2,7 +2,7 @@ import { api } from '@/app/_api/api'
 
 export const signIn = async ({ dto }) => {
         
-  console.log("User Login...")
+  console.log("LOGIN...")
   const response = await fetch(`${api}/login`, {
     method: "POST",
     headers: {
