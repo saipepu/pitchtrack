@@ -60,6 +60,19 @@ const TimerPreview = () => {
     })
   }
 
+  const handlePlayNextSlot = () => {
+    setIsLoading(true)
+    socket.emit('playNextSlot', {
+      eventId: eventId
+    })
+  }
+  const handlePlayPreviousSlot = () => {
+    setIsLoading(true)
+    socket.emit('playPreviousSlot', {
+      eventId: eventId
+    })
+  }
+
   // show the mini preview of timer
   return (
     <div className='w-full flex flex-col justify-start items-start gap-2'>
@@ -116,7 +129,7 @@ const TimerPreview = () => {
           </SelectContent>
         </Select>
         <div className={`w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center cursor-pointer ${isLoading ? 'opacity-20 cursor-wait' : 'opacity-100'}`}
-          onClick={() => handleRewind()}
+          onClick={() => handlePlayPreviousSlot()}
         >
           <SkipBack size={16} />
         </div>
@@ -125,7 +138,7 @@ const TimerPreview = () => {
         <PlayButton slot={runningSlot} eventId={eventId} isRunning={isRunning} setIsRunning={setIsRunning} isActive={isActive} />
 
         <div className={`w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center cursor-pointer ${isLoading ? 'opacity-20 cursor-wait' : 'opacity-100'}`}
-          onClick={() => handleSkipforward()}
+          onClick={() => handlePlayNextSlot()}
         >
           <SkipForward size={16} />
         </div>

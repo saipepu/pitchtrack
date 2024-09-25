@@ -45,7 +45,7 @@ const TimeBlockSetting = ({ setShowSetting, slot, setSlot, handleSave } : any) =
           </div>
           <div className='w-full flex flex-col justify-start items-start gap-2'>
             <p className='lg font-bold'>Start Time</p>
-            <StartTime slot={slot} setSlot={setSlot} handleSave={handleSave} startTime={startTime}/>
+            <StartTime slot={slot} setSlot={setSlot} handleSave={handleSave} startTime={startTime} index={slot.sortOrder}/>
           </div>
         </div>
 

@@ -10,7 +10,6 @@ import React, { useEffect, useState } from 'react'
 
 enum StartType {
   Manual = 'manual',
-  Scheduled = 'scheduled',
   Linked = 'linked'
 }
 
@@ -62,15 +61,15 @@ const StartTime = ({ index, slot, setSlot, startTime } : any ) => {
           <SelectContent className='bg-white text-black'>
             <SelectGroup>
               <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Manual}>{StartType.Manual}</SelectItem>
-              <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Scheduled}>{StartType.Scheduled}</SelectItem>
-              {index > 0 &&
+              {/* <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Scheduled}>{StartType.Scheduled}</SelectItem> */}
+              {slot.sortOrder > 0 &&
                 <SelectItem onClick={(e) => e.stopPropagation()} className="cursor-pointer bg-white" value={StartType.Linked}>{StartType.Linked}</SelectItem>
               }
             </SelectGroup>
           </SelectContent>
         </Select>
       </div>
-      <div className="w-full grid grid-cols-4 items-center gap-2">
+      {/* <div className="w-full grid grid-cols-4 items-center gap-2">
         <Label htmlFor="title">Time</Label>
         <div className='w-full col-span-3 border-0 flex justify-start items-center'>
           <Input
@@ -144,7 +143,7 @@ const StartTime = ({ index, slot, setSlot, startTime } : any ) => {
             </PopoverContent>
           </Popover>
         </div>
-      </div>
+      </div> */}
     </>
   )
 }
