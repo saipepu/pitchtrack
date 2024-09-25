@@ -5,11 +5,11 @@ import Header from '../components/landing/Header';
 import SignUpForm from '../components/landing/SignUpForm';
 import SignInForm from '../components/landing/SignInForm';
 import { Button } from '@/components/ui/button';
-import { useNetworkStatus } from '@/app/hooks/NetworkStatus'
+// import { useNetworkStatus } from '@/app/hooks/NetworkStatus'
 
 const Landing = () => {
 
-  const { isOnline } = useNetworkStatus()
+  // const { isOnline } = useNetworkStatus()
   const [user, setUser] = React.useState<any>()
   const [showForm, setShowForm] = useState<string | null>("")
   const [defaultEmail, setDefaultEmail] = useState<string | null>("")
@@ -23,7 +23,7 @@ const Landing = () => {
 
   return (
     <div className='w-full h-full max-h-[100vh] flex flex-col justify-start items-center overflow-hidden bg-green-200'>
-      {isOnline ? 
+      {/* {isOnline ?  */}
         <>
           <div className='relative w-full min-h-full flex flex-col justify-start items-center overflow-y-scroll bg-white'>
 
@@ -80,12 +80,12 @@ const Landing = () => {
             </div>
           )}
         </>
-      :
+      {/* :
         <div className='w-full h-full bg-black flex flex-col justify-center items-center'>
           <img src="https://cdn.dribbble.com/users/124259/screenshots/5274507/timer_transition.gif" alt="offline" className='w-[300px] h-[300px] object-contain'/>
           <p className='text-base text-white text-center font-light'>NO INTERNET CONNECTION</p>
         </div>
-      }
+      } */}
 
 
 
