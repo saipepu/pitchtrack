@@ -69,11 +69,7 @@ const SignUpForm = ({ setShowForm, setDefaultEmail } : any) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="min-w-[300px] flex flex-col justify-start items-start space-y-4 bg-white p-5 rounded-lg">
         <div className="w-full flex justify-between items-center mb-5">
-          {isLoading ? (
-            <Loader size={20} className="animate-spin" />
-          ) : (
-            <p className="text-2xl font-semibold">Sign Up</p>
-          )}
+          <p className="text-2xl font-semibold">Sign Up</p>
           <X size={20} className="cursor-pointer" onClick={() => setShowForm(null)}/>
         </div>
         <FormField

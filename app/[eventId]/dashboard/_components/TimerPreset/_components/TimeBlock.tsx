@@ -171,7 +171,7 @@ const TimeBlock = ({ index }: any) => {
             </div>}
           </div>
         )}
-        <div className='h-full flex justify-start items-center gap-1 md:gap-4 z-10'>
+        <div className='w-full h-full flex justify-start items-center gap-1 md:gap-4 z-10'>
 
           <div className='relative min-w-[16px] h-full flex justify-center items-center'>
             <p className='absolute group-hover/slot:opacity-0 text-lg font-semibold text-slate-500 duration-500 select-none'>{index+1}</p>
@@ -179,10 +179,10 @@ const TimeBlock = ({ index }: any) => {
               <Equal size={16} className='group-hover/slot:opacity-100 opacity-0 duration-500'/>
             </div>
           </div>
-          <div className='hidden md:flex cursor-pointer w-full h-full justify-center items-center gap-[2px] rounded-md px-2'>
+          <div className='hidden md:flex cursor-pointer w-full max-w-[88px] h-full justify-center items-center gap-[2px] rounded-md px-2'>
             <Popover onOpenChange={(open) => !open && handleSave(slot)}>
               <PopoverTrigger asChild>
-                <div className='max-w-[65px] md:min-w-[95px] md:max-w-[95px] relative'>
+                <div className='w-full relative'>
                   <p className='group-hover/slot:opacity-100 opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Start time</p>
                   <p className={`text-lg font-semibold whitespace-nowrap select-none ${slot?.startTimeType == "linked" && 'text-slate-300'}`}>{startTime}</p>
                   <p className='group-hover/slot:opacity-100 opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>{slot?.startTimeType || "Start Type"}</p>
@@ -194,10 +194,10 @@ const TimeBlock = ({ index }: any) => {
               </PopoverContent>
             </Popover>
           </div>
-          <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md px-2'>
+          <div className='cursor-pointer w-full max-w-[60px] md:max-w-[88px]  h-full flex justify-center items-center gap-[2px] rounded-md px-2'>
             <Popover onOpenChange={(open) => !open && handleSave(slot)}>
               <PopoverTrigger asChild>
-                <div className='max-w-[40px] md:min-w-[65px] md:max-w-[65px] relative'>
+                <div className='w-full relative'>
                   <p className='xl:group-hover/slot:opacity-100 xl:opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Duration</p>
                   <p className='md:min-w-[65px] text-sm md:text-lg font-semibold whitespace-nowrap select-none'>{duration}</p>
                   <p className='group-hover/slot:opacity-100 opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Countdown</p>
@@ -209,11 +209,11 @@ const TimeBlock = ({ index }: any) => {
               </PopoverContent>
             </Popover>
           </div>
-          <div className='cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md  px-2'>
+          <div className='cursor-pointer w-full max-w-[165px] md:max-w-full  h-full flex justify-center items-center gap-[2px] rounded-md  px-2'>
             <Popover onOpenChange={(open) => !open && handleSave(slot)}>
               <PopoverTrigger asChild>
-                <div className='max-w-[40px] md:min-w-[65px] md:max-w-[65px] flex justify-start items-center gap-2 group'>
-                  <p className='text-sm md:text-lg font-semibold whitespace-nowrap select-none'>{slot?.title}</p>
+                <div className='w-full flex justify-start items-center gap-2 group'>
+                  <p className='text-sm md:text-lg font-semibold whitespace-nowrap select-none truncate'>{slot?.title}</p>
                   <Pencil size={16} className='opacity-0 group-hover/slot:opacity-100 duration-500'/>
                 </div>
               </PopoverTrigger>

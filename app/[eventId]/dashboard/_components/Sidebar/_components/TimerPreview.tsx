@@ -2,22 +2,24 @@
 
 import { SlotContext } from '@/app/hooks/SlotContext';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ChevronLeft, ChevronRight, ClipboardCopy, Clock, Link, Palette, Pause, Play, Save, SaveAllIcon, SkipBack, SkipForward } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ClipboardCopy, Clock, Link, Palette, Pause, Play, Save, SaveAllIcon, Share, SkipBack, SkipForward } from 'lucide-react'
 import { useParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react'
 import PlayButton from '../../PlayButton/PlayButton';
 import socket from '@/utils/socket';
 import { toast } from '@/components/ui/use-toast';
+import ShareableViewOptions from '../../ShareableView/ShareableViewOptions';
 
 const TimerPreview = () => {
 
   const { eventId } = useParams();
   const [currentTime, setCurrentTime] = useState('00:00:00')
   const { slots, isRunning, setIsRunning, runningSlot, setRunningSlot, isActive } = useContext(SlotContext)
-  const [isCopied, setIsCopied] = useState(false)
+  const [isCopied, setIsCopied] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   let SkippingValues = [10, 30, 60]
   const [selectedSkippingValue, setSelectedSkippingValue] = useState(SkippingValues[0])
+  const [showShareableOptions, setShowShareableOptions] = useState(false)
 
   useEffect(() => {
     setCurrentTime(`${new Date().getDate()}:${new Date().getHours()}:${new Date().getSeconds()}`)
@@ -34,14 +36,13 @@ const TimerPreview = () => {
 
   })
 
-  const handleClipBoardCopy = () => {
-    navigator.clipboard.writeText(`${window.location.origin}/${eventId}`)
-    setIsCopied(true)
+  const handleClipBoardCopy = (url: string) => {
+    navigator.clipboard.writeText(url)
     toast({
       title: 'Link copied to Clipboard'
     })
     setTimeout(() => {
-      setIsCopied(false)
+      setIsCopied("")
     }, 2000)
   }
 
@@ -77,6 +78,8 @@ const TimerPreview = () => {
   return (
     <div className='w-full flex flex-col justify-start items-start gap-2'>
 
+      {showShareableOptions && <ShareableViewOptions setShowShareableOptions={setShowShareableOptions} handleClipBoardCopy={handleClipBoardCopy} isCopied={isCopied} eventId={eventId} setIsCopied={setIsCopied} />}
+
       {/* Header */}
       <div className='w-full h-[30px] flex justify-center items-center gap-2'>
         <div className='w-full h-full flex justify-center items-center'>
@@ -86,20 +89,13 @@ const TimerPreview = () => {
           <Palette size={16} />
           <p className='text-sm font-medium text-center'>Customize</p>
         </div> */}
-        {!isCopied ? (
           <div
             className='cursor-pointer bg-slate-100 w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] border-slate-300 px-2'
-            onClick={() => handleClipBoardCopy()}
+            onClick={() => setShowShareableOptions(true)}
           >
-            <Link size={16} strokeWidth={2.5}/>
             <p className='text-sm font-medium text-center'>Share</p>
+            <Share size={14} strokeWidth={2}/>
           </div>
-        ) : (
-          <div className='cursor-pointer bg-green-400 w-full h-full flex justify-center items-center gap-[2px] rounded-md border-[1px] px-2'>
-            <ClipboardCopy size={16} strokeWidth={2.5} className='text-white'/>
-            <p className='text-sm font-medium text-center text-white'>Copied</p>
-          </div>
-        )}
       </div>
 
       {/* Timer Mini Preview */}
@@ -114,7 +110,7 @@ const TimerPreview = () => {
 
       {/* Timer Controls */}
       <div className='w-full h-[30px] flex justify-center items-center gap-1'>
-        <Select defaultValue='-1m'>
+        {/* <Select defaultValue='-1m'>
           <SelectTrigger className="w-full h-full px-1 border-[1px] border-slate-300">
             <SelectValue />
           </SelectTrigger>
@@ -127,7 +123,8 @@ const TimerPreview = () => {
               ))}
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> */}
+        
         <div className={`w-full h-full px-1 border-[1px] border-slate-300 rounded-md flex justify-center items-center cursor-pointer ${isLoading ? 'opacity-20 cursor-wait' : 'opacity-100'}`}
           onClick={() => handlePlayPreviousSlot()}
         >
@@ -142,7 +139,8 @@ const TimerPreview = () => {
         >
           <SkipForward size={16} />
         </div>
-        <Select defaultValue='+1m'>
+
+        {/* <Select defaultValue='+1m'>
           <SelectTrigger className="w-full h-full px-1 border-[1px] border-slate-300">
             <SelectValue />
           </SelectTrigger>
@@ -155,7 +153,7 @@ const TimerPreview = () => {
               ))}
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
 
       {/* Extra Details */}
