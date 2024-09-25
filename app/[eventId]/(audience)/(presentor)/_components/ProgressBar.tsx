@@ -5,6 +5,11 @@ import React, { useEffect, useState } from 'react'
 // TO CALCULATE THE SAFE AND DANGER ZONE WIDTH
 const TimerTrackerBar = (Timer: any) => {
 
+  console.log('Timer', Timer.time, Timer.warning, Timer.danger)
+  if (Timer.warning > Timer.time) {
+    Timer.warning = Timer.time * 0.5
+    Timer.danger = Timer.time * 0.25
+  }
   // safe zone(with) mean the time that the presentor can talk without any warning
   // CALCULATION (totalTime - warningTime) [before the warning time is safe time]
   const safeWidth = (Timer.time - Timer.warning) / Timer.time * 100
@@ -20,7 +25,7 @@ const TimerTrackerBar = (Timer: any) => {
   return { safeWidth, warningWidth, dangerWidth }
 }
 
-const ProgressBar = ({ slot, countDown }: any) => {
+const ProgressBar = ({ duration, warningTime, dangerTime, countDown }: any) => {
 
   const [progressBarColorWidth, setProgressBarColorWidth] = useState({ safeWidth: 0, warningWidth: 0, dangerWidth: 0 });
   const [currentPointer, setCurrentPointer] = useState(0);
@@ -28,16 +33,16 @@ const ProgressBar = ({ slot, countDown }: any) => {
   useEffect(() => {
     setProgressBarColorWidth(
       TimerTrackerBar({
-        time: parseInt(slot?.duration),
-        warning: parseInt(slot?.warningTime),
-        danger: parseInt(slot?.dangerTime)
+        time: duration,
+        warning: warningTime,
+        danger: dangerTime
       })
     )
-  }, [slot])
+  }, [duration, warningTime, dangerTime])
 
   // SET THE COUNTDOWN TIMER CURSOR
   useEffect(() => {
-    let cur = 100 - countDown / slot?.duration * 100;
+    let cur = 100 - countDown / duration * 100;
     setCurrentPointer(cur);
   }, [countDown])
 
