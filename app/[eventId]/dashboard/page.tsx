@@ -143,12 +143,12 @@ const page = () => {
       toast({
         title: `Syncing ${response.category}` || "Sync Info",
         action: <ToastAction altText="Undo" onClick={() => console.log('Undo')} className="border-none">
-                  <LoaderCircle size={32} className='animate-spin text-black/40' strokeWidth={5}/>
+                  <LoaderCircle size={24} className='animate-spin text-black/30' strokeWidth={3}/>
                 </ToastAction>
       })
       setTimeout(() => {
         toast({}).dismiss()
-      }, 1000)
+      }, 1500)
     }
   })
 
