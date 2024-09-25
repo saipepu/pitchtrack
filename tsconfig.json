@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "utils/convertor/test.js", "app/_api/auth/action/signIn.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "utils/convertor/test.js", "app/_api/auth/action/signIn.js", "app/404.js"],
   "exclude": ["node_modules"]
 }
