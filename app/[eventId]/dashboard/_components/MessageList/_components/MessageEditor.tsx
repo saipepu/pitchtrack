@@ -51,7 +51,7 @@ const MessageEditor = ({ index } : any) => {
     if(response.success) {
       setMessages((prev: any) => {
         const updated = prev.filter((item: any, i: number) => {
-          return i !== index
+          return item._id !== message._id
         })
         return updated
       })
@@ -63,9 +63,10 @@ const MessageEditor = ({ index } : any) => {
   }
 
   return (
-    <div key={index} className={`relative w-full min-h-[100px] flex justify-start items-center rounded-lg p-2 gap-2 bg-slate-100`}>
+    <div key={index} className={`relative w-full min-h-[100px] flex justify-start items-start rounded-lg p-2 gap-2 bg-slate-100`}>
       <div className='h-full flex justify-center items-center'>
-        <Equal size={16} className="cursor-grab"/>
+        {/* <Equal size={16} className="cursor-grab"/> */}
+        <p className='text-md font-bold'>{index+1}.</p>
       </div>
       <div className='w-full h-full flex flex-col justify-start items-start gap-2'>
         <Textarea
@@ -112,7 +113,7 @@ const MessageEditor = ({ index } : any) => {
           </div>
         </div>
         <div className='w-full flex justify-between items-center '>
-          <div className={`cursor-pointer h-full flex justify-center items-center gap-[1px] rounded-md border-[1px] border-slate-300 p-1 ${message.onDisplay ? 'bg-slate-300' : ''}`}
+          <div className={`cursor-pointer h-full flex justify-center items-center gap-[1px] rounded-md border-[1px] border-slate-300 p-1 duration-300 ${message.onDisplay ? 'bg-slate-300' : ''}`}
             onClick={() => {
               handleSave(!message.onDisplay)
             }}
