@@ -33,7 +33,7 @@ let slot: Slot = {
   title: 'Slot 1',
   speaker: 'Speaker 1',
   notes: 'Some notes',
-  startType: 'Scheduled',
+  startType: 'Manual',
   startTime: '2024-08-15T12:40:40.000+07:00',
   duration: '120',
   pauseTime: '0',
