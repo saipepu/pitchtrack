@@ -229,7 +229,7 @@ const Card = ({ tag, card, setCards, index, handleDragStart }: any) => {
       <DropIndicator beforeId={card._id} tag={card.tag}/>
       <div
         id={`${tag}-${card._id}`}
-        draggable={true}
+        draggable={tag === 'timeslot'}
         className="cursor-grab active:cursor-grabbing"
         onDragStart={(e) => {
           handleDragStart(e, card)
@@ -309,7 +309,7 @@ const AddCard = ({ tag, setCards, cards }: any) => {
     <>
       <Button
           onClick={() => handleAddCard()}
-          className="flex w-full justify-start items-center gap-1 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:text-slate-500"
+          className="flex justify-start items-center gap-1 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:text-slate-500"
       >
           <p>New {tag === 'timeslot' ? 'Slot' : 'Message'}</p>
           <Plus width={12} height={12} />
