@@ -35,7 +35,7 @@ const TimerPreview = () => {
   })
 
   const handleClipBoardCopy = () => {
-    navigator.clipboard.writeText(`${window.location.origin}/${eventId}/audience/presentor`)
+    navigator.clipboard.writeText(`${window.location.origin}/${eventId}`)
     setIsCopied(true)
     toast({
       title: 'Link copied to Clipboard'
