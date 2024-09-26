@@ -23,6 +23,8 @@ const Duration = ({ slot, setSlot, handleSave }: any) => {
 
   const handleInputChange = () => {
     let totalSec = convertHHMMSStoTotalSec(`${hour}:${minute}:${second}`)
+    console.log(hour, minute, second)
+    console.log('totalSec', totalSec)
     setSlot({ ...slot, duration: totalSec })
   }
 
@@ -43,11 +45,13 @@ const Duration = ({ slot, setSlot, handleSave }: any) => {
             className="text-center w-full col-span-3 p-1 px-2 border-0 bg-white"
             id="HH"
             type="number"
+            maxLength={3}
+            placeholder='00'
             value={parseInt(hour).toString().padStart(2, '0')}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               if(parseInt(e.target.value) > 23) e.target.value = '23'
               if(e.target.value == '') e.target.value = '0'
-              setHour(e.target.value)
+              setHour(parseInt(e.target.value).toString().trim())
             }}
           />
           </>
