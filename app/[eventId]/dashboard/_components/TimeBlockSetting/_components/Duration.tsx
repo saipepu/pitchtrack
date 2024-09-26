@@ -17,7 +17,7 @@ const Duration = ({ slot, setSlot, handleSave }: any) => {
 
   let hhmmss = convertTotalSectoHHMMSS(slot.duration)
   let [hh, mm, ss] = hhmmss.split(':')
-  const [hour, setHour] = useState("00")
+  const [hour, setHour] = useState(hh)
   const [minute, setMinute] = useState(mm)
   const [second, setSecond] = useState(ss)
 
@@ -39,7 +39,7 @@ const Duration = ({ slot, setSlot, handleSave }: any) => {
         </div>
         <div className='w-full col-span-3 border-0 flex justify-start items-center'>
           <>
-          {/* <Input
+          <Input
             className="text-center w-full col-span-3 p-1 px-2 border-0 bg-white"
             id="HH"
             type="number"
@@ -49,9 +49,9 @@ const Duration = ({ slot, setSlot, handleSave }: any) => {
               if(e.target.value == '') e.target.value = '0'
               setHour(e.target.value)
             }}
-          /> */}
+          />
           </>
-          {/* <span className='text-lg font-semibold mx-2'>:</span> */}
+          <span className='text-lg font-semibold mx-2'>:</span>
           <Input
             className="text-center w-full col-span-3 p-1 px-2 border-0 bg-white placeholder:text-slate-400"
             id="MM"

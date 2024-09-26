@@ -194,7 +194,7 @@ const TimeBlock = ({ index }: any) => {
               </PopoverContent>
             </Popover>
           </div>
-          <div className='cursor-pointer w-full max-w-[60px] md:max-w-[88px]  h-full flex justify-center items-center gap-[2px] rounded-md px-2'>
+          <div className='cursor-pointer w-full max-w-[70px] md:max-w-[88px] bg-blue-200  h-full flex justify-center items-center gap-[2px] rounded-md px-2'>
             <Popover onOpenChange={(open) => !open && handleSave(slot)}>
               <PopoverTrigger asChild>
                 <div className='w-full relative'>
