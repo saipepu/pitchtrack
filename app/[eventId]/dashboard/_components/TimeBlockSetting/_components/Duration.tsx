@@ -2,7 +2,6 @@
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { PopoverClose } from '@/components/ui/popover';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { convertHHMMSStoTotalSec } from '@/utils/convertor/convert-hhmmss-to-totalsec';
 import { convertTotalSectoHHMMSS } from '@/utils/convertor/convert-totalsec-to-hhmmss';
@@ -23,8 +22,6 @@ const Duration = ({ slot, setSlot, handleSave }: any) => {
 
   const handleInputChange = () => {
     let totalSec = convertHHMMSStoTotalSec(`${hour}:${minute}:${second}`)
-    console.log(hour, minute, second)
-    console.log('totalSec', totalSec)
     setSlot({ ...slot, duration: totalSec })
   }
 

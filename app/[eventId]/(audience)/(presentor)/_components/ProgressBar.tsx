@@ -4,8 +4,7 @@ import React, { useEffect, useState } from 'react'
 
 // TO CALCULATE THE SAFE AND DANGER ZONE WIDTH
 const TimerTrackerBar = (Timer: any) => {
-
-  console.log('Timer', Timer.time, Timer.warning, Timer.danger)
+  
   if (Timer.warning > Timer.time) {
     Timer.warning = Timer.time * 0.5
     Timer.danger = Timer.time * 0.25

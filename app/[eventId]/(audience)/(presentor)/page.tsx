@@ -55,7 +55,6 @@ const Presentor = () => {
   }, [])
 
   useEffect(() => {
-    console.log(slot.warningTime, slot.dangerTime, slot.duration)
     setWarningTime(slot.warningTime)
     setDangerTime(slot.dangerTime)
     if(parseInt(slot.warningTime) > parseInt(slot.duration)) {
@@ -67,7 +66,6 @@ const Presentor = () => {
 
   socket.on('onRoomInfoUpdate', (response) => {
     if(response.success) {
-      console.log('response', response)
       let slotList = response.message.slots.map((slot: any, i: number) => {
         return {
           ...slot,
@@ -79,7 +77,6 @@ const Presentor = () => {
       setMessage(response.message.messages.find((m: any) => m.onDisplay))
     }
   })
-  console.log(slot.speaker, 'SPEAKER updated')
 
   socket.on("timerUpdate", (message) => {
     setCountDown(message.remainingTime)

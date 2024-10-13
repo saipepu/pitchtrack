@@ -18,7 +18,7 @@ import socket from '@/utils/socket';
 const TimeBlock = ({ index }: any) => {
 
   const { eventId } = useParams();
-  const { slots, setSlots, isRunning, setIsRunning, isActive, setIsActive, runningSlot, setRunningSlot } = useContext(SlotContext)
+  const { slots, setSlots, isRunning, setIsRunning, isActive, setIsActive, setRunningSlot } = useContext(SlotContext)
   const [slot, setSlot] = useState(slots[index]) // MAKE A COPY OF THE SLOT
   const [showSetting, setShowSetting] = useState(false)
   const [socketSlotId, setSocketSlotId] = useState('')

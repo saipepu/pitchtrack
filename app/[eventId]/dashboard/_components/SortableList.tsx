@@ -9,7 +9,6 @@ import { useContext } from 'react';
 import MessageEditor from "./MessageList/_components/MessageEditor";
 import TimeBlock from './TimerPreset/_components/TimeBlock';
 import { reorderSlot } from '@/app/_api/slot';
-import { ToastAction } from '@/components/ui/toast';
 
 let slotDefaultSchema = {
     "tag": "Tag1",

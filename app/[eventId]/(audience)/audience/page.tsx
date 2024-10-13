@@ -17,7 +17,6 @@ const ShareableSlotList = () => {
   const [message, setMessage] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
   const [socketSlotId, setSocketSlotId] = useState("");
-  const [isActive, setIsActive] = useState(false);
   const [countdown, setCountdown] = useState(0);
 
   // FORMAT START TIME UTC TIME TO HH:MM:SS
@@ -63,6 +62,20 @@ const ShareableSlotList = () => {
     fetchEventById()
 
   }, [])
+
+  socket.on('onRoomInfoUpdate', (response) => {
+    if(response.success) {
+      console.log('response', response)
+      let slotList = response.message.slots.map((slot: any, i: number) => {
+        return {
+          ...slot,
+          tag: 'timeslot',
+        }
+      })
+      setSlots(slotList)
+      setMessage(response.message.messages.find((m: any) => m.onDisplay))
+    }
+  })
 
   socket.on("timerUpdate", (message) => {
 
