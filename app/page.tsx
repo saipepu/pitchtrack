@@ -58,7 +58,7 @@ const Landing = () => {
 
             <div className='w-full flex justify-center items-center border-slate-300 border-t-2 py-5'>
               <div className='w-full md:max-w-[1000px] flex flex-col md:flex-row justify-between items-start md:items-center px-4 md:px-0'>
-                <p className='text-lg whitespace-nowrap'>Pitchtrack &copy; 2021</p>
+                <p className='text-lg whitespace-nowrap'>Pitchtrack &copy; 2024</p>
                 <p className='text-lg'>Passionately Crafted by PePu & JuzBird.</p>
               </div>
             </div>
