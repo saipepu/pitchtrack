@@ -4,7 +4,6 @@ import { LogOut } from 'lucide-react'
 
 const Header = ({ user, setShowForm } : any) => {
 
-  console.log('Header', user)
   return (
     <div className='z-10 w-full md:max-w-[1000px] h-24 flex justify-between items-center px-4 md:px-2 p-2'>
       {/* LOGO */}
