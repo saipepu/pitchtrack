@@ -29,14 +29,6 @@ const page = () => {
   const [isActive, setIsActive] = useState(false)
   const [runningSlot, setRunningSlot] = useState('')
 
-  // PLAY AUDIO
-  const playAudio = () => {
-    let audio: any = document.getElementById('alarm')
-    if(audio) {
-      audio.play()
-    }
-  }
-
   // FETCH ORGANIZER DATA
   const fetchOrganizerData = async () => {
 
@@ -84,21 +76,31 @@ const page = () => {
       } else {
 
         let selectedEvent = response.message.events.find((event: any) => event._id == eventId)
-        setEvent(selectedEvent)
-        let s = selectedEvent.slots.map((slot: any, i: number) => {
-          return {
-            ...slot,
-            tag: 'timeslot',
-          }
-        })
-        s = s.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
-        setSlots(s)
-        setMessages(selectedEvent.messages.map((message: any, i: number) => {
-          return {
-            ...message,
-            tag: 'message',
-          }
-        }))
+
+        if(!selectedEvent) {
+
+          return router.push(`/profile`)
+
+        } else {
+
+          setEvent(selectedEvent)
+          let s = selectedEvent?.slots.map((slot: any, i: number) => {
+            return {
+              ...slot,
+              tag: 'timeslot',
+            }
+          })
+          s = s.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+          setSlots(s)
+          setMessages(selectedEvent.messages.map((message: any, i: number) => {
+            return {
+              ...message,
+              tag: 'message',
+            }
+          }))
+
+        }
+
 
       }
 
@@ -161,13 +163,6 @@ const page = () => {
   return (
     <SlotContext.Provider value={{slots, setSlots, messages, setMessages, event, isRunning, setIsRunning, isActive, setIsActive, runningSlot, setRunningSlot }}>
       <div className='w-full h-full flex flex-col justify-start items-start overflow-y-scroll lg:overflow-y-hidden'>
-        {/* <audio
-            id="alarm"
-            controls
-            src="/alarm.mp3" className='opacity-0 h-0 z-0 pointer-events-none'>
-                Your browser does not support the
-                <code>audio</code>
-        </audio> */}
 
         {/* Header */}
         <Header organizer={organizer} event={event} events={events} setEvents={setEvents} fetchOrganizerData={fetchOrganizerData}/>

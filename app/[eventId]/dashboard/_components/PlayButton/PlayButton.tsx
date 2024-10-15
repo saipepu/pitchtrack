@@ -58,7 +58,7 @@ const PlayButton = ({ slot, eventId, isRunning, setIsRunning, isActive, setIsLoa
     <div
       className={
         `z-30 group cursor-pointer w-full h-full flex justify-center items-center gap-[2px] rounded-md border-slate-300 px-1 md:px-2
-        ${isRunning && isActive ? 'bg-red-200 border-0' : isActive ? 'bg-green-500 border-0' : 'bg-transparent border-[1px]'}
+        ${isRunning && isActive ? 'bg-red-400 border-0' : isActive ? 'bg-emerald-400 border-0' : 'bg-transparent border-[1px]'}
         transition-all duration-300`
       }
       onClick={() => handlePlayButton()}

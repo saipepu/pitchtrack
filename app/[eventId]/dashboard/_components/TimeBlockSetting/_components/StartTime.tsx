@@ -69,7 +69,7 @@ const StartTime = ({ index, slot, setSlot, startTime } : any ) => {
           </SelectContent>
         </Select>
       </div>
-      {/* <div className="w-full grid grid-cols-4 items-center gap-2">
+      <div className="w-full grid grid-cols-4 items-center gap-2">
         <Label htmlFor="title">Time</Label>
         <div className='w-full col-span-3 border-0 flex justify-start items-center'>
           <Input
@@ -143,7 +143,7 @@ const StartTime = ({ index, slot, setSlot, startTime } : any ) => {
             </PopoverContent>
           </Popover>
         </div>
-      </div> */}
+      </div>
     </>
   )
 }

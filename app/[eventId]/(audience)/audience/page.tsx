@@ -83,7 +83,6 @@ const ShareableSlotList = () => {
     // UPDATE THE GLOBAL RUNNING SLOT
     console.log(message)
     if(eventId == message.eventId) {
-      console.log('TIMER UPDATE')
       setSocketSlotId(message.slotId)
       setCountdown(message.remainingTime)
     }

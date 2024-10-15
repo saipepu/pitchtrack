@@ -45,7 +45,7 @@ const ConnectDevices = () => {
           {devices.map((device: any, i: number) => (
             <div key={i} className='w-full flex justify-between items-center px-2 py-1 bg-slate-100 rounded-md'>
               <span className='text-xs font-light'>{i+1 + ". " +device}</span>
-              <span className={`text-sm text-white px-2 py-1 rounded-md bg-green-500`}>Connected</span>
+              <span className={`text-sm text-white px-2 py-1 rounded-md bg-emerald-400`}>Connected</span>
             </div>
           ))}
         </div>
