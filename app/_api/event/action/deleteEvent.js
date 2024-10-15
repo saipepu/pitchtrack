@@ -1,16 +1,15 @@
 import { api } from '@/app/_api/api'
 
-export const createEvent = async ({ orgId, event }) => {
+export const deleteEvent = async ({ orgId, eventId }) => {
         
-  console.log("CREATE EVENT...")
-  const response = await fetch(`${api}/orgs/${orgId}/event`, {
-    method: "POST",
+  console.log("DELETE EVENT...")
+  const response = await fetch(`${api}/orgs/${orgId}/event/${eventId}`, {
+    method: "DELETE",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": "Bearer " + localStorage.getItem("pitchtrack-token") || ""
-    },
-    body: JSON.stringify(event)
+    }
   })
   .then(response => response.json())
   .catch(error => console.log(error))
