@@ -43,15 +43,41 @@ const ProgressBar = ({ duration, warningTime, dangerTime, countDown }: any) => {
   useEffect(() => {
     let cur = 100 - countDown / duration * 100;
     setCurrentPointer(cur);
+
+    console.log('COUNTDOWN', countDown, 'Danger Time', dangerTime)
+
+    if(countDown == 1) {
+      // PLAY AUDIO
+      console.log('PLAY AUDIO')
+      playAudio()
+    }
+
   }, [countDown])
+
+  // PLAY AUDIO
+  const playAudio = () => {
+    let audio: any = document.getElementById('alarm')
+    audio.muted = false
+    if(audio) {
+      audio.play()
+    }
+  }
 
   return (
     <div className="relative w-full h-[5vh] flex justify-between items-center">
-      <div className={`bg-green h-full`} style={{ width: `${progressBarColorWidth.safeWidth}%`}}>
+      <audio
+          id="alarm"
+          controls
+          muted={true}
+          src="/alarm.mp3" className='opacity-0 h-0 z-0 pointer-events-none absolute'>
+              Your browser does not support the
+              <code>audio</code>
+      </audio>
+      <div className={`bg-emerald-400 h-full`} style={{ width: `${progressBarColorWidth.safeWidth}%`}}>
       </div>
-      <div className={`bg-yellow h-full`} style={{ width: `${progressBarColorWidth.warningWidth}%`}}>
+      <div className={`bg-amber-400 h-full`} style={{ width: `${progressBarColorWidth.warningWidth}%`}}>
       </div>
-      <div className={`bg-red h-full`} style={{ width: `${progressBarColorWidth.dangerWidth}%`}}>
+      <div className={`bg-red-400 h-full`} style={{ width: `${progressBarColorWidth.dangerWidth}%`}}>
       </div>
       <div
         className={`absolute w-[5px] h-full bg-black transition-left ease-linear ${currentPointer == 0 ? 'duration-0' : 'duration-1000'}`}
