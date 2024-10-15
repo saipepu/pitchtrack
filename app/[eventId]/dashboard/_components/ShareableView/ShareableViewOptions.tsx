@@ -1,7 +1,9 @@
-import { Check, ClipboardCopy, Link, Mic, User, X } from 'lucide-react'
+import { Check, ClipboardCopy, Link, X } from 'lucide-react'
 import React from 'react'
+import QRGenerator from './qrGenerator'
 
 const ShareableViewOptions = ({ setShowShareableOptions, handleClipBoardCopy, isCopied, setIsCopied, eventId } : any) => {
+
   return (
     <div className='z-40 absolute flex justify-center items-start w-full min-h-[100vh] top-0 left-0 cursor-auto pt-5 overflow-hidden bg-black/50'>
       <div className="z-50 w-[85vw] md:w-[70vw] max-w-[750px] h-[90vh] flex flex-col justify-start items-start gap-5 bg-slate-100 rounded-lg p-4 overflow-y-scroll">
@@ -18,7 +20,7 @@ const ShareableViewOptions = ({ setShowShareableOptions, handleClipBoardCopy, is
 
         <p className='text-sm text-slate-500 font-light italic'>Click the Clipboard <span><ClipboardCopy size={14} className='inline text-black'/></span> icon to copy the link to the view you would like to share.</p>
 
-        <div className='w-full md:max-h-[300px] grid grid-cols-1 md:grid-cols-2 gap-2'>
+        <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-2'>
 
           <div className='w-full min-h-[100px] flex-1 flex flex-col justify-center items-center p-2 cursor-pointer border-[1px] xl:hover:border-slate-800 border-slate-200 duration-300 transition-all rounded-lg gap-2'>
             <div className='w-full h-full max-h-[200px] flex justify-center items-end'>
@@ -35,6 +37,7 @@ const ShareableViewOptions = ({ setShowShareableOptions, handleClipBoardCopy, is
                 {isCopied == 'presentor' ? <Check size={20} className="ml-auto"/> : <ClipboardCopy size={20} className="ml-auto text-black"/>}
               </div>
             </div>
+            <QRGenerator data={`${window?.location.origin}/${eventId}`} />
           </div>
 
           <div className='w-full min-h-[100px] flex-1 flex flex-col justify-center items-center p-2 cursor-pointer border-[1px] xl:hover:border-slate-800 border-slate-200 duration-300 transition-all rounded-lg gap-2'>
@@ -52,6 +55,7 @@ const ShareableViewOptions = ({ setShowShareableOptions, handleClipBoardCopy, is
                 {isCopied == 'audience' ? <Check size={20} className="ml-auto"/> : <ClipboardCopy size={20} className="ml-auto text-black"/>}
               </div>
             </div>
+            <QRGenerator data={`${window?.location.origin}/${eventId}/audience`} />
           </div>
 
         </div>
