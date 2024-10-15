@@ -38,7 +38,7 @@ const RoomList = ({ organizer } : any ) => {
   const MiniTimerView = ({ time }: { time: string }) => {
 
     return (
-      <div className='h-full w-[120px] rounded-md bg-white border-[1px] border-slate-200 flex flex-col justify-start items-start overflow-hidden'>
+      <div className='min-h-[120px] md:h-full w-full md:max-w-[120px] rounded-md bg-white border-[1px] border-slate-200 flex flex-col justify-start items-start overflow-hidden'>
         <p className='w-full h-full flex justify-center items-center'>
           {time == '0' ? "No Slot" : convertTotalSectoHHMMSS(parseInt(time)) }
         </p>
@@ -203,9 +203,9 @@ const RoomList = ({ organizer } : any ) => {
         </Button>
       </div>
 
-      <div className='w-full h-full flex flex-col justify-start items-start gap-3 p-2 pb-10 overflow-y-scroll'>
+      <div className='w-full min-h-full flex flex-col justify-start items-start gap-3 p-2 pb-20 overflow-y-scroll'>
         {rooms && rooms?.map((room: any, index: number) => (
-          <div key={index} className='w-full min-h-24 flex justify-start items-center gap-3 p-3 rounded-md bg-slate-100'>
+          <div key={index} className='w-full min-h-fit md:min-h-24 flex flex-col md:flex-row justify-start items-center gap-3 p-3 rounded-md bg-slate-100'>
             {room.slots.length > 0
               ?
               <MiniTimerView time={room.slots[0].duration} />
@@ -225,7 +225,7 @@ const RoomList = ({ organizer } : any ) => {
                 </div>
               </div>
             </div>
-            <div className='h-full flex flex-col justify-between items-end'>
+            <div className='w-full md:w-fit h-full flex flex-row-reverse md:flex-col justify-between items-end'>
               <div className="w-full flex justify-end items-center gap-2">
                 <Button
                   className='px-3 py-2 h-fit font-normal bg-emerald-100 text-emerald-600 rounded-md hover:bg-emerald-50 border-[1px] hover:border-emerald-400 cursor-pointer transition-all duration-300'

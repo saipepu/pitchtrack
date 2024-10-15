@@ -244,7 +244,8 @@ const TimeBlock = ({ index }: any) => {
                 <div className='w-full relative'>
                   <p className='group-hover/slot:opacity-100 opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Start time</p>
                   <p className={`text-lg font-semibold whitespace-nowrap select-none ${slot?.startTimeType == "linked" && 'text-slate-300'}`}>{slot?.startTimeType == "linked" ? slot.estimatedStartTimeFormatted : startTime}</p>
-                  <p className='group-hover/slot:opacity-100 opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>{slot?.startTimeType || "Start Type"}</p>
+                  <p className={`${slot?.startTimeType == "scheduled" ? "opacity-100 text-slate-600" : "group-hover/slot:opacity-100"} opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'`}>{slot?.startTimeType || "Start Type"}</p>
+
                 </div>
               </PopoverTrigger>
               <PopoverContent className="w-80 bg-slate-100 text-black p-2 grid grid-cols-1 gap-2">

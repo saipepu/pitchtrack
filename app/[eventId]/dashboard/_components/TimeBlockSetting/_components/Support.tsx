@@ -118,7 +118,7 @@ const Support = ({ slot, setSlot }: any) => {
         </div>
 
         {/* CHIME */}
-        <div className='col-span-1 w-full grid grid-cols-2 items-center'>
+        {/* <div className='col-span-1 w-full grid grid-cols-2 items-center'>
           <div className='col-span-1 flex items-center md:justify-end px-2'>
             <Label htmlFor="warning">Chime</Label>
           </div>
@@ -138,10 +138,10 @@ const Support = ({ slot, setSlot }: any) => {
               </SelectContent>
             </Select>
           </div>
-        </div>
+        </div> */}
 
         {/* FLASH */}
-        <div className='col-span-1 w-full grid grid-cols-2 items-center'>
+        {/* <div className='col-span-1 w-full grid grid-cols-2 items-center'>
           <div className='col-span-1 flex items-center md:justify-end px-2'>
             <Label htmlFor="warning">Flash</Label>
           </div>
@@ -161,7 +161,7 @@ const Support = ({ slot, setSlot }: any) => {
               </SelectContent>
             </Select>
           </div>
-        </div>
+        </div> */}
 
       </div>
 
@@ -230,7 +230,7 @@ const Support = ({ slot, setSlot }: any) => {
         </div>
 
         {/* CHIME */}
-        <div className='col-span-1 w-full grid grid-cols-2 items-center'>
+        {/* <div className='col-span-1 w-full grid grid-cols-2 items-center'>
           <div className='col-span-1 flex items-center md:justify-end px-2'>
             <Label htmlFor="warning">Chime</Label>
           </div>
@@ -250,10 +250,10 @@ const Support = ({ slot, setSlot }: any) => {
               </SelectContent>
             </Select>
           </div>
-        </div>
+        </div>  */}
 
         {/* FLASH */}
-        <div className='col-span-1 w-full grid grid-cols-2 items-center'>
+        {/* <div className='col-span-1 w-full grid grid-cols-2 items-center'>
           <div className='col-span-1 flex items-center md:justify-end px-2'>
             <Label htmlFor="warning">Flash</Label>
           </div>
@@ -273,7 +273,7 @@ const Support = ({ slot, setSlot }: any) => {
               </SelectContent>
             </Select>
           </div>
-        </div>
+        </div> */}
 
       </div>
     </>
