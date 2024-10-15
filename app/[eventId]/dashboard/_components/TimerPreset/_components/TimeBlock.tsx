@@ -9,11 +9,12 @@ import Duration from '../../TimeBlockSetting/_components/Duration'
 import StartTime from '../../TimeBlockSetting/_components/StartTime'
 import TimeBlockSetting from '../../TimeBlockSetting/TimeBlockSetting'
 import { SlotContext } from "@/app/hooks/SlotContext";
-import { updateSlot, deleteSlot } from "@/app/_api/slot";
+import { updateSlot, deleteSlot, cloneSlot } from "@/app/_api/slot";
 import { useParams } from 'next/navigation';
 import PlayButton from '../../PlayButton/PlayButton';
 import { toast } from '@/components/ui/use-toast';
 import socket from '@/utils/socket';
+import { Button } from '@/components/ui/button';
 
 const TimeBlock = ({ index }: any) => {
 
@@ -40,8 +41,15 @@ const TimeBlock = ({ index }: any) => {
     slots[index] = {...slot, tag: 'timeslot' }
     setSlots([...slots])
 
-    let dto = { ...slot}
+    let dto = { ...slot }
     delete dto._id
+    delete dto.createdAt
+    delete dto.updatedAt
+    delete dto.estimatedStartTimeFormatted
+    delete dto.estimatedStartTime
+    delete dto.gap
+    delete dto.gapTime
+    delete dto.gapTotalSec
     
     // UPDATE SLOT
     const response = await updateSlot({ eventId, slotId: slot._id, slot: dto })
@@ -60,6 +68,18 @@ const TimeBlock = ({ index }: any) => {
 
   }
 
+  const handleQuickFix = () => {
+
+    if(slot.gap == 'negative') {
+      slot.startTime = new Date(new Date(slot.startTime).getTime() + slot.gapTotalSec * 1000)
+    } else if(slot.gap == 'positive') {
+      slot.startTime = new Date(new Date(slot.startTime).getTime() - slot.gapTotalSec * 1000)
+    }
+    console.log('QUICK FIX', slot.startTime)
+    setSlot({...slot})
+    handleSave(slot)
+  }
+
   const handleDelete = async () => {
   
       // DELETE SLOT
@@ -75,6 +95,25 @@ const TimeBlock = ({ index }: any) => {
 
   }
 
+  const handleClone = async () => {
+    let dto = { ...slot }
+    delete dto._id
+    const response = await cloneSlot({ eventId, slotId: slot._id })
+
+    if(response.success) {
+      console.log('Slot cloned successfully')
+      toast({
+        title: "Slot cloned successfully"
+      })
+      console.log(response.message.slots.map((x:any) => x.sortOrder))
+    } else {
+      console.log('Failed to clone slot', response)
+      toast({
+        title: "Slot cloned failed"
+      })
+    }
+  }
+
   useEffect(() => {
     setSlot(slots[index])
   }, [slots])
@@ -86,7 +125,6 @@ const TimeBlock = ({ index }: any) => {
     setSocketSlotId(message.slotId)
     if(eventId == message.eventId && slot._id == message.slotId) {
       setRunningSlot(slots.find((slot: any, i: number) => slot._id == message.slotId))
-      console.log('TIMER UPDATE', slot._id)
       setIsRunning(message.isRunning)
       setIsActive(message.slotId === slot._id)
       setCountdown(message.remainingTime)
@@ -134,11 +172,32 @@ const TimeBlock = ({ index }: any) => {
       {showSetting && (
         <TimeBlockSetting setShowSetting={setShowSetting} slot={slot} setSlot={setSlot} handleSave={handleSave}/>
       )}
+      {slot.gap !== 'zero' && slot.startTimeType !== 'linked' && 
+        <div className={`w-full p-1 mb-1 rounded-md border-dashed border-[1px] border-slate-400 flex justify-between items-center`}>
+          <div className="w-full flex justify-start items-center gap-2 pl-2">
+            {slot.gap == 'negative' &&
+              <p className='text-xs text-rose-400'>
+                Late: {slot.gapTime} behind previous slot
+              </p>
+            }
+            {slot.gap == 'positive' &&
+              <p className='text-xs text-emerald-400'>
+                Gap: {slot.gapTime} between
+              </p>
+            }
+          </div>
+          <Button className='h-fit p-1' onClick={() => {
+            handleQuickFix()
+          }}>
+            <p className='text-xs text-slate-400'>Reset</p>
+          </Button>
+        </div>
+      }
       <div
         id={`${slots[index].tag + "-" + slots[index].id}`}
         className={`
                     relative group/slot w-full h-[80px] flex justify-between items-center rounded-lg p-2 gap-2
-                    ${isActive && socketSlotId == slot._id ? 'border-2 border-green-700' : 'bg-slate-100'}
+                    ${isActive && socketSlotId == slot._id ? 'border-2 border-emerald-500' : 'bg-slate-100'}
                     transition-all duration-300 overflow-visible
                   `}
       >
@@ -184,7 +243,7 @@ const TimeBlock = ({ index }: any) => {
               <PopoverTrigger asChild>
                 <div className='w-full relative'>
                   <p className='group-hover/slot:opacity-100 opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>Start time</p>
-                  <p className={`text-lg font-semibold whitespace-nowrap select-none ${slot?.startTimeType == "linked" && 'text-slate-300'}`}>{startTime}</p>
+                  <p className={`text-lg font-semibold whitespace-nowrap select-none ${slot?.startTimeType == "linked" && 'text-slate-300'}`}>{slot?.startTimeType == "linked" ? slot.estimatedStartTimeFormatted : startTime}</p>
                   <p className='group-hover/slot:opacity-100 opacity-0 duration-500 text-xs text-slate-400 font-normal whitespace-nowrap select-none'>{slot?.startTimeType || "Start Type"}</p>
                 </div>
               </PopoverTrigger>
@@ -248,13 +307,13 @@ const TimeBlock = ({ index }: any) => {
                 <MoreVerticalIcon size={16} />
               </PopoverTrigger>
               <PopoverContent className='w-fit bg-slate-100 text-black p-2 grid grid-cols-1 gap-2'>
-                <PopoverClose className="flex justify-start items-center gap-2 cursor-pointer" onClick={() => handleDelete()}>
-                  <Trash size={16} className='stroke-red-600'/>
-                  <p className='text-sm font-medium text-red-600'>Delete</p>
+                <PopoverClose className="group flex justify-start items-center gap-2 cursor-pointer" onClick={() => handleDelete()}>
+                  <Trash size={16} className='stroke-slate-400 group-hover:stroke-rose-400'/>
+                  <p className='text-sm font-medium text-slate-400 group-hover:text-rose-400'>Delete</p>
                 </PopoverClose>
-                <div className="flex justify-start items-center gap-2 opacity-15">
-                  <Copy size={16} className='stroke-purple-600'/>
-                  <p className='text-sm font-medium text-purple-600'>Clone</p>
+                <div className="flex justify-start items-center gap-2 cursor-pointer" onClick={() => handleClone()}>
+                  <Copy size={16} className='stroke-emerald-600'/>
+                  <p className='text-sm font-medium text-emerald-600'>Clone</p>
                 </div>
               </PopoverContent>
             </Popover>
