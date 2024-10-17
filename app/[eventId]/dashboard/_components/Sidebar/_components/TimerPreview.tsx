@@ -22,8 +22,17 @@ const TimerPreview = () => {
   const [showShareableOptions, setShowShareableOptions] = useState(false)
 
   useEffect(() => {
-    setCurrentTime(`${new Date().getDate()}:${new Date().getHours()}:${new Date().getSeconds()}`)
+    setCurrentTime(`${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`)
+
+    const intervalId = setInterval(() => {
+      setCurrentTime(`${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`)
+    }, 1000)
+
     setRunningSlot(slots[0])
+
+    return () => {
+      clearInterval(intervalId)
+    }
   },[slots])
 
   socket.on('timerUpdate', (message) => {

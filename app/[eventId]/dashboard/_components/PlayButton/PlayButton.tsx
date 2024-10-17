@@ -12,6 +12,22 @@ const PlayButton = ({ slot, eventId, isRunning, setIsRunning, isActive, setIsLoa
   const handlePlayButton = () => {
     setIsLoading && setIsLoading(true)
 
+    // if(isRunning) {
+    //   EmitSocket('stop', {
+    //     duration: slot.duration,
+    //     eventId: eventId,
+    //     slotId: slot._id
+    //   })
+    //   setIsRunning(false)
+    // } else {
+    //   EmitSocket('start', {
+    //     duration: slot.duration,
+    //     eventId: eventId,
+    //     slotId: slot._id
+    //   })
+    //   setIsRunning(true)
+    // }
+
     if(isCompleted) {
       setIsCompleted(false)
       EmitSocket('start', {
@@ -47,6 +63,7 @@ const PlayButton = ({ slot, eventId, isRunning, setIsRunning, isActive, setIsLoa
       }
 
     }
+
   }
 
   socket.on('timerCompleted', () => {

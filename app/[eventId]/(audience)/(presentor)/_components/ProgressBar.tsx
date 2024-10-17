@@ -59,6 +59,7 @@ const ProgressBar = ({ duration, warningTime, dangerTime, countDown }: any) => {
     let audio: any = document.getElementById('alarm')
     audio.muted = false
     if(audio) {
+      audio.playbackRate = 3
       audio.play()
     }
   }

@@ -55,12 +55,14 @@ const Presentor = () => {
   }, [])
 
   useEffect(() => {
-    setWarningTime(slot.warningTime)
-    setDangerTime(slot.dangerTime)
-    if(parseInt(slot.warningTime) > parseInt(slot.duration)) {
-      console.log(slot.warnigTime > slot.duration)
-      setWarningTime(slot.duration * 0.5)
-      setDangerTime(slot.duration * 0.25)
+    if(slot) {
+      setWarningTime(slot.warningTime)
+      setDangerTime(slot.dangerTime)
+      if(parseInt(slot.warningTime) > parseInt(slot.duration)) {
+        console.log(slot.warnigTime > slot.duration)
+        setWarningTime(slot.duration * 0.5)
+        setDangerTime(slot.duration * 0.25)
+      }
     }
   }, [slot])
 
